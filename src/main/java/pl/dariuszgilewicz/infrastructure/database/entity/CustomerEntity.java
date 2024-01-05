@@ -2,6 +2,7 @@ package pl.dariuszgilewicz.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class CustomerEntity {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private AddressEntity address;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer")
+    private UserEntity user;
 
     @OneToMany(mappedBy = "customer")
     private List<OrdersEntity> customerOrders;

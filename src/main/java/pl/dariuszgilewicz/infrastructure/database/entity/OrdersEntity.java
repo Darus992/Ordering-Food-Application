@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import pl.dariuszgilewicz.infrastructure.database.enums.OrderStatus;
 import pl.dariuszgilewicz.infrastructure.database.enums.OrderType;
+import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter

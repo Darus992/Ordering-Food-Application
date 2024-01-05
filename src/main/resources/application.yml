@@ -5,7 +5,7 @@ server:
 
 spring:
   security:
-    enabled: false
+    enabled: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver

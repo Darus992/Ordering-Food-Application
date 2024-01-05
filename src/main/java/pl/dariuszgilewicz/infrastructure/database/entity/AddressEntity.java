@@ -34,7 +34,7 @@ public class AddressEntity {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "address")
     private CustomerEntity customer;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurantAddress")   //dodałem na podstawie customer
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurantAddress")
     private RestaurantEntity restaurant;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "deliveryAddress")

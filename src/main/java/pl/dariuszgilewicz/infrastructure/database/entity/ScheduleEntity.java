@@ -19,7 +19,7 @@ public class ScheduleEntity {
     @Column(name = "schedule_id")
     private Integer scheduleId;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "schedule_hours",
             joinColumns = @JoinColumn(name = "schedule_id"),

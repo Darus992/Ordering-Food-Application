@@ -1,9 +1,11 @@
 package pl.dariuszgilewicz.infrastructure.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.time.OffsetTime;
 import java.util.List;
 
@@ -22,10 +24,14 @@ public class RestaurantOpeningTimeEntity {
     private Integer restaurantOpeningTimeId;
 
     @Column(name = "opening_hour")
-    private OffsetTime openingHour;
+    @JsonFormat(pattern = "HH:mm:ss.SSS", shape = JsonFormat.Shape.STRING)
+//    private OffsetTime openingHour;
+    private LocalTime openingHour;
 
     @Column(name = "close_hour")
-    private OffsetTime closeHour;
+    @JsonFormat(pattern = "HH:mm:ss.SSS", shape = JsonFormat.Shape.STRING)
+//    private OffsetTime closeHour;
+    private LocalTime closeHour;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "day_of_week")

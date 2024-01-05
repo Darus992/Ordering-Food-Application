@@ -2,6 +2,7 @@ package pl.dariuszgilewicz.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,9 @@ public class RestaurantOwnerEntity {
     @Column(name = "pesel", unique = true)
     private String pesel;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "restaurantOwner") //dodałem cascadeType oraz zmieniłem na listę
-    private List<RestaurantEntity> restaurants;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "owner")
+    private UserEntity user;
+
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "restaurantOwner") //dodałem cascadeType oraz zmieniłem na listę
+//    private List<RestaurantEntity> restaurants;
 }

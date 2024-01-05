@@ -2,6 +2,7 @@ package pl.dariuszgilewicz.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 
 import java.util.List;
 
@@ -32,13 +33,13 @@ public class RestaurantEntity {
     @JoinColumn(name = "food_menu_id")
     private FoodMenuEntity foodMenu;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)       //adres restauracji jest zrobiony na podstawie customer
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_address_id")
     private AddressEntity restaurantAddress;
 
-    @ManyToOne(fetch = FetchType.EAGER)             //zmieniłem na EAGER
-    @JoinColumn(name = "restaurant_owner_id")
-    private RestaurantOwnerEntity restaurantOwner;
+//    @ManyToOne(fetch = FetchType.EAGER)             //zmieniłem na EAGER
+//    @JoinColumn(name = "restaurant_owner_id")
+//    private RestaurantOwnerEntity restaurantOwner;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
