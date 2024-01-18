@@ -49,7 +49,22 @@
 </nav>
 <br>
 <br>
-<div class="container text-center">
+<div th:if="${isCompleted == false}" class="container text-center">
+    <div class="col">
+        <h3>Your account is not completed!</h3>
+    </div>
+    <div class="row">
+        <span>Please fill necessary data clicking <a href="/" th:href="@{/owner/create}">here</a> or go to Menu/LINK to use your account fully.</span>
+    </div>
+</div>
+<div  class="container text-center">
+<!--    th:if="${isCompleted == true}"-->
+    <div class="col">
+        <a th:href="@{/restaurant/create}" class="btn btn-info" type="button">Create Restaurant</a>
+    </div>
+
+    <br>
+
     <div class="col">
         <table class="table">
             <thead class="table-dark">
@@ -77,8 +92,8 @@
                         <ul class="dropdown-menu">
                             <li><a th:if="${restaurant.foodMenu == null}" th:href="@{/restaurant/create-food-menu/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Add Food Menu</a></li>
                             <li><a th:if="${restaurant.foodMenu != null}" th:href="@{/restaurant/create-food/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Add Food To Menu</a></li>
-                            <li><a th:if="${restaurant.restaurantSchedule == null}" th:href="@{/restaurant/create-schedule/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Add Schedule</a></li>
-                            <li><a th:href="@{/restaurants/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Go To Restaurant</a></li>
+<!--                            <li><a th:if="${restaurant.restaurantSchedule == null}" th:href="@{/restaurant/create-schedule/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Add Schedule</a></li>-->
+                            <li><a th:href="@{/restaurant/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Go To Restaurant</a></li>
                             <li><button class="dropdown-item" type="button">Add Delivery Address</button></li>
                         </ul>
                     </div>

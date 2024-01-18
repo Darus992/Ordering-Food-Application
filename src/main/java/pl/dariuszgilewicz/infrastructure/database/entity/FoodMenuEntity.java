@@ -22,7 +22,7 @@ public class FoodMenuEntity {
     @Column(name = "menu_name")
     private String menuName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  //nie zapomnieć dodać tabeli łączącej do bazy danych i do migracji
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "food_menu_food",
             joinColumns = @JoinColumn(name = "food_menu_id"),

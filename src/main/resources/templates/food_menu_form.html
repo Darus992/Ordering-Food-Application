@@ -39,11 +39,6 @@
             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
           </li>
         </ul>
-        <form class="d-flex" th:action="@{/restaurants}" method="get" th:object="${restaurants}">
-          <input class="form-control me-2" type="search" placeholder="Restaurant name" id="restaurantName"
-                 name="restaurantName" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
       </div>
     </div>
   </nav>
@@ -65,48 +60,40 @@
     </div>
   </div>
 
+  <br>
+
   <div class="container">
     <div class="d-flex justify-content-center">
       <div class="col-md-6">
         <form action="#" th:action="@{/restaurant/create-food-menu/{restaurantEmail}}" method="POST" th:object="${foodMenuForm}">
           <div class="row mt-3">
-            <div class="col-md-3">
-              <label for="foodMenuName">Food Menu Name:</label>
-            </div>
-            <div class="col-md-3">
-              <input type="text" id="foodMenuName" th:field="*{foodMenuName}">
+            <div class="col-md-4">
+              Food Menu Name:
+              <input type="text" id="foodMenuName" class="form-control" th:field="*{foodMenuName}">
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-3">
-              <label for="foodCategory">Food Category:</label>
-            </div>
-            <div class="col-md-3">
-              <input type="text" id="foodCategory" th:field="*{foodCategory}">
+            <div class="col-md-4">
+              Food Category:
+              <input type="text" id="foodCategory" class="form-control" th:field="*{foodCategory}">
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-3">
-              <label for="foodName">Food Name:</label>
-            </div>
-            <div class="col-md-3">
-              <input type="text" id="foodName" th:field="*{foodName}">
+            <div class="col-md-4">
+              Food Name:
+              <input type="text" id="foodName" class="form-control" th:field="*{foodName}">
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-3">
-              <label for="foodDescription">Description</label>
-            </div>
-            <div class="col-md-3">
-              <input type="text" id="foodDescription" th:field="*{foodDescription}">
+            <div class="col-md-4">
+              Description:
+              <input type="text" id="foodDescription" class="form-control" th:field="*{foodDescription}">
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-3">
-              <label for="foodPrice">Price:</label>
-            </div>
-            <div class="col-md-3">
-              <input type="text" id="foodPrice" th:field="*{foodPrice}">
+            <div class="col-md-4">
+              Price:
+              <input type="text" id="foodPrice" class="form-control" th:field="*{foodPrice}">
             </div>
           </div>
           <div class="row mt-3">

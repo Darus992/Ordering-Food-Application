@@ -6,9 +6,8 @@ CREATE TABLE restaurant
     email                           VARCHAR(120)    NOT NULL,
     food_menu_id                    INT,
     restaurant_address_id           INT             NOT NULL,
---    restaurant_owner_id             INT             NOT NULL,
-    user_id                         INT             NOT NULL,
-    schedule_id                     INT,
+    restaurant_owner_id             INT             NOT NULL,
+    restaurant_opening_time_id      INT             NOT NULL,
     delivery_address_id             INT,
     PRIMARY KEY (restaurant_id),
     UNIQUE (email),
@@ -16,12 +15,10 @@ CREATE TABLE restaurant
             REFERENCES food_menu (food_menu_id),
         FOREIGN KEY (restaurant_address_id)
             REFERENCES address (address_id),
---        FOREIGN KEY (restaurant_owner_id)
---            REFERENCES restaurant_owner (restaurant_owner_id),
-        FOREIGN KEY (user_id)
-            REFERENCES users (user_id),
-        FOREIGN KEY (schedule_id)
-            REFERENCES schedule (schedule_id),
+        FOREIGN KEY (restaurant_owner_id)
+            REFERENCES restaurant_owner (restaurant_owner_id),
+        FOREIGN KEY (restaurant_opening_time_id)
+            REFERENCES restaurant_opening_time (restaurant_opening_time_id),
         FOREIGN KEY (delivery_address_id)
             REFERENCES address (address_id)
 );

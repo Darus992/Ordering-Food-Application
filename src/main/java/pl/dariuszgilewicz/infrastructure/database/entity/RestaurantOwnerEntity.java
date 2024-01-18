@@ -5,7 +5,6 @@ import lombok.*;
 import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -33,6 +32,6 @@ public class RestaurantOwnerEntity {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "owner")
     private UserEntity user;
 
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "restaurantOwner") //dodałem cascadeType oraz zmieniłem na listę
-//    private List<RestaurantEntity> restaurants;
+    @OneToMany(mappedBy = "restaurantOwner")
+    private List<RestaurantEntity> restaurants;
 }

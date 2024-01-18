@@ -47,12 +47,6 @@ public class UserEntity {
     @JoinColumn(name = "customer_id")
     private CustomerEntity customer;
 
-    @OneToMany(mappedBy = "user")
-    private List<RestaurantEntity> restaurants;
-
-//    @OneToMany(mappedBy = "user")
-//    private List<OrdersEntity> customerOrders;
-
     @ElementCollection(targetClass = UserRole.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))

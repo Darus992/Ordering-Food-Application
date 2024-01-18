@@ -1,96 +1,134 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-        crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-          crossorigin="anonymous"></script>
-  <title>Order your food online!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <title>Order your food online!</title>
 </head>
 
 <body>
-  <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
+<nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
     <div class="container-fluid">
-      <h5>Order your food online!</h5>
-      <div th:if="${isAuthenticated}" class="btn-group dropstart">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Menu
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-          <li><a class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
-          <li><button class="dropdown-item" type="button">Something else here</button></li>
-        </ul>
-      </div>
-      <div th:unless="${isAuthenticated}" class="container-right">
-        <a th:href="@{/login}" class="btn btn-primary" role="button">Log in</a>
-        <a th:href="@{/users/register}" class="btn btn-primary" role="button">Register</a>
-      </div>
+        <h5>Order your food online!</h5>
+        <div class="container-right">
+            <div th:if="${isAuthenticated}" class="btn-group dropstart">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Menu
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                    <li><a th:if="${isAuthenticated && userRole == 'OWNER'}" class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
+                    <li><a th:if="${isAuthenticated && userRole == 'CUSTOMER'}" class="dropdown-item" th:href="@{/customer}">Go to your account</a></li>
+                    <li><button class="dropdown-item" type="button">Something else here</button></li>
+                </ul>
+            </div>
+            <a th:unless="${isAuthenticated}" th:href="@{/login}" class="btn btn-primary" role="button">Log in</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/user/register-customer}" class="btn btn-primary" role="button">Customer Register</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/user/register-business}" class="btn btn-primary" role="button">Business Register</a>
+        </div>
     </div>
-  </nav>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+</nav>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
-        </ul>
-        <form class="d-flex" th:action="@{/restaurants}" method="get" th:object="${restaurants}">
-          <input class="form-control me-2" type="search" placeholder="Restaurant name" id="restaurantName" name="restaurantName" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
+        <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </nav>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container">
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <div class="container text-center">
-        <div class="col-12">
-          <h2>Search Results:</h2>
-          <table class="table">
-            <thead class="table-dark">
+</nav>
+
+<div class="container text-center">
+    <form th:action="@{/restaurants/category}" method="get">
+        <div class="d-flex justify-content-center">
+            <div class="col p-3 bg-warning text-emphasis-warning">
+                <div class="col">
+                    <button type="submit" name="foodCategory" value="Pizza"
+                            style="border: none; background-color: transparent;">
+                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/pizza.png" alt="pizza"/>
+                        <p>Pizza</p>
+                    </button>
+                    <button type="submit" name="foodCategory" value="Burgers"
+                            style="border: none; background-color: transparent;">
+                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/hamburger.png"
+                             alt="hamburger"/>
+                        <p>Burgers</p>
+                    </button>
+                    <button type="submit" name="foodCategory" value="Home Cooked Dinners"
+                            style="border: none; background-color: transparent;">
+                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/thanksgiving.png"
+                             alt="thanksgiving"/>
+                        <p>Home Cooked Dinners</p>
+                    </button>
+                    <button type="submit" name="foodCategory" value="Sushi"
+                            style="border: none; background-color: transparent;">
+                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/nigiri-sushi.png"
+                             alt="nigiri-sushi"/>
+                        <p>Sushi</p>
+                    </button>
+                    <button type="submit" name="foodCategory" value="Fish & Seafood"
+                            style="border: none; background-color: transparent;">
+                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/fish-food.png"
+                             alt="fish-food"/>
+                        <p>Fish & Seafood</p>
+                    </button>
+                </div>
+                <div class="h4 pb-2 mb-4 border-bottom border-dark"></div>
+            </div>
+        </div>
+    </form>
+    <form th:action="@{/restaurants}" method="get" th:object="${restaurants}">
+        <div class="col p-3 bg-warning text-emphasis-warning">
+            <p>Find restaurants delivering right now, near you</p>
+            <div class="col-6 d-flex" style="margin-left: 320px;">
+                <input class="form-control me-2" type="search" placeholder="Enter city or street" id="searchTerm"
+                       name="searchTerm" aria-label="Search">
+                <button class="btn btn-light" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <br>
+    <div class="row">
+        <h4>Available Restaurants:</h4>
+        <table class="table table-warning table-hover">
+            <thead>
             <tr>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Restaurant City</th>
-              <th>Restaurant District</th>
-              <th></th>
+                <th scope="col">Name</th>
+                <th scope="col">City</th>
+                <th scope="col">District</th>
+                <th scope="col">Postal Code</th>
+                <th scope="col">Street</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="restaurant: ${restaurants}">
-              <td th:text="${restaurant.restaurantName}"></td>
-              <td th:text="${restaurant.restaurantPhone}"></td>
-              <td th:text="${restaurant.restaurantEmail}"></td>
-              <td th:text="${restaurant.restaurantAddress.addressCity}"></td>
-              <td th:text="${restaurant.restaurantAddress.addressDistrict}"></td>
-              <td>
-                <a th:href="@{/restaurants/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="btn btn-info" type="button">Go To Restaurant</a>
-              </td>
+                <td th:text="${restaurant.restaurantName}"></td>
+                <td th:text="${restaurant.restaurantAddress.addressCity}"></td>
+                <td th:text="${restaurant.restaurantAddress.addressDistrict}"></td>
+                <td th:text="${restaurant.restaurantAddress.addressPostalCode}"></td>
+                <td th:text="${restaurant.restaurantAddress.addressAddressStreet}"></td>
+                <td>
+                    <a th:href="@{/restaurant/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}"
+                       class="btn btn-light" type="button">Go To Restaurant</a>
+                </td>
             </tr>
             </tbody>
-          </table>
-        </div>
-      </div>
-      <br>
-      <br>
+        </table>
     </div>
-  </nav>
 
+</div>
 </body>
 </html>

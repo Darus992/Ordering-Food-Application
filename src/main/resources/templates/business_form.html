@@ -45,8 +45,37 @@
   <br>
   <br>
   <div class="container">
-    <form action="#" th:action="@{/restaurant/create}" method="post" th:object="${restaurantRequestForm}">
-      <h4 class="text-center">Create Restaurant:</h4>
+    <form action="#" th:action="@{/user/register-business}" method="post" th:object="${businessRequestForm}">
+      <h4 class="text-center">Create Account:</h4>
+      <div class="row">
+        <div class="d-flex justify-content-around">
+          <div class="col-md-4">
+            <br>
+            Username:
+            <input type="text" id="username" name="username" class="form-control" th:field="*{username}" style="width: 400px;"/>
+            <br>
+            Email:
+            <input type="email" id="email" name="email" class="form-control" th:field="*{userEmail}" style="width: 400px;"/>
+            <br>
+            Password:
+            <input type="password" id="password" name="password" class="form-control" th:field="*{userPassword}" style="width: 400px;"/>
+          </div>
+          <div class="col-md-4">
+            <br>
+            Name:
+            <input type="text" id="name" name="name" class="form-control" th:field="*{ownerName}" style="width: 400px;"/>
+            <br>
+            Surname:
+            <input type="text" id="surname" name="surname" class="form-control" th:field="*{ownerSurname}" style="width: 400px;"/>
+            <br>
+            Pesel:
+            <input type="text" id="pesel" name="pesel" class="form-control" th:field="*{ownerPesel}" style="width: 400px;"/>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <p class="h5 text-center">Please enter restaurant details:</p>
       <br>
       <div class="row">
         <div class="d-flex justify-content-around">
@@ -138,7 +167,8 @@
       <br>
       <div class="row p-5">
         <div class="form-group d-flex justify-content-center">
-          <input type="submit" value="Create Restaurant" name="button" class="btn btn-success mx-3"/>
+          <input type="submit" value="Create Account" name="button" class="btn btn-success mx-3"/>
+          <span>Already have an account ? <a href="#" th:href="@{/login}">Click here</a></span>
         </div>
       </div>
       <br>

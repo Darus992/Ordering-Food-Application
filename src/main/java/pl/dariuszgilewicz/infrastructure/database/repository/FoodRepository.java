@@ -15,7 +15,7 @@ public class FoodRepository {
     private FoodEntityMapper foodEntityMapper;
 
 
-    public FoodEntity createFood(Food food) {
+    public FoodEntity createAndReturnFoodEntity(Food food) {
         FoodEntity toSave = foodEntityMapper.mapToEntity(food);
         foodJpaRepository.save(toSave);
         return toSave;

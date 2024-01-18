@@ -11,9 +11,7 @@
             crossorigin="anonymous"></script>
     <title>Order your food online!</title>
 </head>
-<body class="container">
-<br>
-
+<body>
 <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
     <div class="container-fluid">
         <h5>Order your food online!</h5>
@@ -24,12 +22,14 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-                    <li><a class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
+                    <li><a th:if="${isAuthenticated && userRole == 'OWNER'}" class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
+                    <li><a th:if="${isAuthenticated && userRole == 'CUSTOMER'}" class="dropdown-item" th:href="@{/customer}">Go to your account</a></li>
                     <li><button class="dropdown-item" type="button">Something else here</button></li>
                 </ul>
             </div>
             <a th:unless="${isAuthenticated}" th:href="@{/login}" class="btn btn-primary" role="button">Log in</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/users/register}" class="btn btn-primary" role="button">Register</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/user/register-customer}" class="btn btn-primary" role="button">Customer Register</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/user/register-business}" class="btn btn-primary" role="button">Business Register</a>
         </div>
     </div>
 </nav>
@@ -45,16 +45,96 @@
                     <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                 </li>
             </ul>
-            <form class="d-flex" th:action="@{/restaurants}" method="get" th:object="${restaurants}">
-                <input class="form-control me-2" type="search" placeholder="Restaurant name" id="restaurantName"
-                       name="restaurantName" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
         </div>
     </div>
 </nav>
+<br>
+<div class="container text-center">
+    <form th:action="@{/restaurants}" method="get" th:object="${restaurants}">
+        <div class="d-flex justify-content-center">
+            <div class="col p-3 bg-warning text-emphasis-warning">
+                <h3>Order your food online!</h3>
+                <p>Find restaurants delivering right now, near you</p>
+                <br>
+                <div class="col-8 d-flex" style="margin-left: 150px;">
+                    <input class="form-control me-2" type="search" placeholder="Enter city or street" id="searchTerm" name="searchTerm" aria-label="Search">
+                    <button class="btn btn-light" type="submit">Search</button>
+                </div>
+            </div>
+            <div class="col">
+                <img width="700" height="401" src="https://img.freepik.com/free-photo/top-view-arrangement-with-salad-boxes-sauce_23-2148247882.jpg?w=1380&t=st=1704970302~exp=1704970902~hmac=0f041c8df5c94d64bc5b16e357713dc823e12e8c7a25234003f358ac1c3c0e6c" alt="bg_image" class="img-fluid"/>
+            </div>
+        </div>
+    </form>
+</div>
 
-<br>
-<br>
+<!--<div class="container text-center">-->
+<!--    <div class="row">-->
+<!--        <form th:action="@{/restaurants/category}" method="get">-->
+<!--            <div class="row d-flex justify-content-center">-->
+<!--                <div class="col" style="max-width: 10rem; margin-right: 10px; display: flex; align-items: center;">-->
+<!--                    <button type="submit" name="foodCategory" value="Pizza" style="border: none; background-color: transparent;">-->
+<!--                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/pizza.png" alt="pizza"/>-->
+<!--                        <p>Pizza</p>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="col" style="max-width: 10rem; margin-right: 10px; display: flex; align-items: center;">-->
+<!--                    <button type="submit" name="foodCategory" value="Burgers" style="border: none; background-color: transparent;">-->
+<!--                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/hamburger.png" alt="hamburger"/>-->
+<!--                        <p>Burgers</p>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="col" style="max-width: 10rem; margin-right: 10px; display: flex; align-items: center;">-->
+<!--                    <button type="submit" name="foodCategory" value="Home Cooked Dinners" style="border: none; background-color: transparent;">-->
+<!--                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/thanksgiving.png" alt="thanksgiving"/>-->
+<!--                        <p>Home Cooked Dinners</p>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="col" style="max-width: 10rem; margin-right: 10px; display: flex; align-items: center;">-->
+<!--                    <button type="submit" name="foodCategory" value="Sushi" style="border: none; background-color: transparent;">-->
+<!--                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/nigiri-sushi.png" alt="nigiri-sushi"/>-->
+<!--                        <p>Sushi</p>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="col" style="max-width: 10rem; margin-right: 10px; display: flex; align-items: center;">-->
+<!--                    <button type="submit" name="foodCategory" value="Fish & Seafood" style="border: none; background-color: transparent;">-->
+<!--                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/fish-food.png" alt="fish-food"/>-->
+<!--                        <p>Fish & Seafood</p>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--    <br>-->
+<!--    <div class="row">-->
+<!--        <div class="h4 pb-2 mb-4 border-bottom border-dark"></div>-->
+<!--        <h4>Available Restaurants:</h4>-->
+<!--        <table class="table table-dark table-striped">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th scope="col">Name</th>-->
+<!--                <th scope="col">Phone</th>-->
+<!--                <th scope="col">Email</th>-->
+<!--                <th scope="col">City</th>-->
+<!--                <th scope="col">District</th>-->
+<!--                <th scope="col"></th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody class="table-light">-->
+<!--            <tr th:each="restaurant: ${restaurants}">-->
+<!--                <td th:text="${restaurant.restaurantName}"></td>-->
+<!--                <td th:text="${restaurant.restaurantPhone}"></td>-->
+<!--                <td th:text="${restaurant.restaurantEmail}"></td>-->
+<!--                <td th:text="${restaurant.restaurantAddress.addressCity}"></td>-->
+<!--                <td th:text="${restaurant.restaurantAddress.addressDistrict}"></td>-->
+<!--                <td>-->
+<!--                    <a th:href="@{/restaurants/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="btn btn-info" type="button">Go To Restaurant</a>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+
 </body>
 </html>

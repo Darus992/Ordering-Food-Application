@@ -2,6 +2,8 @@ package pl.dariuszgilewicz.infrastructure.model;
 
 import lombok.*;
 
+import java.util.List;
+
 @Setter
 @Getter
 @Builder
@@ -14,5 +16,7 @@ public class Restaurant {
     private String restaurantEmail;
     private FoodMenu foodMenu;
     private Address restaurantAddress;
-    private Schedule restaurantSchedule;
+    private RestaurantOpeningTime restaurantOpeningTime;
+//    private RestaurantOwner restaurantOwner;
+//    private List<Address> deliveryAddress;
 }

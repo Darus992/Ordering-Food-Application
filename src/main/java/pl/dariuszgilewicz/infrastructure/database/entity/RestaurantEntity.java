@@ -2,7 +2,6 @@ package pl.dariuszgilewicz.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 
 import java.util.List;
 
@@ -37,22 +36,18 @@ public class RestaurantEntity {
     @JoinColumn(name = "restaurant_address_id")
     private AddressEntity restaurantAddress;
 
-//    @ManyToOne(fetch = FetchType.EAGER)             //zmieniłem na EAGER
-//    @JoinColumn(name = "restaurant_owner_id")
-//    private RestaurantOwnerEntity restaurantOwner;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_owner_id")
+    private RestaurantOwnerEntity restaurantOwner;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
-    @OneToMany(mappedBy = "restaurant")
-    private List<OrdersEntity> customerOrders;
-    
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "schedule_id")
-    private ScheduleEntity schedule;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_opening_time_id")
+    private RestaurantOpeningTimeEntity restaurantOpeningTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_address_id")
     private AddressEntity deliveryAddress;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<OrdersEntity> customerOrders;
 }

@@ -2,17 +2,15 @@ package pl.dariuszgilewicz.infrastructure.model;
 
 import lombok.*;
 
-import java.util.List;
-
-@Getter
 @Setter
+@Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantOwner {
+@AllArgsConstructor
+public class Customer {
 
     private String name;
     private String surname;
-    private String pesel;
-    private List<Restaurant> restaurants;
+    private String phone;
+    private Address address;
 }

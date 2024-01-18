@@ -32,6 +32,6 @@ public class FoodEntity {
     @Column(name = "price")
     private BigDecimal price;
 
-    @ManyToMany(mappedBy = "foods")     //dodałem to tak jak podpowiadał mi chatGPT
+    @ManyToMany(mappedBy = "foods")
     private List<FoodMenuEntity> foodsMenu;
 }

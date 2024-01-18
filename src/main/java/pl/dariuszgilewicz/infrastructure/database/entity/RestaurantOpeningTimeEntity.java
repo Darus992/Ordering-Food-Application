@@ -6,8 +6,6 @@ import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.time.OffsetTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -25,18 +23,17 @@ public class RestaurantOpeningTimeEntity {
 
     @Column(name = "opening_hour")
     @JsonFormat(pattern = "HH:mm:ss.SSS", shape = JsonFormat.Shape.STRING)
-//    private OffsetTime openingHour;
     private LocalTime openingHour;
 
     @Column(name = "close_hour")
     @JsonFormat(pattern = "HH:mm:ss.SSS", shape = JsonFormat.Shape.STRING)
-//    private OffsetTime closeHour;
     private LocalTime closeHour;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "day_of_week")
-    private DayOfWeek dayOfWeek;
+    @Column(name = "day_of_week_from")
+    private DayOfWeek dayOfWeekFrom;
 
-    @ManyToMany(mappedBy = "restaurantOpeningTimes")
-    private List<ScheduleEntity> schedules;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "day_of_week_till")
+    private DayOfWeek dayOfWeekTill;
 }

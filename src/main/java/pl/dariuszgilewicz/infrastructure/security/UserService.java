@@ -10,8 +10,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import pl.dariuszgilewicz.infrastructure.database.repository.mapper.UserEntityMapper;
+import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
+import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
+import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,10 +26,17 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final UserEntityMapper userEntityMapper;
+
 
     @Transactional
-    public void createUser(User user) {
-        userRepository.saveUser(user);
+    public void createCustomerUser(CustomerRequestForm customerRequestForm) {
+        userRepository.createCustomerUser(customerRequestForm);
+    }
+
+    @Transactional
+    public void createBusinessUser(BusinessRequestForm businessRequestForm) {
+        userRepository.createBusinessUser(businessRequestForm);
     }
 
     @Override
@@ -61,6 +74,32 @@ public class UserService implements UserDetailsService {
     }
 
     public User findUserByUserName(String userName) {
-        return userRepository.findMappedUserByUserName(userName);
+        UserEntity userEntity = userRepository.findUserEntityByUsername(userName);
+        return userEntityMapper.mapFromEntity(userEntity);
+
+//        //  TODO: ZASTANOWIĆ SIE NAD TYM CZY TO ZOSTAWIĆ CZY USUNĄĆ
+//
+//        if(userEntity.getCustomer() == null && userEntity.getOwner() == null){
+//            user.setIsCompleted(false);
+//        }else {
+//            user.setIsCompleted(true);
+//        }
+//        return user;
+    }
+
+    public static boolean checkIfIsAuthenticated(Model model, Authentication authentication) {
+        boolean isAuthenticated = authentication != null && authentication.isAuthenticated();
+        model.addAttribute("isAuthenticated", isAuthenticated);
+        return isAuthenticated;
+    }
+
+    public static void assignRoleDependsOnAuthentication(Authentication authentication, Model model, boolean isAuthenticated) {
+        if (isAuthenticated) {
+            String userRole = authentication.getAuthorities().stream()
+                    .findFirst()
+                    .map(Objects::toString)
+                    .orElse(null);
+            model.addAttribute("userRole", userRole);
+        }
     }
 }

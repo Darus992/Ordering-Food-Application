@@ -48,9 +48,11 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/restaurant/**", "/owner/**")
+                        .requestMatchers("/owner/**")
                         .hasAuthority("OWNER")
-                        .requestMatchers("/", "/**", "/restaurants", "/users/register")
+                        .requestMatchers("/customer/**")
+                        .hasAnyAuthority("CUSTOMER")
+                        .requestMatchers("/", "/**", "/restaurants", "/user/register-customer", "/user/register-business")
                         .permitAll()
                 )
                 .formLogin(login -> login

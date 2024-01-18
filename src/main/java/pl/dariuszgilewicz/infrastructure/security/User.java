@@ -2,6 +2,7 @@ package pl.dariuszgilewicz.infrastructure.security;
 
 import lombok.*;
 import pl.dariuszgilewicz.infrastructure.model.Restaurant;
+import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
 
 import java.util.List;
 
@@ -12,9 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
-    private String userName;
+    private String username;
     private String email;
     private String password;
     private UserRole role;
-    private List<Restaurant> restaurants;
+    private RestaurantOwner restaurantOwner;
+//    private Boolean isCompleted;
 }

@@ -13,5 +13,6 @@ public class RestaurantOpeningTime {
 
     private String openingHour;
     private String closeHour;
-    private DayOfWeek dayOfWeek;
+    private DayOfWeek dayOfWeekFrom;
+    private DayOfWeek dayOfWeekTill;
 }
