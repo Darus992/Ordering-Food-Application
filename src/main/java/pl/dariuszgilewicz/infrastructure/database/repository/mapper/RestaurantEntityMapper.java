@@ -55,7 +55,7 @@ public interface RestaurantEntityMapper {
     @Mapping(source = "restaurantAddress.addressAddressStreet", target = "restaurantAddress.address")
     RestaurantEntity mapToEntity(Restaurant restaurant);
 
-    default RestaurantEntity mapFromBusinessRequest(BusinessRequestForm businessRequestForm, RestaurantOwnerEntity owner){
+    default RestaurantEntity mapFromBusinessRequest(BusinessRequestForm businessRequestForm){
         return RestaurantEntity.builder()
                 .restaurantName(businessRequestForm.getRestaurantName())
                 .phone(businessRequestForm.getRestaurantPhone())
@@ -66,7 +66,7 @@ public interface RestaurantEntityMapper {
                         .postalCode(businessRequestForm.getRestaurantAddressPostalCode())
                         .address(businessRequestForm.getRestaurantAddressStreet())
                         .build())
-                .restaurantOwner(owner)
+//                .restaurantOwner(owner)
                 .restaurantOpeningTime(RestaurantOpeningTimeEntity.builder()
                         .openingHour(LocalTime.parse(businessRequestForm.getOpeningHour() + ":00", DateTimeFormatter.ISO_LOCAL_TIME))
                         .closeHour(LocalTime.parse(businessRequestForm.getCloseHour() + ":00", DateTimeFormatter.ISO_LOCAL_TIME))

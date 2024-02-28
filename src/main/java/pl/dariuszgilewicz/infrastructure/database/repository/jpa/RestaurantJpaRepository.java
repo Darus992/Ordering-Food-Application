@@ -30,4 +30,6 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity,
             WHERE ra IN :addressEntities
             """)
     Optional<List<RestaurantEntity>> findAllByAddress(@Param("addressEntities") List<AddressEntity> addressEntities);
+
+    boolean existsByEmail(String restaurantEmail);
 }

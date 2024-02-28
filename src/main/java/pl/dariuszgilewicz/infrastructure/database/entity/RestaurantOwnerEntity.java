@@ -2,6 +2,8 @@ package pl.dariuszgilewicz.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 
 import java.util.List;
@@ -32,6 +34,7 @@ public class RestaurantOwnerEntity {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "owner")
     private UserEntity user;
 
+    @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "restaurantOwner")
     private List<RestaurantEntity> restaurants;
 }

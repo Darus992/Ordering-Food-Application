@@ -39,8 +39,8 @@ public class RestaurantController {
             Model model
     ) {
         Restaurant restaurant = restaurantService.findRestaurantByEmail(restaurantEmail);
-        boolean isAuthenticated = UserService.checkIfIsAuthenticated(model, authentication);
-        UserService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
+        boolean isAuthenticated = userService.checkIfIsAuthenticated(model, authentication);
+        userService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
         model.addAttribute("restaurantEmail", restaurantEmail);
         model.addAttribute("restaurant", restaurant);
         return "restaurant_details";
@@ -53,8 +53,8 @@ public class RestaurantController {
             Model model
     ) {
         List<Restaurant> restaurants = restaurantService.findRestaurantsNearYouByAddress(searchTerm);
-        boolean isAuthenticated = UserService.checkIfIsAuthenticated(model, authentication);
-        UserService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
+        boolean isAuthenticated = userService.checkIfIsAuthenticated(model, authentication);
+        userService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
         model.addAttribute("restaurants", restaurants);
 
 
@@ -70,9 +70,9 @@ public class RestaurantController {
             Model model
     ) {
         model.addAttribute("selectedCategory", foodCategory);
-        List<Restaurant> restaurants = restaurantService.findAllRestaurantsWithPickedCategory(foodCategory);
-        boolean isAuthenticated = UserService.checkIfIsAuthenticated(model, authentication);
-        UserService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
+        List<Restaurant> restaurants = restaurantService.findAllRestaurantsWithSelectedCategory(foodCategory);
+        boolean isAuthenticated = userService.checkIfIsAuthenticated(model, authentication);
+        userService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
         model.addAttribute("restaurants", restaurants);
 
         List<String> categories = Arrays.asList("Pizza", "Burgers");

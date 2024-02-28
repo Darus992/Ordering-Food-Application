@@ -12,10 +12,12 @@ import pl.dariuszgilewicz.infrastructure.security.UserService;
 @AllArgsConstructor
 public class HomeController {
 
+    private UserService userService;
+
     @GetMapping("/")
     public String home(Model model, Authentication authentication) {
-        boolean isAuthenticated = UserService.checkIfIsAuthenticated(model, authentication);
-        UserService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
+        boolean isAuthenticated = userService.checkIfIsAuthenticated(model, authentication);
+        userService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
         return "index";
     }
 

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface RestaurantOwnerJpaRepository extends JpaRepository<RestaurantOwnerEntity, Long> {
 
     Optional<RestaurantOwnerEntity> findByPesel(String pesel);
+
+    boolean existsByPesel(String ownerPesel);
 }

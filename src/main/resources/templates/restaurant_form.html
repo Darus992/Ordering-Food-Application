@@ -15,15 +15,17 @@
   <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
   <div class="container-fluid">
     <h5>Order your food online!</h5>
-    <div class="btn-group dropstart">
-      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Menu
-      </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-        <li><a class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
-        <li><button class="dropdown-item" type="button">Something else here</button></li>
-      </ul>
+    <div class="container-right">
+      <div class="btn-group dropstart">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Menu
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+          <li><a class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
+          <li><button class="dropdown-item" type="button">Something else here</button></li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
