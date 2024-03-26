@@ -11,12 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 public class Restaurant {
 
+    private byte[] restaurantImageCard;
     private String restaurantName;
     private String restaurantPhone;
     private String restaurantEmail;
     private FoodMenu foodMenu;
     private Address restaurantAddress;
     private RestaurantOpeningTime restaurantOpeningTime;
-//    private RestaurantOwner restaurantOwner;
-//    private List<Address> deliveryAddress;
+    private List<Integer> customerOrdersNumbers;
 }

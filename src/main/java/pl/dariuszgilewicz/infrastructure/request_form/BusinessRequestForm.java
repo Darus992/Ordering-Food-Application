@@ -1,7 +1,7 @@
 package pl.dariuszgilewicz.infrastructure.request_form;
 
 import lombok.*;
-import pl.dariuszgilewicz.infrastructure.security.UserRole;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.DayOfWeek;
 
@@ -18,6 +18,7 @@ public class BusinessRequestForm {
     private String ownerName;
     private String ownerSurname;
     private String ownerPesel;
+    private MultipartFile restaurantImageCard;
     private String restaurantName;
     private String restaurantPhone;
     private String restaurantEmail;

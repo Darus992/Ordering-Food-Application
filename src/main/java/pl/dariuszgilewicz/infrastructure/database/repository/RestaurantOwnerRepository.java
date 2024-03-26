@@ -13,12 +13,6 @@ import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
 public class RestaurantOwnerRepository {
 
     private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
-    private RestaurantOwnerEntityMapper restaurantOwnerEntityMapper;
-
-    public void createRestaurantOwner(RestaurantOwner restaurantOwner) {
-        RestaurantOwnerEntity toSave = restaurantOwnerEntityMapper.mapToEntity(restaurantOwner);
-        restaurantOwnerJpaRepository.save(toSave);
-    }
 
     public RestaurantOwnerEntity findRestaurantOwnerEntityByPesel(String pesel) {
         return restaurantOwnerJpaRepository.findByPesel(pesel)

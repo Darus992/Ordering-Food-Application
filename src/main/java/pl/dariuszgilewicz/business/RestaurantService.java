@@ -52,8 +52,8 @@ public class RestaurantService {
     }
 
     @Transactional
-    public void createRestaurantAndAssignToOwner(RestaurantRequestForm restaurantRequestForm, String userName) {
-        User user = userService.findUserByUserName(userName);
+    public void createRestaurantAndAssignToOwner(RestaurantRequestForm restaurantRequestForm) {
+        User user = userService.getCurrentUser();
         String ownerPesel = user.getRestaurantOwner().getPesel();
         restaurantRepository.createRestaurantFromRestaurantRequest(restaurantRequestForm, ownerPesel);
     }

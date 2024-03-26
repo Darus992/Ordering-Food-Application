@@ -2,7 +2,9 @@ package pl.dariuszgilewicz.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
 
+import java.sql.Types;
 import java.util.List;
 
 @Getter
@@ -18,6 +20,11 @@ public class FoodMenuEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "food_menu_id")
     private Integer foodMenuId;
+
+    @JdbcTypeCode(Types.VARBINARY)
+//    @JdbcTypeCode(Types.BINARY)
+    @Column(name = "food_menu_image")
+    private byte[] foodMenuImage;
 
     @Column(name = "menu_name")
     private String menuName;

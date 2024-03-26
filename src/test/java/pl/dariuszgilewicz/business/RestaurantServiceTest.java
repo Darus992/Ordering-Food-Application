@@ -166,13 +166,12 @@ class RestaurantServiceTest {
     @Test
     void createRestaurantAndAssignToOwner_shouldWorkSuccessfully() {
         //  given
-        String username = "business_user";
         User businessUser = someMappedBusinessUser1();
         RestaurantRequestForm requestForm = someRestaurantRequestForm1();
-        given(userService.findUserByUserName(username)).willReturn(businessUser);
+        given(userService.getCurrentUser()).willReturn(businessUser);
 
         //  when
-        restaurantService.createRestaurantAndAssignToOwner(requestForm, username);
+        restaurantService.createRestaurantAndAssignToOwner(requestForm);
 
         //  then
         then(restaurantRepository).should().createRestaurantFromRestaurantRequest(requestForm, businessUser.getRestaurantOwner().getPesel());

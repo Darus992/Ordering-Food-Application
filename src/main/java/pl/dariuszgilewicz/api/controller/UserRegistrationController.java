@@ -3,13 +3,20 @@ package pl.dariuszgilewicz.api.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
 import pl.dariuszgilewicz.infrastructure.security.UserService;
+
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Date;
 
 @Controller
 @AllArgsConstructor
@@ -27,7 +34,8 @@ public class UserRegistrationController {
     }
 
     @PostMapping("/register-customer")
-    public String createCustomerUserForm(@ModelAttribute("customerRequestForm") CustomerRequestForm customerRequestForm){
+    public String createCustomerUserForm(
+            @ModelAttribute("customerRequestForm") CustomerRequestForm customerRequestForm){
         userService.createCustomerUser(customerRequestForm);
         return "redirect:/";
     }
@@ -39,7 +47,9 @@ public class UserRegistrationController {
     }
 
     @PostMapping("/register-business")
-    public String createBusinessUserForm(@ModelAttribute("businessRequestForm") BusinessRequestForm businessRequestForm){
+    public String createBusinessUserForm(
+            @ModelAttribute("businessRequestForm") BusinessRequestForm businessRequestForm
+    ){
         userService.createBusinessUser(businessRequestForm);
         return "redirect:/";
     }

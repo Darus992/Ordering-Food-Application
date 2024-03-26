@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 public class Address {
 
-    private String addressCity;
-    private String addressDistrict;
-    private String addressPostalCode;
-    private String addressAddressStreet;
+    private String city;
+    private String district;
+    private String postalCode;
+    private String addressStreet;
 }

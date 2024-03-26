@@ -1,113 +1,201 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-        crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-          crossorigin="anonymous"></script>
-  <title>Restaurant</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <title>Restaurant</title>
 </head>
 <body>
-  <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
-  <div class="container-fluid">
-    <h5>Order your food online!</h5>
-    <div class="container-right">
-      <div th:if="${isAuthenticated}" class="btn-group dropstart">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Menu
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-          <li><a th:if="${isAuthenticated && userRole == 'OWNER'}" class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
-          <li><a th:if="${isAuthenticated && userRole == 'CUSTOMER'}" class="dropdown-item" th:href="@{/customer}">Go to your account</a></li>
-          <li><button class="dropdown-item" type="button">Something else here</button></li>
-        </ul>
-      </div>
-      <a th:unless="${isAuthenticated}" th:href="@{/login}" class="btn btn-primary" role="button">Log in</a>
-      <a th:unless="${isAuthenticated}" th:href="@{/user/register}" class="btn btn-primary" role="button">Register</a>
+<nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
+    <div class="container-fluid">
+        <h5>Order your food online!</h5>
+        <div class="container-right">
+            <div th:if="${isAuthenticated}" class="btn-group dropstart">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    Menu
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                    <li><a th:if="${isAuthenticated && userRole == 'OWNER'}" class="dropdown-item" th:href="@{/owner}">Go
+                        to your account</a></li>
+                    <li><a th:if="${isAuthenticated && userRole == 'CUSTOMER'}" class="dropdown-item"
+                           th:href="@{/customer}">Go to your account</a></li>
+                    <li>
+                        <button class="dropdown-item" type="button">Something else here</button>
+                    </li>
+                </ul>
+            </div>
+            <a th:unless="${isAuthenticated}" th:href="@{/login}" class="btn btn-primary" role="button">Log in</a>
+            <a th:unless="${isAuthenticated}" th:href="@{/user/register}" class="btn btn-primary"
+               role="button">Register</a>
+        </div>
     </div>
-  </div>
 </nav>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+                <li class="nav-item" th:if="${isAuthenticated && userRole == 'CUSTOMER'}">
+                    <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="ordersDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                            </svg>
+                            Your Orders
+                        </button>
+                        <ul class="dropdown-menu p-1" aria-labelledby="ordersDropdown">
+                            <li th:each="number : ${user.customer.customerOrders}">
+                                <div th:if="${number.status == null}">
+                                    <a class="dropdown-item" th:href="@{'/cart?orderNumber=' + ${number.orderNumber}}">Order
+                                        Number: [[${number.orderNumber}]]</a>
+                                </div>
+                            </li>
+                            <div th:if="${user.customer.isCartEmpty == true}">
+                                <p class="dropdown-item text-center mb-1">Your cart is empty</p>
+                            </div>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
-  <br>
-  <br>
+<div>
+<!--    <img th:src="@{'/images/restaurant/header/' + ${restaurant.foodMenu.imageFileName}}" alt="..." style="height: 780px;">-->
+    <img th:src="@{/image/{foodMenuId}(foodMenuId=${restaurant.foodMenu.foodMenuId})}" alt="..." style="height: 780px;">
 
-  <div class="=container-fluid">
+</div>
+<br>
+<br>
+
+<div class="container-fluid">
     <div class="text-center">
-      <div class="row">
-        <h3 th:text="${restaurant.restaurantName}"></h3>
-      </div>
-      <br>
-      <br>
+        <div class="row">
+            <h3 th:text="${restaurant.restaurantName}"></h3>
+        </div>
+        <br>
+        <br>
     </div>
     <div class="container">
-      <div class="text-center">
-        <div class="row">
-          <div class="card border-info mb-3 bg-body-tertiary" style="max-width: 18rem; margin-right: 10px; display: flex; align-items: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16" style="margin-top: 10px;">
-              <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
-            </svg>
-            <div class="card-body">
-              <h5 class="card-title">Phone</h5>
-              <p class="card-text" th:text="${restaurant.restaurantPhone}"></p>
+        <div class="text-center">
+            <div class="row">
+                <div class="card border-info mb-3 bg-body-tertiary"
+                     style="max-width: 18rem; margin-right: 10px; display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                         class="bi bi-telephone" viewBox="0 0 16 16" style="margin-top: 10px;">
+                        <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+                    </svg>
+                    <div class="card-body">
+                        <h5 class="card-title">Phone</h5>
+                        <p class="card-text" th:text="${restaurant.restaurantPhone}"></p>
+                    </div>
+                </div>
+                <div class="card border-info mb-3 bg-body-tertiary"
+                     style="max-width: 18rem; margin-right: 10px; display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                         class="bi bi-envelope" viewBox="0 0 16 16" style="margin-top: 10px;">
+                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+                    </svg>
+                    <div class="card-body">
+                        <h5 class="card-title">Email</h5>
+                        <p class="card-text" th:text="${restaurant.restaurantEmail}"></p>
+                    </div>
+                </div>
+                <div class="card border-info mb-3 bg-body-tertiary"
+                     style="max-width: 18rem; margin-right: 10px; display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                         class="bi bi-geo-alt" viewBox="0 0 16 16" style="margin-top: 10px;">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                    </svg>
+                    <div class="card-body">
+                        <h5 class="card-title">Address</h5>
+                        <p class="card-text" th:text="${restaurant.restaurantAddress.addressAddressStreet}"
+                           style="display: inline-block; margin-left: 5px;"></p>
+                        <p class="card-text" th:text="${restaurant.restaurantAddress.addressPostalCode}"
+                           style="display: inline-block;"></p>
+                        <p class="card-text" th:text="${restaurant.restaurantAddress.addressCity}"
+                           style="display: inline-block;"></p>
+                        <p class="card-text" th:text="${restaurant.restaurantAddress.addressDistrict}"
+                           style="display: inline-block; margin-left: 5px;"></p>
+                    </div>
+                </div>
+                <div class="card border-info mb-3 bg-body-tertiary"
+                     style="max-width: 18rem; margin-right: 10px; display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                         class="bi bi-file-spreadsheet" viewBox="0 0 16 16" style="margin-top: 10px;">
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v4h10V2a1 1 0 0 0-1-1zm9 6h-3v2h3zm0 3h-3v2h3zm0 3h-3v2h2a1 1 0 0 0 1-1zm-4 2v-2H6v2zm-4 0v-2H3v1a1 1 0 0 0 1 1zm-2-3h2v-2H3zm0-3h2V7H3zm3-2v2h3V7zm3 3H6v2h3z"/>
+                    </svg>
+                    <div class="card-body">
+                        <h5 class="card-title">Schedule</h5>
+                        <p class="card-text" th:text="${restaurant.restaurantOpeningTime.openingHour}"
+                           style="display: inline-block; margin-left: 5px;"></p>
+                        -<p class="card-text" th:text="${restaurant.restaurantOpeningTime.closeHour}"
+                            style="display: inline-block; margin-left: 5px;"></p>
+                        <p class="card-text" th:text="${restaurant.restaurantOpeningTime.dayOfWeekFrom}"
+                           style="display: inline-block; margin-left: 5px;"></p>
+                        -<p class="card-text" th:text="${restaurant.restaurantOpeningTime.dayOfWeekTill}"
+                            style="display: inline-block; margin-left: 5px;"></p>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="card border-info mb-3 bg-body-tertiary" style="max-width: 18rem; margin-right: 10px; display: flex; align-items: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16" style="margin-top: 10px;">
-              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
-            </svg>
-            <div class="card-body">
-              <h5 class="card-title">Email</h5>
-              <p class="card-text" th:text="${restaurant.restaurantEmail}"></p>
-            </div>
-          </div>
-          <div class="card border-info mb-3 bg-body-tertiary" style="max-width: 18rem; margin-right: 10px; display: flex; align-items: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16" style="margin-top: 10px;">
-              <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
-              <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-            </svg>
-            <div class="card-body">
-              <h5 class="card-title">Address</h5>
-              <p class="card-text" th:text="${restaurant.restaurantAddress.addressAddressStreet}" style="display: inline-block; margin-left: 5px;"></p>
-              <p class="card-text" th:text="${restaurant.restaurantAddress.addressPostalCode}" style="display: inline-block;"></p>
-              <p class="card-text" th:text="${restaurant.restaurantAddress.addressCity}" style="display: inline-block;"></p>
-              <p class="card-text" th:text="${restaurant.restaurantAddress.addressDistrict}" style="display: inline-block; margin-left: 5px;"></p>
-            </div>
-          </div>
-          <div class="card border-info mb-3 bg-body-tertiary" style="max-width: 18rem; margin-right: 10px; display: flex; align-items: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-spreadsheet" viewBox="0 0 16 16" style="margin-top: 10px;">
-              <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v4h10V2a1 1 0 0 0-1-1zm9 6h-3v2h3zm0 3h-3v2h3zm0 3h-3v2h2a1 1 0 0 0 1-1zm-4 2v-2H6v2zm-4 0v-2H3v1a1 1 0 0 0 1 1zm-2-3h2v-2H3zm0-3h2V7H3zm3-2v2h3V7zm3 3H6v2h3z"/>
-            </svg>
-            <div class="card-body">
-              <h5 class="card-title">Schedule</h5>
-              <p class="card-text" th:text="${restaurant.restaurantOpeningTime.openingHour}" style="display: inline-block; margin-left: 5px;"></p>
-              -<p class="card-text" th:text="${restaurant.restaurantOpeningTime.closeHour}" style="display: inline-block; margin-left: 5px;"></p>
-              <p class="card-text" th:text="${restaurant.restaurantOpeningTime.dayOfWeekFrom}" style="display: inline-block; margin-left: 5px;"></p>
-              -<p class="card-text" th:text="${restaurant.restaurantOpeningTime.dayOfWeekTill}" style="display: inline-block; margin-left: 5px;"></p>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
+<br>
+<form th:action="@{( ${orderNumber == null} ? '/create-cart' : '/update-cart' )}" method="post">
+    <div th:if="${orderNumber != null}">
+        <input type="hidden" name="_method" value="PUT" />
+    </div>
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="food : ${restaurant.foodMenu.foods}">
+                    <td th:text="${food.category}">Category</td>
+                    <td th:text="${food.name}">Name</td>
+                    <td th:text="${food.description}">Description</td>
+                    <td th:text="${food.price}">Price</td>
+                    <td>
+                            <input type="number" name="quantity" min="1" style="margin-right: 10px; align-items: center;"/>
+                            <input type="checkbox" name="foodIds" th:value="${food.foodId}"/>
+                            <div class="col-sm-2">
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                    </td>
+                </tr>
+                </tbody>
+        </table>
+        <input class="form-control me-2" type="hidden" name="restaurantEmail" th:value="${restaurantEmail}">
+        <input class="form-control me-2" type="hidden" name="orderNumber" th:value="${orderNumber}" th:if="${orderNumber != null}">
+        <button class="btn btn-success" type="submit">
+            <span th:text="${orderNumber == null ? 'Create Cart' : 'Add To Cart'}"></span>
+        </button>
+    </div>
+</form>
 
 </body>
 </html>

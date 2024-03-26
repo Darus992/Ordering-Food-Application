@@ -12,7 +12,6 @@ import pl.dariuszgilewicz.infrastructure.model.RestaurantOpeningTime;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @UtilityClass
@@ -150,10 +149,10 @@ public class RestaurantFixtures {
 //                        .foods()
 //                        .build())
                 .restaurantAddress(Address.builder()
-                        .addressCity("Białystok")
-                        .addressDistrict("Antoniuk")
-                        .addressPostalCode("12-221")
-                        .addressAddressStreet("Antoniukowska 100")
+                        .city("Białystok")
+                        .district("Antoniuk")
+                        .postalCode("12-221")
+                        .addressStreet("Antoniukowska 100")
                         .build())
                 .restaurantOpeningTime(RestaurantOpeningTime.builder()
                         .openingHour("15:00")
@@ -174,10 +173,10 @@ public class RestaurantFixtures {
 //                        .foods()
 //                        .build())
                 .restaurantAddress(Address.builder()
-                        .addressCity("Warszawa")
-                        .addressDistrict("Zacisze")
-                        .addressPostalCode("11-253")
-                        .addressAddressStreet("Lisia 2")
+                        .city("Warszawa")
+                        .district("Zacisze")
+                        .postalCode("11-253")
+                        .addressStreet("Lisia 2")
                         .build())
                 .restaurantOpeningTime(RestaurantOpeningTime.builder()
                         .openingHour("15:00")

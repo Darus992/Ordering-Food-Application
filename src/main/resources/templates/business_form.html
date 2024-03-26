@@ -45,7 +45,7 @@
   <br>
   <br>
   <div class="container">
-    <form action="#" th:action="@{/user/register-business}" method="post" th:object="${businessRequestForm}">
+    <form action="#" th:action="@{/user/register-business}" method="post" enctype="multipart/form-data" th:object="${businessRequestForm}">
       <h4 class="text-center">Create Account:</h4>
       <div class="row">
         <div class="d-flex justify-content-around">
@@ -162,6 +162,13 @@
               </select>
             </div>
           </div>
+        </div>
+      </div>
+      <br>
+      <div class="row mb-3">
+        <label class="col-sm-4 col-form-label">Image</label>
+        <div class="col-sm-8">
+          <input class="form-control" type="file" th:field="*{imageFile}">
         </div>
       </div>
       <br>

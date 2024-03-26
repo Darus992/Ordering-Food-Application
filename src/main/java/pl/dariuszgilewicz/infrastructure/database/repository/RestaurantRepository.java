@@ -10,6 +10,7 @@ import pl.dariuszgilewicz.infrastructure.model.Restaurant;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 import pl.dariuszgilewicz.infrastructure.request_form.RestaurantRequestForm;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +22,11 @@ public class RestaurantRepository {
     private RestaurantJpaRepository restaurantJpaRepository;
     private RestaurantOwnerRepository restaurantOwnerRepository;
 
-
-    public List<Restaurant> findRestaurantsByName(String restaurantName) {
-        return restaurantJpaRepository.findAllByRestaurantName(restaurantName)
-                .map(restaurantEntityMapper::mapAllFromEntity)
-                .orElseThrow(() -> new EntityNotFoundException("Not found restaurants list with restaurant name: [%s]".formatted(restaurantName)));
+    public RestaurantEntity findRestaurantEntityByEmail(String restaurantEmail){
+        return restaurantJpaRepository.findByEmail(restaurantEmail)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "RestaurantEntity with restaurantEmail: [%s] not found".formatted(restaurantEmail)
+                ));
     }
 
     public void assignFoodMenuToRestaurant(String restaurantEmail, FoodMenuEntity foodMenuEntity) {
@@ -65,7 +66,13 @@ public class RestaurantRepository {
     }
 
     public void createRestaurantFromBusinessRequest(BusinessRequestForm businessRequestForm, RestaurantOwnerEntity owner) {
-        RestaurantEntity toSave = restaurantEntityMapper.mapFromBusinessRequest(businessRequestForm);
+        RestaurantEntity toSave = null;
+        try {
+            toSave = restaurantEntityMapper.mapFromBusinessRequest(businessRequestForm);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         toSave.setRestaurantOwner(owner);
         restaurantJpaRepository.save(toSave);
     }

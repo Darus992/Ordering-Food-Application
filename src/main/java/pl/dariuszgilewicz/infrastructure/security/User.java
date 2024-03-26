@@ -1,6 +1,7 @@
 package pl.dariuszgilewicz.infrastructure.security;
 
 import lombok.*;
+import pl.dariuszgilewicz.infrastructure.model.Customer;
 import pl.dariuszgilewicz.infrastructure.model.Restaurant;
 import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
 
@@ -18,5 +19,5 @@ public class User {
     private String password;
     private UserRole role;
     private RestaurantOwner restaurantOwner;
-//    private Boolean isCompleted;
+    private Customer customer;
 }

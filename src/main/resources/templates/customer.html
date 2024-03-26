@@ -17,7 +17,12 @@
     <h5>Order your food online!</h5>
     <div class="btn-group dropstart">
       <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Menu
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+             class="bi bi-person-circle" viewBox="0 0 16 16">
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+          <path fill-rule="evenodd"
+                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+        </svg>
       </button>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -28,28 +33,174 @@
   </div>
 </nav>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <form class="d-flex" th:action="@{/restaurants}" method="get" th:object="${restaurants}">
-        <input class="form-control me-2" type="search" placeholder="Restaurant name" id="restaurantName"
-               name="restaurantName" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+    <div class="container-fluid">
+      <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
+          <li class="nav-item">
+            <div class="dropdown">
+              <button class="btn btn-info dropdown-toggle" type="button" id="ordersDropdown"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-cart-check" viewBox="0 0 16 16">
+                  <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+                  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                </svg>
+                Your Carts
+              </button>
+              <ul class="dropdown-menu p-1" aria-labelledby="ordersDropdown">
+                <li th:each="number : ${user.customer.customerOrders}">
+                  <div th:if="${number.status == null}">
+                    <a class="dropdown-item" th:href="@{'/cart?orderNumber=' + ${number.orderNumber}}">Order
+                      Number: [[${number.orderNumber}]]</a>
+                  </div>
+                </li>
+                <div th:if="${user.customer.isCartEmpty == true}">
+                  <p class="dropdown-item text-center mb-1">Your cart is empty</p>
+                </div>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
-
+  </nav>
+  <br>
+  <br>
   <div class="container">
-    <a th:href="@{/customer/create}" class="btn btn-primary" role="button">Fill Details</a>
+    <div class="row justify-content-center">
+      <br>
+
+      <div class="row">
+        <div class="col-2">
+          <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Profile</a>
+            <a class="list-group-item list-group-item-action" id="list-orders-history-list" data-bs-toggle="list" href="#list-orders-history" role="tab" aria-controls="list-orders-history">Orders History</a>
+          </div>
+        </div>
+        <div class="col-10">
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+              <div class="card">
+                <div class="card-header text-center">
+                  <h3>Account Details</h3>
+                </div>
+                <form class="row m-3 g-3">
+                  <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="inputEmail4" th:value="${user.email}">
+                  </div>
+                  <div class="col-6">
+                    <label for="inputPhone" class="form-label">Phone</label>
+                    <div class="input-group flex-nowrap">
+                      <span class="input-group-text" id="addon-wrapping">+48</span>
+                      <input type="text" class="form-control" id="inputPhone" th:value="${user.customer.phone}"
+                             aria-describedby="addon-wrapping">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <label for="inputName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="inputName" th:value="${user.customer.name}">
+                  </div>
+                  <div class="col-6">
+                    <label for="inputSurname" class="form-label">Surname</label>
+                    <input type="text" class="form-control" id="inputSurname" th:value="${user.customer.surname}">
+                  </div>
+                  <h3 class="text-center">Delivery Address:</h3>
+                  <div class="col-12">
+                    <label for="inputAddress" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="inputAddress" th:value="${user.customer.address.addressAddressStreet}">
+                  </div>
+                  <div class="col-12">
+                    <label for="inputAddress2" class="form-label">Address 2</label>
+                    <input type="text" class="form-control" id="inputAddress2" placeholder="Address 2... (Optional)">
+                  </div>
+                  <div class="col-md-5">
+                    <label for="inputCity" class="form-label">City</label>
+                    <input type="text" class="form-control" id="inputCity" th:value="${user.customer.address.addressCity}">
+                  </div>
+                  <div class="col-md-5">
+                    <label for="inputDistrict" class="form-label">District</label>
+                    <input type="text" class="form-control" id="inputDistrict" th:value="${user.customer.address.addressDistrict}">
+                  </div>
+                  <div class="col-md-2">
+                    <label for="inputPostalCode" class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" id="inputPostalCode" th:value="${user.customer.address.addressPostalCode}">
+                  </div>
+                  <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-warning">Save change</button>
+                    <button type="submit" class="btn btn-warning">Change Password</button>
+                  </div>
+                  <div class="col-12 text-center">
+                    <span>
+                      Do you want to delete your account?
+                      <a href="/" th:href="@{/user/delete}" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete my account</a>
+                    </span>
+                    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="confirmModalLabel">Delete my account</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to delete your account?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-danger">Yes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="list-orders-history" role="tabpanel" aria-labelledby="list-orders-history-list">
+              <div class="card">
+                <div class="card-header">
+                  TEKST POMOCNICZY
+                </div>
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Order Number</th>
+                    <th>Status</th>
+                    <th>Receive Date Time</th>
+                    <th>Complete Date Time</th>
+                    <th>Total Price</th>
+                    <th>Restaurant Name</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="order : ${user.customer.customerOrders}">
+                    <td th:text="${order.orderNumber}">Order number</td>
+                    <td th:text="${order.status}">Status</td>
+                    <td th:text="${order.receivedDateTime}">Received Date Time</td>
+                    <td th:text="${order.completedDateTime}">Completed Date Time</td>
+                    <td th:text="${order.totalPrice}">Total Price</td>
+                    <td th:text="${order.restaurant.restaurantName}">Restaurant Name</td>
+                    <td>
+                      <a th:href="@{/order/{orderNumber}(orderNumber=${order.orderNumber})}" class="btn btn-success" role="button">Check Details</a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </body>

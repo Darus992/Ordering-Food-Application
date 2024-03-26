@@ -19,6 +19,7 @@ import pl.dariuszgilewicz.infrastructure.security.UserService;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.hamcrest.core.StringContains.containsString;

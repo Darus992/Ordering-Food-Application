@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Food {
 
+    private Integer foodId;
     private String category;
     private String name;
     private String description;

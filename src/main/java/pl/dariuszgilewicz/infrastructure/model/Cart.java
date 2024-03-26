@@ -3,21 +3,19 @@ package pl.dariuszgilewicz.infrastructure.model;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-@Setter
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoodMenu {
+public class Cart {
 
-    private int foodMenuId;
-    private byte[] foodMenuImage;
-    private String foodMenuName;
+    private Integer orderNumber;
     private String foodCategory;
     private String foodName;
     private String foodDescription;
     private BigDecimal foodPrice;
-    private List<Food> foods;
+    private Integer quantity;
+    private BigDecimal totalPrice;
 }

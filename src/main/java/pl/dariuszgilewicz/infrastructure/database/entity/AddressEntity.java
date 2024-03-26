@@ -3,8 +3,6 @@ package pl.dariuszgilewicz.infrastructure.database.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Entity
@@ -36,7 +34,4 @@ public class AddressEntity {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurantAddress")
     private RestaurantEntity restaurant;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "deliveryAddress")
-    private List<RestaurantEntity> restaurants;
 }

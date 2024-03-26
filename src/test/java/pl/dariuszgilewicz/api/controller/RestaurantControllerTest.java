@@ -137,7 +137,7 @@ class RestaurantControllerTest {
     void findRestaurantsBySearchTerm_shouldWorkCorrectlyWithAuthenticatedCustomer() throws Exception {
         //  given
         Restaurant restaurant = someRestaurantModel1();
-        String searchTerm = restaurant.getRestaurantAddress().getAddressCity();
+        String searchTerm = restaurant.getRestaurantAddress().getCity();
         when(restaurantService.findRestaurantsNearYouByAddress(anyString())).thenReturn(List.of(restaurant));
         when(userService.checkIfIsAuthenticated(any(Model.class), any(Authentication.class))).thenReturn(true);
         //  when
@@ -164,7 +164,7 @@ class RestaurantControllerTest {
     void findRestaurantsBySearchTerm_shouldWorkCorrectlyWithAuthenticatedOwner() throws Exception {
         //  given
         Restaurant restaurant = someRestaurantModel1();
-        String searchTerm = restaurant.getRestaurantAddress().getAddressCity();
+        String searchTerm = restaurant.getRestaurantAddress().getCity();
         when(restaurantService.findRestaurantsNearYouByAddress(anyString())).thenReturn(List.of(restaurant));
         when(userService.checkIfIsAuthenticated(any(Model.class), any(Authentication.class))).thenReturn(true);
         //  when
@@ -191,7 +191,7 @@ class RestaurantControllerTest {
     void findRestaurantsBySearchTerm_shouldWorkCorrectlyWithoutLoggIn() throws Exception {
         //  given
         Restaurant restaurant = someRestaurantModel1();
-        String searchTerm = restaurant.getRestaurantAddress().getAddressCity();
+        String searchTerm = restaurant.getRestaurantAddress().getCity();
         when(restaurantService.findRestaurantsNearYouByAddress(anyString())).thenReturn(List.of(restaurant));
         when(userService.checkIfIsAuthenticated(any(Model.class), any(Authentication.class))).thenReturn(false);
         //  when

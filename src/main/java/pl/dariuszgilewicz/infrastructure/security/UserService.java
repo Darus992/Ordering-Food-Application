@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import pl.dariuszgilewicz.infrastructure.database.repository.mapper.UserEntityMapper;
+import pl.dariuszgilewicz.infrastructure.model.Orders;
 import pl.dariuszgilewicz.infrastructure.model.exception.EntityAlreadyExistAuthenticationException;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
@@ -82,20 +83,48 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public User findUserByUserName(String userName) {
+    private User findUserOwnerByUserName(String userName) {
         return userJpaRepository.findByUserName(userName)
-                .map(userEntityMapper::mapFromEntity)
+                .map(userEntityMapper::mapFromEntityOwner)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "User Entity with username: [%s] not found".formatted(userName)
                 ));
-        //  TODO: ZASTANOWIĆ SIE NAD TYM CZY TO ZOSTAWIĆ CZY USUNĄĆ
-//
-//        if(userEntity.getCustomer() == null && userEntity.getOwner() == null){
-//            user.setIsCompleted(false);
-//        }else {
-//            user.setIsCompleted(true);
-//        }
-//        return user;
+    }
+
+    private User findUserCustomerByUserName(String userName) {
+        return userJpaRepository.findByUserName(userName)
+                .map(userEntityMapper::mapFromEntityCustomer)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "User Entity with username: [%s] not found".formatted(userName)
+                ));
+    }
+
+    public User getCurrentUser() {
+        String username = getCurrentUserName();
+        Optional<? extends GrantedAuthority> authority = SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream()
+                .findFirst();
+
+        if (authority.isPresent() && authority.get().getAuthority().equals(UserRole.CUSTOMER.toString())) {
+            User user = findUserCustomerByUserName(username);
+            boolean isCartEmpty = checkIfCustomerCartIsEmpty(user.getCustomer().getCustomerOrders());
+            user.getCustomer().setCartEmpty(isCartEmpty);
+            return user;
+        } else if (authority.isPresent() && authority.get().getAuthority().equals(UserRole.OWNER.toString())) {
+            return findUserOwnerByUserName(username);
+        } else {
+            throw new RuntimeException("YOU ARE NOT LOGG IN");
+        }
+    }
+
+    private boolean checkIfCustomerCartIsEmpty(List<Orders> customerOrders) {
+        int counter = 0;
+        for (Orders order : customerOrders){
+            if(order.getStatus() != null){
+                counter++;
+            }
+        }
+        return customerOrders.size() == counter;
     }
 
     public boolean checkIfIsAuthenticated(Model model, Authentication authentication) {

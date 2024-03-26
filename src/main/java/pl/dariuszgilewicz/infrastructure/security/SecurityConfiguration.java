@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/owner/**", "/restaurant/create", "/restaurant/create-food-menu/{restaurantEmail}",
                                 "/restaurant/create-food/{restaurantEmail}")
                         .hasAuthority("OWNER")
-                        .requestMatchers("/customer/**")
+                        .requestMatchers("/customer/**", "/cart", "/add-to-cart", "/update-cart", "/delete-food-from-cart")
                         .hasAuthority("CUSTOMER")
                         .requestMatchers("/", "/**", "/restaurants", "/user/register-customer", "/user/register-business",
                                 "/restaurant/{restaurantEmail}")

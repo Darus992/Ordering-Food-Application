@@ -105,6 +105,7 @@
         <table class="table table-warning table-hover">
             <thead>
             <tr>
+                <th scope="col">Image</th>
                 <th scope="col">Name</th>
                 <th scope="col">City</th>
                 <th scope="col">District</th>
@@ -115,6 +116,9 @@
             </thead>
             <tbody>
             <tr th:each="restaurant: ${restaurants}">
+                <td>
+                    <img th:src="@{'/images/restaurant/' + ${restaurant.restaurantImageFileName}}" alt="..." style="height: 120px;">
+                </td>
                 <td th:text="${restaurant.restaurantName}"></td>
                 <td th:text="${restaurant.restaurantAddress.addressCity}"></td>
                 <td th:text="${restaurant.restaurantAddress.addressDistrict}"></td>
@@ -128,7 +132,6 @@
             </tbody>
         </table>
     </div>
-
 </div>
 </body>
 </html>

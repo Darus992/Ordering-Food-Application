@@ -18,10 +18,10 @@ public interface CustomerEntityMapper {
                 .surname(customer.getSurname())
                 .phone(customer.getPhone())
                 .address(AddressEntity.builder()
-                        .city(customer.getAddress().getAddressCity())
-                        .district(customer.getAddress().getAddressDistrict())
-                        .postalCode(customer.getAddress().getAddressPostalCode())
-                        .address(customer.getAddress().getAddressAddressStreet())
+                        .city(customer.getAddress().getCity())
+                        .district(customer.getAddress().getDistrict())
+                        .postalCode(customer.getAddress().getPostalCode())
+                        .address(customer.getAddress().getAddressStreet())
                         .build())
                 .build();
     }
@@ -32,10 +32,10 @@ public interface CustomerEntityMapper {
                 .surname(entity.getSurname())
                 .phone(entity.getPhone())
                 .address(Address.builder()
-                        .addressCity(entity.getAddress().getCity())
-                        .addressDistrict(entity.getAddress().getDistrict())
-                        .addressPostalCode(entity.getAddress().getPostalCode())
-                        .addressAddressStreet(entity.getAddress().getAddress())
+                        .city(entity.getAddress().getCity())
+                        .district(entity.getAddress().getDistrict())
+                        .postalCode(entity.getAddress().getPostalCode())
+                        .addressStreet(entity.getAddress().getAddress())
                         .build())
                 .build();
     }

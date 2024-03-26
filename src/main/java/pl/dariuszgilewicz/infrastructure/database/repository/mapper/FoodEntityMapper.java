@@ -10,4 +10,5 @@ public interface FoodEntityMapper {
 
 
     FoodEntity mapToEntity(Food food);
+    Food mapFromEntity(FoodEntity entity);
 }

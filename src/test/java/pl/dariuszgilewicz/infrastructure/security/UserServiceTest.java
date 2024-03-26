@@ -101,10 +101,11 @@ class UserServiceTest {
         UserEntity existingUser = someCustomerUser1();
         User expectedUser = someMappedCustomerUser1();
         when(userJpaRepository.findByUserName(existingUser.getUserName())).thenReturn(Optional.of(existingUser));
-        when(userEntityMapper.mapFromEntity(existingUser)).thenReturn(expectedUser);
+        when(userEntityMapper.mapFromEntityOwner(existingUser)).thenReturn(expectedUser);
 
         //  when
-        User userResult = userService.findUserByUserName(existingUser.getUserName());
+//        User userResult = userService.findUserOwnerByUserName(existingUser.getUserName());
+        User userResult = userService.getCurrentUser();
 
         //  then
         assertEquals(expectedUser.getUsername(), userResult.getUsername());
@@ -122,7 +123,10 @@ class UserServiceTest {
 
         //  when
         //  then
-        assertThatThrownBy(() -> userService.findUserByUserName(notExistingUsername))
+//        assertThatThrownBy(() -> userService.findUserOwnerByUserName(notExistingUsername))
+//                .isInstanceOf(EntityNotFoundException.class)
+//                .hasMessageContaining("User Entity with username: [%s] not found".formatted(notExistingUsername));
+        assertThatThrownBy(() -> userService.getCurrentUser())
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("User Entity with username: [%s] not found".formatted(notExistingUsername));
     }

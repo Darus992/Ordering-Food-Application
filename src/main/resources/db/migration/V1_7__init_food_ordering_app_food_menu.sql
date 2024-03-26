@@ -1,7 +1,8 @@
 CREATE TABLE food_menu
 (
-    food_menu_id    SERIAL      NOT NULL,
-    menu_name       VARCHAR(35) NOT NULL,
+    food_menu_id        SERIAL          NOT NULL,
+    food_menu_image     BYTEA,
+    menu_name           VARCHAR(35)     NOT NULL,
     PRIMARY KEY (food_menu_id)
 );
 

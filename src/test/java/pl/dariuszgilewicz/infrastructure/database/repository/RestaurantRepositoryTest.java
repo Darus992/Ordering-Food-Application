@@ -14,6 +14,7 @@ import pl.dariuszgilewicz.infrastructure.model.Restaurant;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 import pl.dariuszgilewicz.infrastructure.request_form.RestaurantRequestForm;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,7 +111,7 @@ class RestaurantRepositoryTest {
     }
 
     @Test
-    void createRestaurantFromBusinessRequest_shouldMapFromBusinessRequestAndSaveRestaurantToDatabase() {
+    void createRestaurantFromBusinessRequest_shouldMapFromBusinessRequestAndSaveRestaurantToDatabase() throws IOException {
         //  given
         RestaurantOwnerEntity ownerEntity = someRestaurantOwnerEntity1();
         RestaurantEntity expectedRestaurantEntity = someRestaurantEntity1();

@@ -1,16 +1,20 @@
 package pl.dariuszgilewicz.api.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.dariuszgilewicz.business.FoodMenuService;
 import pl.dariuszgilewicz.business.RestaurantService;
-import pl.dariuszgilewicz.infrastructure.model.Food;
-import pl.dariuszgilewicz.infrastructure.model.FoodMenu;
-import pl.dariuszgilewicz.infrastructure.model.Restaurant;
+import pl.dariuszgilewicz.infrastructure.database.repository.jpa.FoodMenuJpaRepository;
+import pl.dariuszgilewicz.infrastructure.model.*;
 import pl.dariuszgilewicz.infrastructure.request_form.RestaurantRequestForm;
+import pl.dariuszgilewicz.infrastructure.security.User;
 import pl.dariuszgilewicz.infrastructure.security.UserService;
 
 import java.util.Arrays;
@@ -24,6 +28,20 @@ public class RestaurantController {
     private FoodMenuService foodMenuService;
     private RestaurantService restaurantService;
     private UserService userService;
+    private FoodMenuJpaRepository foodMenuJpaRepository;
+
+    @GetMapping("/image/{foodMenuId}")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long foodMenuId) {
+
+        if(foodMenuJpaRepository.findById(foodMenuId).isPresent()){
+            byte[] imageData = foodMenuJpaRepository.findById(foodMenuId).get().getFoodMenuImage();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 
     @GetMapping("/restaurant/create")
@@ -35,14 +53,20 @@ public class RestaurantController {
     @GetMapping(value = "/restaurant/{restaurantEmail}")
     public String showCurrentRestaurantDetails(
             @PathVariable String restaurantEmail,
+            @RequestParam (required = false) Integer orderNumber,
             Authentication authentication,
             Model model
     ) {
         Restaurant restaurant = restaurantService.findRestaurantByEmail(restaurantEmail);
         boolean isAuthenticated = userService.checkIfIsAuthenticated(model, authentication);
         userService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
+
+        //  TODO: TO POWODUJE BŁĄD DLA NIEZALOGOWANEGO UŻYTKOWNIKA
+        User user = userService.getCurrentUser();
         model.addAttribute("restaurantEmail", restaurantEmail);
         model.addAttribute("restaurant", restaurant);
+        model.addAttribute("orderNumber", orderNumber);
+        model.addAttribute("user", user);
         return "restaurant_details";
     }
 
@@ -96,8 +120,7 @@ public class RestaurantController {
 
     @PostMapping("/restaurant/create")
     public String createRestaurantForm(@ModelAttribute("restaurantRequestForm") RestaurantRequestForm restaurantRequestForm) {
-        String userName = userService.getCurrentUserName();
-        restaurantService.createRestaurantAndAssignToOwner(restaurantRequestForm, userName);
+        restaurantService.createRestaurantAndAssignToOwner(restaurantRequestForm);
         return "redirect:/owner";
     }
 

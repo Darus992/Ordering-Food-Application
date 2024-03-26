@@ -32,8 +32,7 @@ class RestaurantOwnerControllerTest {
     void showOwnerPage_shouldWorkCorrectlyWithAuthenticatedUser() throws Exception {
         //  given
         User user = UsersFixtures.someMappedBusinessUser2();
-        when(userService.getCurrentUserName()).thenReturn(user.getUsername());
-        when(userService.findUserByUserName(user.getUsername())).thenReturn(user);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         //  when
         //  then
