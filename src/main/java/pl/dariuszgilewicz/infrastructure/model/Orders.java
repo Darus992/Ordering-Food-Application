@@ -17,9 +17,8 @@ public class Orders {
     private OrderStatus status;
     private String orderNotes;
     private String receivedDateTime;
-    private String expectedDeliveryDateTime;
     private String completedDateTime;
-    private Map<Food, Integer> orderRequest;
+    private Map<Food, Integer> foods;
     private BigDecimal totalPrice;
     private Customer customer;
     private Restaurant restaurant;

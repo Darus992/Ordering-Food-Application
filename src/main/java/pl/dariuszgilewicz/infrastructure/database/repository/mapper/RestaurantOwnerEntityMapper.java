@@ -1,57 +1,40 @@
 package pl.dariuszgilewicz.infrastructure.database.repository.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import pl.dariuszgilewicz.infrastructure.database.entity.*;
-import pl.dariuszgilewicz.infrastructure.model.Restaurant;
 import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
+import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+@Component
+@AllArgsConstructor
+public class RestaurantOwnerEntityMapper {
+    private RestaurantEntityMapper restaurantEntityMapper;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface RestaurantOwnerEntityMapper {
 
-    default RestaurantOwnerEntity mapToEntity(RestaurantOwner restaurantOwner) {
-        return RestaurantOwnerEntity.builder()
-                .name(restaurantOwner.getName())
-                .surname(restaurantOwner.getSurname())
-                .pesel(restaurantOwner.getPesel())
-                .restaurants(mapRestaurantsEntityFromList(restaurantOwner.getRestaurants()))
+    public RestaurantOwner mapFromEntity(RestaurantOwnerEntity entity){
+        return RestaurantOwner.builder()
+                .name(entity.getName())
+                .surname(entity.getSurname())
+                .pesel(entity.getPesel())
+                .restaurants(restaurantEntityMapper.mapFromEntityList(entity.getRestaurants()))
                 .build();
     }
 
-    default List<RestaurantEntity> mapRestaurantsEntityFromList(List<Restaurant> restaurants) {
-        List<RestaurantEntity> entities = new ArrayList<>();
-        for (Restaurant restaurant : restaurants) {
-            RestaurantEntity entity = mapRestaurantToEntity(restaurant);
-            entities.add(entity);
-        }
-        return entities;
+    public RestaurantOwnerEntity mapToEntity(RestaurantOwner owner) {
+        return RestaurantOwnerEntity.builder()
+                .name(owner.getName())
+                .surname(owner.getSurname())
+                .pesel(owner.getPesel())
+                .restaurants(restaurantEntityMapper.mapToEntityList(owner.getRestaurants()))
+                .build();
     }
 
-    default RestaurantEntity mapRestaurantToEntity(Restaurant restaurant) {
-        return RestaurantEntity.builder()
-                .restaurantName(restaurant.getRestaurantName())
-                .phone(restaurant.getRestaurantPhone())
-                .email(restaurant.getRestaurantEmail())
-                .foodMenu(FoodMenuEntity.builder()
-                        .menuName(restaurant.getFoodMenu().getFoodMenuName())
-                        .build())
-                .restaurantAddress(AddressEntity.builder()
-                        .city(restaurant.getRestaurantAddress().getCity())
-                        .district(restaurant.getRestaurantAddress().getDistrict())
-                        .postalCode(restaurant.getRestaurantAddress().getPostalCode())
-                        .address(restaurant.getRestaurantAddress().getAddressStreet())
-                        .build()
-                )
-                .restaurantOpeningTime(RestaurantOpeningTimeEntity.builder()
-                        .openingHour(LocalTime.parse(restaurant.getRestaurantOpeningTime().getOpeningHour()))
-                        .closeHour(LocalTime.parse(restaurant.getRestaurantOpeningTime().getCloseHour()))
-                        .dayOfWeekFrom(restaurant.getRestaurantOpeningTime().getDayOfWeekFrom())
-                        .dayOfWeekTill(restaurant.getRestaurantOpeningTime().getDayOfWeekTill())
-                        .build())
+    public RestaurantOwnerEntity mapFromBusinessRequest(BusinessRequestForm requestForm){
+        return RestaurantOwnerEntity.builder()
+                .name(requestForm.getOwnerName())
+                .surname(requestForm.getOwnerSurname())
+                .pesel(requestForm.getOwnerPesel())
                 .build();
     }
 }

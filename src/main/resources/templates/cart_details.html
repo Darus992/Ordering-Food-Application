@@ -9,136 +9,173 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
+    <script src="http://localhost:8190/ordering-food-application/js/orderService.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="http://localhost:8190/ordering-food-application/css/styles.css"/>
     <title>Cart Details</title>
 </head>
 <body>
 <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
     <div class="container-fluid">
-        <h5>Order your food online!</h5>
+        <div class="d-flex align-items-center">
+            <a th:href="@{/}" role="button">
+                <i class="bi bi-house-door-fill fs-4 mx-3"></i>
+            </a>
+            <h5 class="mb-0">Order your food online!</h5>
+        </div>
         <div class="container-right">
-            <div class="btn-group dropstart">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                         class="bi bi-person-circle" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                        <path fill-rule="evenodd"
-                              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                    </svg>
+            <div th:if="${isAuthenticated == false}">
+                <a th:href="@{/login}" class="btn btn-primary me-2" role="button">Log in</a>
+                <button class="btn btn-primary me-2" type="button" data-bs-toggle="modal"
+                        data-bs-target="#registerTypeModal">Register
                 </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-                    <li><a class="dropdown-item" th:href="@{/customer}">Go to your account</a></li>
-                    <li>
-                        <button class="dropdown-item" type="button">Something else here</button>
-                    </li>
-                </ul>
             </div>
-        </div>
-    </div>
-</nav>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                </li>
-                <li class="nav-item">
-                    <div class="dropdown">
-                        <button class="btn btn-info dropdown-toggle" type="button" id="ordersDropdown"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-cart-check" viewBox="0 0 16 16">
-                                <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
-                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
-                            </svg>
-                            Your Carts
-                        </button>
-                        <ul class="dropdown-menu p-1" aria-labelledby="ordersDropdown">
-                            <li th:each="number : ${user.customer.customerOrders}">
-                                <div th:if="${number.status == null}">
-                                    <a class="dropdown-item" th:href="@{'/cart?orderNumber=' + ${number.orderNumber}}">Order
-                                        Number: [[${number.orderNumber}]]</a>
-                                </div>
-                                <div th:unless="${number.status == null}">
-                                    <p class="dropdown-item text-center mb-1">Your cart is empty</p>
-                                </div>
-                            </li>
-                        </ul>
+            <div th:unless="${isAuthenticated == false}">
+                <div class="btn-group dropstart">
+                    <button class="btn btn-secondary dropdown-toggle p-0 rounded-circle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                             class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+                            <path fill-rule="evenodd"
+                                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"></path>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu mx-1">
+                        <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
+                        <a th:if="${user.role.name == 'CUSTOMER'}" th:href="@{/customer}" class="dropdown-item"
+                           role="button">Your account</a>
+                        <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item" role="button">Your
+                            account</a>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal fade" id="registerTypeModal" tabindex="-1" aria-labelledby="registerTypeModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="registerTypeModalLabel">Register Account Type</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="form-label">Which account type do you want to create?</p>
+                            <br>
+                            <a th:href="@{/user/register-customer}" class="btn btn-primary me-2" role="button">Customer
+                                Account</a>
+                            <a th:href="@{/user/register-business}" class="btn btn-primary me-2" role="button">Business
+                                Account</a>
+                        </div>
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
-<br>
-<br>
-<div class="container">
-    <h1>Cart Details</h1>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Food Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="entry : ${order.orderRequest}">
-            <td th:text="${entry.key.name}"></td>
-            <td th:text="${entry.value}"></td>
-            <td th:text="${entry.key.price}"></td>
-            <td>
-                <form th:action="@{/delete-food-from-cart}" method="post">
-                    <input type="hidden" name="_method" value="DELETE"/>
-                    <input type="hidden" name="orderNumber" th:value="${order.orderNumber}"/>
-                    <input type="hidden" name="foodId" th:value="${entry.key.foodId}"/>
-                    <input type="number" name="quantity" min="1" th:value="${entry.value}">
-                    <button class="btn btn-danger" type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="row justify-content-between">
-        <div class="col-4">
-            <h3>Total Price:</h3>
-        </div>
-        <div class="col-4">
-            <h3><span th:text="${order.totalPrice}"></span> PLN</h3>
-        </div>
-        <div class="col-3 d-flex align-items-center">
-            <div class="mr-2">
-                <a th:href="@{'/restaurant/{restaurantEmail}?orderNumber=' + ${order.orderNumber}(restaurantEmail=${order.restaurant.restaurantEmail})}"
-                   class="btn btn-success m-2" role="button">
-                    Add More
-                </a>
+
+<div class="row justify-content-around my-4">
+    <div class="col-md-8">
+        <div class="card bg-body-tertiary">
+            <div class="text-center m-3">
+                <h3 class="fs-2">
+                    Cart Summary
+                    <i class="bi bi-cart-check mx-2"></i>
+                </h3>
             </div>
-            <div>
-                <form th:action="@{/delete-cart}" method="post">
-                    <input type="hidden" name="_method" value="DELETE"/>
-                    <input type="hidden" name="orderNumber" th:value="${order.orderNumber}"/>
-                    <button class="btn btn-danger m-2" type="submit">Cancel Cart</button>
-                </form>
+            <div class="row justify-content-center text-center">
+                <table class="table-light fs-5">
+                    <thead>
+                        <tr>
+                            <th>Food Name</th>
+                            <th>Quantity</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="entry : ${cart.cartRequest}">
+                            <td th:text="${entry.key.name}"></td>
+                            <td th:text="${entry.value}"></td>
+                            <td th:text="${entry.key.description}"></td>
+                            <td th:text="${entry.key.price} + ' zł'"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row justify-content-between fw-bold fs-4">
+                <div class="col-md-4 text-start m-3">
+                    <span class="card-text">Total Price:</span>
+                </div>
+                <div class="col-md-2 text-center m-3">
+                   <span class="card-text mx-1" th:text="${cart.totalPrice}">Price</span>
+                    <span class="card-text"> zł</span>
+                </div>
+            </div>
+            <div class="row justify-content-around mx-5">
+               <textarea class="form-control my-4" name="orderNotes" rows="3"></textarea>
             </div>
         </div>
     </div>
-    <br>
-    <div class="col-6">
-        <h4>Comment:</h4>
-        <form th:action="@{/create-order}" method="post" th:object="${order}">
-            <textarea class="form-control" name="orderNotes" rows="3" th:field="*{orderNotes}"></textarea>
-            <input type="hidden" name="_method" value="PUT"/>
-            <input type="hidden" name="orderNumber" th:value="${order.orderNumber}"/>
-            <button class="btn btn-success m-3" type="submit">Create Order</button>
-        </form>
+    <div class="col-md-3">
+        <div class="card bg-body-tertiary">
+            <div class="row justify-content-around">
+                <h3 class="text-center my-3">
+                    Confirm Purchase
+                    <i class="bi bi-credit-card mx-2"></i>
+                </h3>
+                <div class="col-md-7">
+                    <label for="cardNumber">Card Number:</label>
+                    <input type="text" id="cardNumber" class="form-control" value="1234 5678 9012 3456">
+                    <br>
+                    <label for="nameOnCard">Name On Card:</label>
+                    <input type="text" id="nameOnCard" class="form-control" value="John Website">
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="expiryDate">Expiry Date:</label>
+                            <input type="text" id="expiryDate" class="form-control" value="01/19">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="securityCode">Security Code:</label>
+                            <input type="text" id="securityCode" class="form-control" value="123">
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-3">
+                    <div class="col-10">
+                        <div class="d-flex justify-content-center">
+                            <div class="d-flex align-items-center">
+                                <form th:action="@{/order/create-order}" method="post" id="fakePayForm" th:object="${cart}">
+                                    <input type="hidden" name="restaurantEmail" th:value="${restaurantEmail}" />
+                                    <input type="hidden" name="foodsId" th:value="${foodsId}" />
+                                    <input type="hidden" name="foodsValues" th:value="${foodsValues}" />
+                                    <input type="hidden" name="totalPrice" th:value="${cart.totalPrice}" />
+                                    <input type="hidden" name="orderNotes" id="orderNotes" />
+                                    <button type="button" class="btn btn-success m-2 px-5" id="fakePayButton">Pay</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
+<footer class="footer bg-dark py-1">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <a href="https://www.facebook.com" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-facebook" style="font-size: 1.5rem; color: #0866ff;"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/dariusz-gilewicz-6646bb301" class="me-3" target="_blank"
+               style="text-decoration: none;">
+                <i class="bi bi-linkedin" style="font-size: 1.5rem; color: #0a66c2;"></i>
+            </a>
+            <a href="https://www.github.com/Darus992" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-github" style="font-size: 1.5rem; color: white;"></i>
+            </a>
+        </div>
+    </div>
+</footer>
 </html>

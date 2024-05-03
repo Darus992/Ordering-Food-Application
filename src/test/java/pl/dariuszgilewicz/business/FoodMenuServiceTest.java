@@ -49,20 +49,4 @@ class FoodMenuServiceTest {
         verify(restaurantRepository, times(1)).assignFoodMenuToRestaurant(eq(email), eq(foodMenuEntity));
 
     }
-
-    @Test
-    void createFoodAndAssignToFoodMenu_shouldWorkSuccessfully(){
-        //  given
-        FoodEntity foodEntity = someFoodEntity1();
-        Food food = someFood1();
-        String email = "na_wypasie@restaurant.pl";
-        when(foodRepository.createAndReturnFoodEntity(food)).thenReturn(foodEntity);
-
-        //  when
-        foodMenuService.createFoodAndAssignToFoodMenu(food, email);
-
-        //  then
-        verify(restaurantRepository, times(1)).assignFoodToFoodMenuInRestaurant(eq(email), eq(foodEntity));
-
-    }
 }

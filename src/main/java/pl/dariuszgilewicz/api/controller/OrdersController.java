@@ -1,17 +1,27 @@
 package pl.dariuszgilewicz.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.dariuszgilewicz.business.OrderService;
-import pl.dariuszgilewicz.infrastructure.database.enums.OrderStatus;
 import pl.dariuszgilewicz.infrastructure.database.repository.OrderRepository;
+import pl.dariuszgilewicz.infrastructure.model.Cart;
+import pl.dariuszgilewicz.infrastructure.model.Food;
 import pl.dariuszgilewicz.infrastructure.model.Orders;
 import pl.dariuszgilewicz.infrastructure.security.User;
 import pl.dariuszgilewicz.infrastructure.security.UserService;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -21,85 +31,93 @@ public class OrdersController {
     private UserService userService;
     private OrderRepository orderRepository;
 
-    @GetMapping("/cart")
-    public String showCartDetails(
-            @RequestParam(required = false) Integer orderNumber,
+    @GetMapping("/order/cart-summary")
+    public String showCartSummary(
+            @RequestParam("foodKeys") String foodKeysJSON,
+            @RequestParam("foodValues") String foodValuesJSON,
+            @RequestParam("totalPrice") BigDecimal totalPrice,
+            @RequestParam("restaurantEmail") String restaurantEmail,
             Model model
     ) {
-        Orders order = orderRepository.findOrderByOrderNumber(orderNumber);
-        User user = userService.getCurrentUser();
-        model.addAttribute("order", order);
-        model.addAttribute("user", user);
+        findAndAddUserToModelAttributeIfIsAuthenticated(model);
+        model.addAttribute("restaurantEmail", restaurantEmail);
+        mapJsonToObjectValues(null, foodValuesJSON, foodKeysJSON, totalPrice, model);
         return "cart_details";
     }
 
-    @GetMapping("/order/{orderNumber}")
-    public String showOrder(
-            @PathVariable Integer orderNumber,
-            Model model
-    ) {
+    @GetMapping("/order/{orderNumber}/details")
+    public String showOrderDetails(@PathVariable Integer orderNumber, Model model) {
+        findAndAddUserToModelAttributeIfIsAuthenticated(model);
         Orders order = orderRepository.findOrderByOrderNumber(orderNumber);
-        User user = userService.getCurrentUser();
-
-        if(!order.getStatus().equals(OrderStatus.COMPLETED)) {
-            orderService.checkForUpdateStatus(order);
-        }
-
         model.addAttribute("order", order);
-        model.addAttribute("user", user);
         return "order_details";
     }
 
-    @PostMapping("/create-cart")
-    public String createCart(
-            @RequestParam List<Integer> foodIds,
-            @RequestParam List<Integer> quantity,
-            @RequestParam String restaurantEmail
-    ) {
-        String username = userService.getCurrentUserName();
-        orderService.createCart(foodIds, quantity, username, restaurantEmail);
-        return "redirect:/restaurant/" + restaurantEmail;
-    }
-
-    @PutMapping("/create-order")
+    @PostMapping("/order/create-order")
     public String createOrder(
-            @RequestParam Integer orderNumber,
-            @ModelAttribute Orders order,
+            @RequestParam("foodsId") String jsonFoodsId,
+            @RequestParam("foodsValues") String jsonFoodsValues,
+            @RequestParam("totalPrice") BigDecimal totalPrice,
+            @RequestParam("orderNotes") String orderNotes,
+            @RequestParam("restaurantEmail") String restaurantEmail,
             Model model
     ) {
-        model.addAttribute("orderNumber", orderNumber);
-        orderService.createOrder(orderNumber, order);
-        return "redirect:/order/" + orderNumber;
-    }
+        findAndAddUserToModelAttributeIfIsAuthenticated(model);
+        User user = (User) model.getAttribute("user");
+        Cart cart = mapJsonToObjectValues(jsonFoodsId, jsonFoodsValues, null, totalPrice, model);
 
-    @PutMapping("/update-cart")
-    public String updateOrdersCart(
-            @RequestParam List<Integer> foodIds,
-            @RequestParam List<Integer> quantity,
-            @RequestParam("restaurantEmail") String restaurantEmail,
-            @RequestParam Integer orderNumber
-    ) {
-        orderService.updateCart(orderNumber, foodIds, quantity);
-        return "redirect:/restaurant/" + restaurantEmail;
-    }
-
-    @DeleteMapping("/delete-food-from-cart")
-    public String deleteFoodFromOrderCart(
-            @RequestParam Integer orderNumber,
-            @RequestParam Integer foodId,
-            @RequestParam Integer quantity
-    ) {
-        boolean isDeleteCompletely = orderService.deleteFoodFromCart(orderNumber, foodId, quantity);
-        if (isDeleteCompletely) {
-            return "redirect:/customer";
-        } else {
-            return "redirect:/cart?orderNumber=" + orderNumber;
+        if (user != null) {
+            Integer orderNumber = orderService.createOrderAndReturnOrderNumber(cart.getFoodsIdArray(), cart.getFoodsValuesArray(), totalPrice, orderNotes, user, restaurantEmail);
+            return "redirect:/order/" + orderNumber + "/details";
         }
+        return "login";
     }
 
-    @DeleteMapping("/delete-cart")
-    public String deleteCart(@RequestParam Integer orderNumber) {
-        orderService.deleteCart(orderNumber);
-        return "redirect:/customer";
+    private Cart mapJsonToObjectValues(String jsonFoodsId, String jsonFoodsValues, String jsonFoodsKeys, BigDecimal totalPrice, Model model) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<Food, Integer> cartMap = new HashMap<>();
+        Cart cart = new Cart();
+        Integer[] foodsValues;
+
+        try {
+            foodsValues = objectMapper.readValue(jsonFoodsValues, Integer[].class);
+            Integer[] foodsId = new Integer[foodsValues.length];
+
+            if (jsonFoodsKeys != null) {
+                Food[] cartFoods = objectMapper.readValue(jsonFoodsKeys, Food[].class);
+                for (int i = 0; i < cartFoods.length; i++) {
+                    Food food = Food.builder()
+                            .foodId(cartFoods[i].getFoodId())
+                            .category(cartFoods[i].getCategory())
+                            .name(cartFoods[i].getName())
+                            .description(cartFoods[i].getDescription())
+                            .price(cartFoods[i].getPrice())
+                            .build();
+                    cartMap.put(food, foodsValues[i]);
+                    foodsId[i] = cartFoods[i].getFoodId();
+                }
+                cart.setCartRequest(cartMap);
+                cart.setTotalPrice(totalPrice);
+
+                model.addAttribute("cart", cart);
+                model.addAttribute("foodsId", Arrays.asList(foodsId));
+                model.addAttribute("foodsValues", Arrays.asList(foodsValues));
+            }
+
+            if (jsonFoodsId != null) {
+                foodsId = objectMapper.readValue(jsonFoodsId, Integer[].class);
+                cart.setFoodsIdArray(foodsId);
+                cart.setFoodsValuesArray(foodsValues);
+            }
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return cart;
+    }
+
+    private void findAndAddUserToModelAttributeIfIsAuthenticated(Model model) {
+        Optional<User> optionalUser = userService.getCurrentOptionalUser(model);
+        optionalUser.ifPresent(user -> model.addAttribute("user", user));
     }
 }

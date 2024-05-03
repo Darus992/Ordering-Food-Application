@@ -86,10 +86,10 @@ public class FoodMenuFixtures {
     public static FoodMenu someFoodMenu2(){
         return FoodMenu.builder()
                 .foodMenuName("Przykładowa nazwa")
-                .foodCategory("Pizza")
-                .foodName("Super Pizza")
-                .foodDescription("dodatki, sosy, itp.")
-                .foodPrice(BigDecimal.valueOf(35.5))
+//                .foodCategory("Pizza")
+//                .foodName("Super Pizza")
+//                .foodDescription("dodatki, sosy, itp.")
+//                .foodPrice(BigDecimal.valueOf(35.5))
                 .foods(new ArrayList<>())
                 .build();
     }

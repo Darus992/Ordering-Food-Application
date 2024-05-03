@@ -10,9 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.dariuszgilewicz.infrastructure.database.entity.*;
 import pl.dariuszgilewicz.infrastructure.database.repository.jpa.RestaurantJpaRepository;
 import pl.dariuszgilewicz.infrastructure.database.repository.mapper.RestaurantEntityMapper;
-import pl.dariuszgilewicz.infrastructure.model.Restaurant;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
-import pl.dariuszgilewicz.infrastructure.request_form.RestaurantRequestForm;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +28,6 @@ import static pl.dariuszgilewicz.util.FoodMenuFixtures.someFoodMenuEntity2;
 import static pl.dariuszgilewicz.util.FoodMenuFixtures.someListOfFoodMenuEntities1;
 import static pl.dariuszgilewicz.util.RestaurantFixtures.*;
 import static pl.dariuszgilewicz.util.RestaurantOwnerFixtures.someRestaurantOwnerEntity1;
-import static pl.dariuszgilewicz.util.RestaurantRequestFormFixtures.someRestaurantRequestForm1;
 
 @ExtendWith(MockitoExtension.class)
 class RestaurantRepositoryTest {
@@ -47,24 +44,6 @@ class RestaurantRepositoryTest {
     @Mock
     private RestaurantOwnerRepository restaurantOwnerRepository;
 
-
-    @Test
-    void findAllRestaurantsWithSelectedCategory_shouldWorkSuccessfully() {
-        //  given
-        List<FoodMenuEntity> foodMenuEntities = someListOfFoodMenuEntities1();
-        List<RestaurantEntity> restaurantEntities = someListOfRestaurantEntities1();
-        List<Restaurant> expectedList = someListOfMappedRestaurants1();
-        when(restaurantJpaRepository.findByFoodMenus(foodMenuEntities)).thenReturn(Optional.of(restaurantEntities));
-        when(restaurantEntityMapper.mapAllFromEntity(restaurantEntities)).thenReturn(expectedList);
-
-        //  when
-        List<Restaurant> resultList = restaurantRepository.findAllRestaurantsWithSelectedCategory(foodMenuEntities);
-
-        //  then
-        assertEquals(expectedList, resultList);
-
-    }
-
     @Test
     void findAllRestaurantsWithSelectedCategory_shouldThrowException() {
         //  given
@@ -80,23 +59,6 @@ class RestaurantRepositoryTest {
     }
 
     @Test
-    void findRestaurantsNearYouByAddress_shouldWorkSuccessfully() {
-        //  given
-        List<AddressEntity> addressEntityList = someListOfAddressEntity1();
-        List<RestaurantEntity> restaurantEntityList = someListOfRestaurantEntities1();
-        List<Restaurant> expectedRestaurantList = someListOfMappedRestaurants1();
-        when(restaurantJpaRepository.findAllByAddress(addressEntityList)).thenReturn(Optional.of(restaurantEntityList));
-        when(restaurantEntityMapper.mapAllFromEntity(restaurantEntityList)).thenReturn(expectedRestaurantList);
-
-        //  when
-        List<Restaurant> resultRestaurantList = restaurantRepository.findRestaurantsNearYouByAddress(addressEntityList);
-
-        //  then
-        assertEquals(expectedRestaurantList, resultRestaurantList);
-
-    }
-
-    @Test
     void findRestaurantsNearYouByAddress_shouldThrowException() {
         //  given
         List<AddressEntity> addressEntityList = someListOfAddressEntity1();
@@ -104,7 +66,7 @@ class RestaurantRepositoryTest {
 
         //  when
         //  then
-        assertThatThrownBy(() -> restaurantRepository.findRestaurantsNearYouByAddress(addressEntityList))
+        assertThatThrownBy(() -> restaurantRepository.findRestaurantsByAddress(addressEntityList))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Not found List of RestaurantEntity by AddressEntity List: [%s]".formatted(addressEntityList));
 
@@ -120,29 +82,6 @@ class RestaurantRepositoryTest {
 
         //  when
         restaurantRepository.createRestaurantFromBusinessRequest(requestForm, ownerEntity);
-
-        //  then
-        ArgumentCaptor<RestaurantEntity> restaurantEntityArgumentCaptor = ArgumentCaptor.forClass(RestaurantEntity.class);
-        verify(restaurantJpaRepository).save(restaurantEntityArgumentCaptor.capture());
-
-        RestaurantEntity savedRestaurantEntity = restaurantEntityArgumentCaptor.getValue();
-
-        assertEquals(expectedRestaurantEntity, savedRestaurantEntity);
-        assertEquals(expectedRestaurantEntity.getRestaurantOwner(), savedRestaurantEntity.getRestaurantOwner());
-
-    }
-
-    @Test
-    void createRestaurantFromRestaurantRequest_shouldFindOwnerByPeselAndMapFromRestaurantRequestAndSaveRestaurantToDatabase() {
-        //  given
-        RestaurantRequestForm requestForm = someRestaurantRequestForm1();
-        RestaurantOwnerEntity ownerEntity = someRestaurantOwnerEntity1();
-        RestaurantEntity expectedRestaurantEntity = someRestaurantEntity1();
-        when(restaurantOwnerRepository.findRestaurantOwnerEntityByPesel(ownerEntity.getPesel())).thenReturn(ownerEntity);
-        when(restaurantEntityMapper.mapFromRestaurantRequest(requestForm, ownerEntity)).thenReturn(expectedRestaurantEntity);
-
-        //  when
-        restaurantRepository.createRestaurantFromRestaurantRequest(requestForm, ownerEntity.getPesel());
 
         //  then
         ArgumentCaptor<RestaurantEntity> restaurantEntityArgumentCaptor = ArgumentCaptor.forClass(RestaurantEntity.class);

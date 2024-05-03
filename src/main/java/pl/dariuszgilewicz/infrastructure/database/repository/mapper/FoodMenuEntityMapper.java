@@ -1,28 +1,27 @@
 package pl.dariuszgilewicz.infrastructure.database.repository.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import pl.dariuszgilewicz.infrastructure.database.entity.FoodEntity;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import pl.dariuszgilewicz.infrastructure.database.entity.FoodMenuEntity;
 import pl.dariuszgilewicz.infrastructure.model.FoodMenu;
 
-import java.util.ArrayList;
-import java.util.List;
+@Component
+@AllArgsConstructor
+public class FoodMenuEntityMapper {
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface FoodMenuEntityMapper {
+    private FoodEntityMapper foodEntityMapper;
 
-    default FoodMenuEntity mapToEntity(FoodMenu foodMenu){
-        FoodEntity foodEntity = FoodEntity.builder()
-                .category(foodMenu.getFoodCategory())
-                .name(foodMenu.getFoodName())
-                .description(foodMenu.getFoodDescription())
-                .price(foodMenu.getFoodPrice())
+    public FoodMenu mapFromEntity(FoodMenuEntity entity) {
+        return FoodMenu.builder()
+                .foodMenuId(entity.getFoodMenuId())
+                .foods(foodEntityMapper.mapFromEntityList(entity.getFoods()))
                 .build();
+    }
+
+    public FoodMenuEntity mapToEntity(FoodMenu foodMenu) {
         return FoodMenuEntity.builder()
-                .foodMenuImage(foodMenu.getFoodMenuImage())
-                .menuName(foodMenu.getFoodMenuName())
-                .foods(new ArrayList<>(List.of(foodEntity)))
+                .foodMenuId(foodMenu.getFoodMenuId())
+                .foods(foodEntityMapper.mapToEntityList(foodMenu.getFoods()))
                 .build();
     }
 }

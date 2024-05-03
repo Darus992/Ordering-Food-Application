@@ -1,159 +1,161 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-        crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-          crossorigin="anonymous"></script>
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="http://localhost:8190/ordering-food-application/css/styles.css"/>
   <title>Order Details</title>
 </head>
+
 <body>
-<nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
-  <div class="container-fluid">
-    <h5>Order your food online!</h5>
-    <div class="container-right">
-      <div class="btn-group dropstart">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-               class="bi bi-person-circle" viewBox="0 0 16 16">
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-            <path fill-rule="evenodd"
-                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-          </svg>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-          <li><a class="dropdown-item" th:href="@{/customer}">Go to your account</a></li>
-          <li>
-            <button class="dropdown-item" type="button">Something else here</button>
-          </li>
-        </ul>
+  <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center">
+        <a th:href="@{/}" role="button">
+          <i class="bi bi-house-door-fill fs-4 mx-3"></i>
+        </a>
+        <h5 class="mb-0">Order your food online!</h5>
+      </div>
+      <div class="container-right">
+        <div class="btn-group dropstart">
+          <button class="btn btn-secondary dropdown-toggle p-0 rounded-circle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+              class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+              <path fill-rule="evenodd"
+                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1">
+              </path>
+            </svg>
+          </button>
+          <ul class="dropdown-menu mx-1">
+            <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
+            <a th:if="${user.role.name == 'CUSTOMER'}" th:href="@{/customer}" class="dropdown-item" role="button">Your
+              account</a>
+            <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item" role="button">Your
+              account</a>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-        <li class="nav-item">
-          <div class="dropdown">
-            <button class="btn btn-info dropdown-toggle" type="button" id="ordersDropdown"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                   class="bi bi-cart-check" viewBox="0 0 16 16">
-                <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
-                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
-              </svg>
-              Your Carts
-            </button>
-            <ul class="dropdown-menu p-1" aria-labelledby="ordersDropdown">
-              <li th:each="number : ${user.customer.customerOrders}">
-                <div th:if="${number.status == null}">
-                  <a class="dropdown-item" th:href="@{'/cart?orderNumber=' + ${number.orderNumber}}">Order
-                    Number: [[${number.orderNumber}]]</a>
-                </div>
-              </li>
-              <div th:if="${user.customer.isCartEmpty == true}">
-                <p class="dropdown-item text-center mb-1">Your cart is empty</p>
-              </div>
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-  <br>
-  <br>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="card">
-        <div class="card-body text-center">
-          <h5 class="card-title">
-            Order Number: <span th:text="${order.orderNumber}"></span>
-          </h5>
+  </nav>
+  <div class="container my-5">
+    <div class="card bg-body-tertiary">
+      <div class="card-header fs-4 fw-bold d-flex justify-content-around">
+        <div class="col-md-5">
+          <span>Order Number: </span>
+          <span class="card-text" id="orderNumber" th:text="${order.orderNumber}">Order Number</span>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <h6>Restaurant:</h6>
-            <span th:text="${order.restaurant.restaurantName}"></span>,
-            <span th:text="${order.restaurant.restaurantAddress.addressAddressStreet}"></span>,
-            <span th:text="${order.restaurant.restaurantAddress.addressPostalCode}"></span>,
-            <span th:text="${order.restaurant.restaurantAddress.addressCity}"></span>
-          </li>
-          <li class="list-group-item">
-            <h6>Order Status:</h6>
-            <span th:text="${order.status}"></span>
-          </li>
-          <li class="list-group-item">
-            <h6>Received Date Time:</h6>
-            <span th:text="${order.receivedDateTime}"></span>
-          </li>
-          <li class="list-group-item">
-            <h6>Expected Delivery Date Time:</h6>
-            <span th:txt="${order.expectedDeliveryDateTime}"></span>
-          </li>
-          <li class="list-group-item">
-            <h6>Completed Date Time:</h6>
-            <span th:text="${order.completedDateTime}"></span>
-          </li>
-          <li class="list-group-item">
-            <h5 class="text-center">Order Request:</h5>
+        <div class="col-md-4 text-end">
+          <span>Order Status: </span>
+          <span class="card-text" id="orderStatus" th:text="${order.status}">Order Status</span>
+        </div>
+      </div>
+      <div class="card-body fs-5 fw-normal">
+        <div class="d-flex justify-content-between">
+          <div class="col-md-6">
+            <span class="fw-medium">Restaurant Address: </span>
             <br>
-            <table class="table">
-              <thead>
+            <span class="card-text" th:text="${order.restaurant.restaurantAddress.addressStreet}">Street</span>,
+            <span class="card-text" th:text="${order.restaurant.restaurantAddress.postalCode}">Postal Code</span>,
+            <span class="card-text" th:text="${order.restaurant.restaurantAddress.city}">City</span>
+            <br>
+            <br>
+            <span class="fw-medium">Restaurant Name: </span>
+            <span class="card-text" id="restaurantName" th:text="${order.restaurant.restaurantName}">Restaurant Name</span>
+            <br>
+            <span class="fw-medium">Restaurant Phone: </span>
+            <span class="card-text" id="restaurantPhone" th:text="${order.restaurant.restaurantPhone}">Phone</span>
+            <br>
+            <span class="fw-medium">Restaurant Email: </span>
+            <span class="card-text" id="restaurantEmail" th:text="${order.restaurant.restaurantEmail}">Email</span>
+            <br>
+            <span class="fw-medium">Received Date Time: </span>
+            <span class="card-text" id="receivedDateTime" th:text="${order.receivedDateTime}">Received Date Time</span>
+            <br>
+          </div>
+          <div class="col-md-6">
+            <span class="fw-medium">Delivery Address: </span>
+            <br>
+            <span class="card-text" th:text="${order.customer.address.addressStreet}">Street</span>,
+            <span class="card-text" th:text="${order.customer.address.postalCode}">Postal Code</span>,
+            <span class="card-text" th:text="${order.customer.address.city}">City</span>
+            <br>
+            <br>
+            <span class="fw-medium">Customer Name: </span>
+            <span class="card-text" id="customerName" th:text="${order.customer.name}">Name</span>
+            <br>
+            <span class="fw-medium">Customer Surname: </span>
+            <span class="card-text" id="customerSurname" th:text="${order.customer.surname}">Surname</span>
+            <br>
+            <span class="fw-medium">Customer Phone: </span>
+            <span class="card-text" id="customerPhone" th:text="${order.customer.phone}">Phone</span>
+            <br>
+            <span class="fw-medium">Completed Date Time: </span>
+            <div th:if="${order.completedDateTime != ''}">
+              <span class="card-text" th:text="${order.completedDateTime}">Completed Date Time</span>
+            </div>
+            <div th:unless="${order.completedDateTime != ''}">
+              <span class="card-text">Non.</span>
+            </div>
+            <br>
+          </div>
+        </div>
+        <div class="col-md-12 my-3">
+          <table class="table">
+            <thead>
               <tr>
                 <th>Food Name</th>
                 <th>Quantity</th>
                 <th>Price</th>
               </tr>
-              </thead>
-              <tbody>
-              <tr th:each="entry : ${order.orderRequest}">
-                <td th:text="${entry.key.name}"></td>
-                <td th:text="${entry.value}"></td>
-                <td th:text="${entry.key.price}"></td>
-              </tbody>
-            </table>
-            <div class="row justify-content-between">
-              <div class="col-4">
-                <h6>Total Price: </h6>
-              </div>
-              <div class="col-5 text-center">
-               <h6><span th:text="${order.totalPrice}"></span> PLN</h6>
-              </div>
+            </thead>
+            <tbody>
+              <tr th:each="entry : ${order.foods}">
+                <td th:text="${entry.key.name}">Name</td>
+                <td th:text="${entry.value}">Quantity</td>
+                <td th:text="${entry.key.price + ' zł.'}">Price</td>
+            </tbody>
+          </table>
+          <div class="row justify-content-between">
+            <div class="col-4">
+              <span class="fw-medium">Total Price: </span>
             </div>
-          </li>
-        </ul>
-        <div class="card-body text-center">
-          <h5>Order Notes:</h5>
-          <textarea class="form-control" readonly name="orderNotes" rows="3" th:text="${order.orderNotes}"></textarea>
+            <div class="col-5 text-center">
+              <span class="card-text" id="totalPrice" th:text="${order.totalPrice}">Total Price</span>
+              <span class="card-text px-2" text="zł.">zł.</span>
+            </div>
+          </div>
         </div>
-        <div class="card-body text-center">
-          <h6>Delivery to address:</h6>
-          <p>
-            <span th:text="${order.customer.address.addressAddressStreet}"></span>,
-            <span th:text="${order.customer.address.addressPostalCode}"></span>,
-            <span th:text="${order.customer.address.addressCity}"></span>
-          </p>
+        <div class="col-md-8 my-3">
+          <span class="fw-medium">Order Notes: </span>
+          <br>
+          <textarea class="form-control" name="orderNotes" id="orderNotes" rows="3" th:text="${order.orderNotes}"></textarea>
         </div>
       </div>
     </div>
   </div>
-<br>
-<br>
 </body>
+<footer class="footer bg-dark py-1">
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <a href="https://www.facebook.com" class="me-3" target="_blank" style="text-decoration: none;">
+        <i class="bi bi-facebook" style="font-size: 1.5rem; color: #0866ff;"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/dariusz-gilewicz-6646bb301" class="me-3" target="_blank"
+        style="text-decoration: none;">
+        <i class="bi bi-linkedin" style="font-size: 1.5rem; color: #0a66c2;"></i>
+      </a>
+      <a href="https://www.github.com/Darus992" class="me-3" target="_blank" style="text-decoration: none;">
+        <i class="bi bi-github" style="font-size: 1.5rem; color: white;"></i>
+      </a>
+    </div>
+  </div>
+</footer>
 </html>

@@ -1,187 +1,292 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-        crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-          crossorigin="anonymous"></script>
-  <title>Business Form</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Business Form</title>
 </head>
 <body>
-  <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
-  <div class="container-fluid">
-    <h5>Order your food online!</h5>
-    <div class="btn-group dropstart">
-      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Menu
-      </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-        <li><a class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
-        <li><button class="dropdown-item" type="button">Something else here</button></li>
-      </ul>
+    <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
+        <div class="container-fluid">
+            <h5>Order your food online!</h5>
+            <div class="container-right">
+                <div th:if="${isAuthenticated == false}">
+                    <a th:href="@{/login}" class="btn btn-primary me-2" role="button">Log in</a>
+                    <button class="btn btn-primary me-2" type="button" data-bs-toggle="modal"
+                            data-bs-target="#registerTypeModal">Register
+                    </button>
+                </div>
+                <div th:if="${isAuthenticated == true}">
+                    <div class="btn-group dropstart">
+                        <button class="btn btn-secondary dropdown-toggle p-0 rounded-circle" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                                 class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+                                <path fill-rule="evenodd"
+                                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"></path>
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu mx-1">
+                            <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
+                            <a th:if="${user.role.name == 'CUSTOMER'}" th:href="@{/customer}" class="dropdown-item"
+                               role="button">Your account</a>
+                            <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item" role="button">Your
+                                account</a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal fade" id="registerTypeModal" tabindex="-1" aria-labelledby="registerTypeModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="registerTypeModalLabel">Register Account Type</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="form-label">Which account type do you want to create?</p>
+                                <br>
+                                <a th:href="@{/user/register-customer}" class="btn btn-primary me-2" role="button">Customer
+                                    Account</a>
+                                <a th:href="@{/user/register-business}" class="btn btn-primary me-2" role="button">Business
+                                    Account</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="rounded border bg-body-tertiary p-4 m-4">
+            <form action="#" th:action="@{/user/register-business}" method="post" enctype="multipart/form-data"
+                  th:object="${businessRequestForm}">
+                <h4 class="text-center">Create Account:</h4>
+                <div class="row">
+                    <div class="d-flex justify-content-around">
+                        <div class="col-md-4">
+                            <br>
+                            Username:
+                            <input type="text" id="username" name="username" class="form-control" th:field="*{username}"
+                                   style="width: 400px;"/>
+                            <p th:if="${#fields.hasErrors('username')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.username}"></p>
+                            <br>
+                            Email:
+                            <input type="email" id="email" name="email" class="form-control" th:field="*{userEmail}"
+                                   style="width: 400px;"/>
+                            <p th:if="${#fields.hasErrors('userEmail')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.userEmail}"></p>
+                            <br>
+                            Password:
+                            <input type="password" id="password" name="password" class="form-control"
+                                   th:field="*{userPassword}" style="width: 400px;"/>
+                            <p th:if="${#fields.hasErrors('userPassword')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.userPassword}"></p>
+                        </div>
+                        <div class="col-md-4">
+                            <br>
+                            Name:
+                            <input type="text" id="name" name="name" class="form-control" th:field="*{ownerName}"
+                                   style="width: 400px;"/>
+                            <p th:if="${#fields.hasErrors('ownerName')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.ownerName}"></p>
+                            <br>
+                            Surname:
+                            <input type="text" id="surname" name="surname" class="form-control" th:field="*{ownerSurname}"
+                                   style="width: 400px;"/>
+                            <p th:if="${#fields.hasErrors('ownerSurname')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.ownerSurname}"></p>
+                            <br>
+                            Pesel:
+                            <input type="text" id="pesel" name="pesel" class="form-control" th:field="*{ownerPesel}"
+                                   style="width: 400px;"/>
+                            <p th:if="${#fields.hasErrors('ownerPesel')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.ownerPesel}"></p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <p class="h5 text-center">Please enter restaurant details:</p>
+                <br>
+                <div class="row">
+                    <div class="d-flex justify-content-around">
+                        <div class="col-md-4">
+                            <br>
+                            Restaurant Name:
+                            <input type="text" id="restaurantName" name="restaurantName" class="form-control"
+                                   th:field="*{restaurantName}">
+                            <p th:if="${#fields.hasErrors('restaurantName')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.restaurantName}"></p>
+                            <br>
+                            Restaurant Phone:
+                            <input type="tel" id="restaurantPhone" name="restaurantPhone" class="form-control"
+                                   th:field="*{restaurantPhone}">
+                            <p th:if="${#fields.hasErrors('restaurantPhone')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.restaurantPhone}"></p>
+                            <br>
+                            Restaurant Email:
+                            <input type="email" id="restaurantEmail" name="restaurantEmail" class="form-control"
+                                   th:field="*{restaurantEmail}">
+                            <p th:if="${#fields.hasErrors('restaurantEmail')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.restaurantEmail}"></p>
+                            <br>
+                        </div>
+                        <div class="col-md-4">
+                            <br>
+                            Restaurant City:
+                            <input type="text" id="city" name="city" class="form-control"
+                                   th:field="*{restaurantAddressCity}" style="width: 400px;">
+                            <p th:if="${#fields.hasErrors('restaurantAddressCity')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.restaurantAddressCity}"></p>
+                            <br>
+                            Restaurant Street:
+                            <input type="text" id="street" name="street" class="form-control"
+                                   th:field="*{restaurantAddressStreet}" style="width: 400px;">
+                            <p th:if="${#fields.hasErrors('restaurantAddressStreet')}" th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.restaurantAddressStreet}"></p>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    District:
+                                    <input type="text" id="district" name="district" class="form-control"
+                                           th:field="*{restaurantAddressDistrict}" style="width: 200px;">
+                                    <p th:if="${#fields.hasErrors('restaurantAddressDistrict')}" th:errorclass="text-danger"
+                                       th:errors="${businessRequestForm.restaurantAddressDistrict}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    Postal Code:
+                                    <input type="text" id="postalCode" name="postalCode" class="form-control"
+                                           th:field="*{restaurantAddressPostalCode}" style="width: 170px;">
+                                    <p th:if="${#fields.hasErrors('restaurantAddressPostalCode')}"
+                                       th:errorclass="text-danger"
+                                       th:errors="${businessRequestForm.restaurantAddressPostalCode}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1">
+                        <div class="row">
+                            <div class="col-md-6" style="width: 200px">
+                                Opening Hour:
+                                <select id="startingHour" name="startingHour" class="form-select" th:field="*{openingHour}">
+                                    <option th:each="hour : ${#numbers.sequence(0, 23)}"
+                                            th:value="${hour < 10 ? #strings.concat('0', hour) : #strings.concat('', hour)}"
+                                            th:text="${#strings.concat(hour < 10 ? '0' : '', hour) + ':00'}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" style="width: 200px">
+                                Closing Hour:
+                                <select id="closingHour" name="closingHour" class="form-select" th:field="*{closeHour}">
+                                    <option th:each="hour : ${#numbers.sequence(0, 23)}"
+                                            th:value="${hour < 10 ? #strings.concat('0', hour) : #strings.concat('', hour)}"
+                                            th:text="${#strings.concat(hour < 10 ? '0' : '', hour) + ':00'}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 offset-md-1">
+                        <div class="row">
+                            <div class="col-md-6" style="width: 200px">
+                                Starting Day:
+                                <select id="startingDay" name="startingDay" class="form-select" th:field="*{dayOfWeekFrom}">
+                                    <option value="MONDAY">MONDAY</option>
+                                    <option value="TUESDAY">TUESDAY</option>
+                                    <option value="WEDNESDAY">WEDNESDAY</option>
+                                    <option value="THURSDAY">THURSDAY</option>
+                                    <option value="FRIDAY">FRIDAY</option>
+                                    <option value="SATURDAY">SATURDAY</option>
+                                    <option value="SUNDAY">SUNDAY</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" style="width: 200px">
+                                Finishing Day:
+                                <select id="finishDay" name="finishDay" class="form-select" th:field="*{dayOfWeekTill}">
+                                    <option value="MONDAY">MONDAY</option>
+                                    <option value="TUESDAY">TUESDAY</option>
+                                    <option value="WEDNESDAY">WEDNESDAY</option>
+                                    <option value="THURSDAY">THURSDAY</option>
+                                    <option value="FRIDAY">FRIDAY</option>
+                                    <option value="SATURDAY">SATURDAY</option>
+                                    <option value="SUNDAY">SUNDAY</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-5 offset-md-1">
+                        <div class="col-md-6" style="width: 400px">
+                            <label class="col-form-label">Card Image:</label>
+                            <input class="form-control" type="file" th:field="*{restaurantImageCard}">
+                        </div>
+                    </div>
+                    <div class="col-md-5 offset-md-1">
+                        <div class="col-md-6" style="width: 400px">
+                            <label class="col-form-label">Header Image:</label>
+                            <input class="form-control" type="file" th:field="*{restaurantImageHeader}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center m-2">
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-success m-2">Create Account</button>
+                        <a class="btn btn-secondary m-2" th:href="@{/}" role="button">Cancel</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group d-flex justify-content-center">
+                        <span>Already have an account ? <a href="#" th:href="@{/login}">Click here</a></span>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-</nav>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-  <br>
-  <br>
-  <div class="container">
-    <form action="#" th:action="@{/user/register-business}" method="post" enctype="multipart/form-data" th:object="${businessRequestForm}">
-      <h4 class="text-center">Create Account:</h4>
-      <div class="row">
-        <div class="d-flex justify-content-around">
-          <div class="col-md-4">
-            <br>
-            Username:
-            <input type="text" id="username" name="username" class="form-control" th:field="*{username}" style="width: 400px;"/>
-            <br>
-            Email:
-            <input type="email" id="email" name="email" class="form-control" th:field="*{userEmail}" style="width: 400px;"/>
-            <br>
-            Password:
-            <input type="password" id="password" name="password" class="form-control" th:field="*{userPassword}" style="width: 400px;"/>
-          </div>
-          <div class="col-md-4">
-            <br>
-            Name:
-            <input type="text" id="name" name="name" class="form-control" th:field="*{ownerName}" style="width: 400px;"/>
-            <br>
-            Surname:
-            <input type="text" id="surname" name="surname" class="form-control" th:field="*{ownerSurname}" style="width: 400px;"/>
-            <br>
-            Pesel:
-            <input type="text" id="pesel" name="pesel" class="form-control" th:field="*{ownerPesel}" style="width: 400px;"/>
-          </div>
-        </div>
-      </div>
-      <br>
-      <br>
-      <p class="h5 text-center">Please enter restaurant details:</p>
-      <br>
-      <div class="row">
-        <div class="d-flex justify-content-around">
-          <div class="col-md-4">
-            <br>
-            Restaurant Name:
-            <input type="text" id="restaurantName" name="restaurantName" class="form-control" th:field="*{restaurantName}">
-            <br>
-            Restaurant Phone:
-            <input type="tel" id="restaurantPhone" name="restaurantPhone" class="form-control" th:field="*{restaurantPhone}">
-            <br>
-            Restaurant Email:
-            <input type="email" id="restaurantEmail" name="restaurantEmail" class="form-control" th:field="*{restaurantEmail}">
-            <br>
-          </div>
-          <div class="col-md-4">
-            <br>
-            Restaurant City:
-            <input type="text" id="city" name="city" class="form-control" th:field="*{restaurantAddressCity}" style="width: 400px;">
-            <br>
-            Restaurant Street:
-            <input type="text" id="street" name="street" class="form-control" th:field="*{restaurantAddressStreet}" style="width: 400px;">
-            <br>
-            <div class="row">
-              <div class="col-md-6">
-                District:
-                <input type="text" id="district" name="district" class="form-control" th:field="*{restaurantAddressDistrict}" style="width: 200px;">
-              </div>
-              <div class="col-md-6">
-                Postal Code:
-                <input type="text" id="postalCode" name="postalCode" class="form-control" th:field="*{restaurantAddressPostalCode}" style="width: 170px;">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-5 offset-md-1">
-          <div class="row">
-            <div class="col-md-6" style="width: 200px">
-              Opening Hour:
-              <select id="startingHour" name="startingHour" class="form-select" th:field="*{openingHour}">
-                <option th:each="hour : ${#numbers.sequence(0, 23)}"
-                        th:value="${hour < 10 ? #strings.concat('0', hour) : #strings.concat('', hour)}"
-                        th:text="${#strings.concat(hour < 10 ? '0' : '', hour) + ':00'}">
-                </option>
-              </select>
-            </div>
-            <div class="col-md-6" style="width: 200px">
-              Closing Hour:
-              <select id="closingHour" name="closingHour" class="form-select" th:field="*{closeHour}">
-                <option th:each="hour : ${#numbers.sequence(0, 23)}"
-                        th:value="${hour < 10 ? #strings.concat('0', hour) : #strings.concat('', hour)}"
-                        th:text="${#strings.concat(hour < 10 ? '0' : '', hour) + ':00'}">
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-5 offset-md-1">
-          <div class="row">
-            <div class="col-md-6" style="width: 200px">
-              Starting Day:
-              <select id="startingDay" name="startingDay" class="form-select" th:field="*{dayOfWeekFrom}">
-                <option value="MONDAY">MONDAY</option>
-                <option value="TUESDAY">TUESDAY</option>
-                <option value="WEDNESDAY">WEDNESDAY</option>
-                <option value="THURSDAY">THURSDAY</option>
-                <option value="FRIDAY">FRIDAY</option>
-                <option value="SATURDAY">SATURDAY</option>
-                <option value="SUNDAY">SUNDAY</option>
-              </select>
-            </div>
-            <div class="col-md-6" style="width: 200px">
-              Finishing Day:
-              <select id="finishDay" name="finishDay" class="form-select" th:field="*{dayOfWeekTill}">
-                <option value="MONDAY">MONDAY</option>
-                <option value="TUESDAY">TUESDAY</option>
-                <option value="WEDNESDAY">WEDNESDAY</option>
-                <option value="THURSDAY">THURSDAY</option>
-                <option value="FRIDAY">FRIDAY</option>
-                <option value="SATURDAY">SATURDAY</option>
-                <option value="SUNDAY">SUNDAY</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br>
-      <div class="row mb-3">
-        <label class="col-sm-4 col-form-label">Image</label>
-        <div class="col-sm-8">
-          <input class="form-control" type="file" th:field="*{imageFile}">
-        </div>
-      </div>
-      <br>
-      <div class="row p-5">
-        <div class="form-group d-flex justify-content-center">
-          <input type="submit" value="Create Account" name="button" class="btn btn-success mx-3"/>
-          <span>Already have an account ? <a href="#" th:href="@{/login}">Click here</a></span>
-        </div>
-      </div>
-      <br>
-      <br>
-    </form>
-  </div>
 
 </body>
+<footer class="footer bg-dark py-1">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <a href="https://www.facebook.com" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-facebook" style="font-size: 1.5rem; color: #0866ff;"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/dariusz-gilewicz-6646bb301" class="me-3" target="_blank"
+               style="text-decoration: none;">
+                <i class="bi bi-linkedin" style="font-size: 1.5rem; color: #0a66c2;"></i>
+            </a>
+            <a href="https://www.github.com/Darus992" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-github" style="font-size: 1.5rem; color: white;"></i>
+            </a>
+        </div>
+    </div>
+</footer>
 </html>

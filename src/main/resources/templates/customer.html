@@ -9,68 +9,33 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
           crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="http://localhost:8190/ordering-food-application/css/styles.css"/>
     <title>Customer</title>
 </head>
 <body>
   <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
   <div class="container-fluid">
-    <h5>Order your food online!</h5>
+    <div class="d-flex align-items-center">
+      <a th:href="@{/}" role="button">
+        <i class="bi bi-house-door-fill fs-4 mx-3"></i>
+      </a>
+      <h5 class="mb-0">Order your food online!</h5>
+    </div>
     <div class="btn-group dropstart">
-      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-             class="bi bi-person-circle" viewBox="0 0 16 16">
-          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-          <path fill-rule="evenodd"
-                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+      <button class="btn btn-secondary dropdown-toggle p-0 rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"></path>
         </svg>
       </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-        <li><a class="dropdown-item" th:href="@{/customer}">Go to your account</a></li>
-        <li><button class="dropdown-item" type="button">Something else here</button></li>
+      <ul class="dropdown-menu mx-1">
+        <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
+        <a th:href="@{/customer}" class="dropdown-item" role="button">Your account</a>
       </ul>
     </div>
   </div>
 </nav>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
-          <li class="nav-item">
-            <div class="dropdown">
-              <button class="btn btn-info dropdown-toggle" type="button" id="ordersDropdown"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                     class="bi bi-cart-check" viewBox="0 0 16 16">
-                  <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
-                  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
-                </svg>
-                Your Carts
-              </button>
-              <ul class="dropdown-menu p-1" aria-labelledby="ordersDropdown">
-                <li th:each="number : ${user.customer.customerOrders}">
-                  <div th:if="${number.status == null}">
-                    <a class="dropdown-item" th:href="@{'/cart?orderNumber=' + ${number.orderNumber}}">Order
-                      Number: [[${number.orderNumber}]]</a>
-                  </div>
-                </li>
-                <div th:if="${user.customer.isCartEmpty == true}">
-                  <p class="dropdown-item text-center mb-1">Your cart is empty</p>
-                </div>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
   <br>
   <br>
   <div class="container">
@@ -91,82 +56,101 @@
                 <div class="card-header text-center">
                   <h3>Account Details</h3>
                 </div>
-                <form class="row m-3 g-3">
+                <form class="row m-3 g-3" action="#" th:action="@{/customer/update-profile}" method="post" th:object="${userForm}">
                   <div class="col-md-6">
-                    <label for="inputEmail4" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4" th:value="${user.email}">
+                    <label for="username" class="form-label">Username: </label>
+                    <input type="text" name="username" id="username" class="form-control" th:value="${user.username}">
+                    <p th:if="${#fields.hasErrors('username')}" th:errorclass="text-danger" th:errors="${userForm.username}"></p>
+                  </div>  
+                  <div class="col-md-6">
+                    <label for="inputEmail" class="form-label">Email: </label>
+                    <input type="text" class="form-control" id="inputEmail" name="email" th:value="${user.email}">
+                    <p th:if="${#fields.hasErrors('email')}" th:errorclass="text-danger" th:errors="${userForm.email}"></p>
                   </div>
-                  <div class="col-6">
-                    <label for="inputPhone" class="form-label">Phone</label>
+                  <div class="col-md-6">
+                    <label for="password">Password: </label>
+                    <input type="password" name="password" id="password" class="form-control">
+                    <p th:if="${#fields.hasErrors('password')}" th:errorclass="text-danger" th:errors="${userForm.password}"></p>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="inputPhone" class="form-label">Phone: </label>
                     <div class="input-group flex-nowrap">
                       <span class="input-group-text" id="addon-wrapping">+48</span>
-                      <input type="text" class="form-control" id="inputPhone" th:value="${user.customer.phone}"
+                      <input type="text" class="form-control" id="inputPhone" name="customer.phone" th:value="${user.customer.phone}"
                              aria-describedby="addon-wrapping">
                     </div>
+                    <p th:if="${#fields.hasErrors('customer.phone')}" th:errorclass="text-danger" th:errors="${userForm.customer.phone}"></p>
                   </div>
-                  <div class="col-6">
-                    <label for="inputName" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="inputName" th:value="${user.customer.name}">
+                  <div class="col-md-6">
+                    <label for="inputName" class="form-label">Name: </label>
+                    <input type="text" class="form-control" id="inputName" name="customer.name" th:value="${user.customer.name}">
+                    <p th:if="${#fields.hasErrors('customer.name')}" th:errorclass="text-danger" th:errors="${userForm.customer.name}"></p>
                   </div>
-                  <div class="col-6">
-                    <label for="inputSurname" class="form-label">Surname</label>
-                    <input type="text" class="form-control" id="inputSurname" th:value="${user.customer.surname}">
+                  <div class="col-md-6">
+                    <label for="inputSurname" class="form-label">Surname: </label>
+                    <input type="text" class="form-control" id="inputSurname" name="customer.surname" th:value="${user.customer.surname}">
+                    <p th:if="${#fields.hasErrors('customer.surname')}" th:errorclass="text-danger" th:errors="${userForm.customer.surname}"></p>
                   </div>
                   <h3 class="text-center">Delivery Address:</h3>
                   <div class="col-12">
-                    <label for="inputAddress" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="inputAddress" th:value="${user.customer.address.addressAddressStreet}">
-                  </div>
-                  <div class="col-12">
-                    <label for="inputAddress2" class="form-label">Address 2</label>
-                    <input type="text" class="form-control" id="inputAddress2" placeholder="Address 2... (Optional)">
+                    <label for="inputAddress" class="form-label">Address: </label>
+                    <input type="text" class="form-control" id="inputAddress" name="customer.address.addressStreet" th:value="${user.customer.address.addressStreet}">
+                    <p th:if="${#fields.hasErrors('customer.address.addressStreet')}" th:errorclass="text-danger" th:errors="${userForm.customer.address.addressStreet}"></p>
                   </div>
                   <div class="col-md-5">
-                    <label for="inputCity" class="form-label">City</label>
-                    <input type="text" class="form-control" id="inputCity" th:value="${user.customer.address.addressCity}">
+                    <label for="inputCity" class="form-label">City: </label>
+                    <input type="text" class="form-control" id="inputCity" name="customer.address.city" th:value="${user.customer.address.city}">
+                    <p th:if="${#fields.hasErrors('customer.address.city')}" th:errorclass="text-danger" th:errors="${userForm.customer.address.city}"></p>
                   </div>
                   <div class="col-md-5">
-                    <label for="inputDistrict" class="form-label">District</label>
-                    <input type="text" class="form-control" id="inputDistrict" th:value="${user.customer.address.addressDistrict}">
+                    <label for="inputDistrict" class="form-label">District: </label>
+                    <input type="text" class="form-control" id="inputDistrict" name="customer.address.district" th:value="${user.customer.address.district}">
+                    <p th:if="${#fields.hasErrors('customer.address.district')}" th:errorclass="text-danger" th:errors="${userForm.customer.address.district}"></p>
                   </div>
                   <div class="col-md-2">
-                    <label for="inputPostalCode" class="form-label">Postal Code</label>
-                    <input type="text" class="form-control" id="inputPostalCode" th:value="${user.customer.address.addressPostalCode}">
+                    <label for="inputPostalCode" class="form-label">Postal Code: </label>
+                    <input type="text" class="form-control" id="inputPostalCode" name="customer.address.postalCode" th:value="${user.customer.address.postalCode}">
+                    <p th:if="${#fields.hasErrors('customer.address.postalCode')}" th:errorclass="text-danger" th:errors="${userForm.customer.address.postalCode}"></p>
                   </div>
                   <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-warning">Save change</button>
-                    <button type="submit" class="btn btn-warning">Change Password</button>
+                    <input type="hidden" name="_method" value="PATCH">
+                    <input type="hidden" name="emailParam" th:value="${user.email}">
+                    <button type="submit" class="btn btn-primary">Save change</button>
                   </div>
-                  <div class="col-12 text-center">
-                    <span>
-                      Do you want to delete your account?
-                      <a href="/" th:href="@{/user/delete}" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete my account</a>
-                    </span>
-                    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="confirmModalLabel">Delete my account</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            Are you sure you want to delete your account?
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <button type="button" class="btn btn-danger">Yes</button>
-                          </div>
+                </form>
+                <div class="col-12 text-center">
+                      <span>
+                        Do you want to delete your account?
+                        <a href="/" data-bs-toggle="modal" data-bs-target="#confirmModal">Delete my account</a>
+                      </span>
+                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="confirmModalLabel">Delete my account</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to delete your account?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                          <form action="/" th:action="@{/customer/delete-account}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="userEmail" th:value="${user.email}">
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                          </form>
                         </div>
                       </div>
                     </div>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
             <div class="tab-pane fade" id="list-orders-history" role="tabpanel" aria-labelledby="list-orders-history-list">
               <div class="card">
-                <div class="card-header">
-                  TEKST POMOCNICZY
+                <div class="card-header text-center">
+                  <h4>Order History</h4>
                 </div>
                 <table class="table">
                   <thead>
@@ -185,11 +169,11 @@
                     <td th:text="${order.orderNumber}">Order number</td>
                     <td th:text="${order.status}">Status</td>
                     <td th:text="${order.receivedDateTime}">Received Date Time</td>
-                    <td th:text="${order.completedDateTime}">Completed Date Time</td>
-                    <td th:text="${order.totalPrice}">Total Price</td>
+                    <td th:text="${order.completedDateTime != '' ? order.completedDateTime : 'Non.'}">Completed Date Time</td>
+                    <td th:text="${order.totalPrice + ' zł'}">Total Price</td>
                     <td th:text="${order.restaurant.restaurantName}">Restaurant Name</td>
                     <td>
-                      <a th:href="@{/order/{orderNumber}(orderNumber=${order.orderNumber})}" class="btn btn-success" role="button">Check Details</a>
+                      <a th:href="@{'order/' + ${order.orderNumber} + '/details'}" class="btn btn-success" role="button">Check Details</a>
                     </td>
                   </tr>
                   </tbody>
@@ -204,4 +188,28 @@
   </div>
 
 </body>
+<footer class="footer bg-dark py-1">
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <a href="https://www.facebook.com" class="me-3" target="_blank" style="text-decoration: none;">
+        <i class="bi bi-facebook" style="font-size: 1.5rem; color: #0866ff;"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/dariusz-gilewicz-6646bb301" class="me-3" target="_blank" style="text-decoration: none;">
+        <i class="bi bi-linkedin" style="font-size: 1.5rem; color: #0a66c2;"></i>
+      </a>
+      <a href="https://www.github.com/Darus992" class="me-3" target="_blank" style="text-decoration: none;">
+        <i class="bi bi-github" style="font-size: 1.5rem; color: white;"></i>
+      </a>
+    </div>
+  </div>
+</footer>
+<script th:inline="javascript">
+    var defaultTab = /*[[${defaultTab}]]*/ 'list-details-list';
+    document.addEventListener("DOMContentLoaded", function() {
+        var tabLink = document.getElementById(defaultTab);
+        if (tabLink) {
+            tabLink.click(); // Wywołanie zdarzenia kliknięcia na zakładce
+        }
+    });
+</script>
 </html>

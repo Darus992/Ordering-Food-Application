@@ -1,11 +1,14 @@
 package pl.dariuszgilewicz.api.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import pl.dariuszgilewicz.infrastructure.security.User;
 import pl.dariuszgilewicz.infrastructure.security.UserService;
+
+import java.util.Optional;
 
 
 @Controller
@@ -15,9 +18,11 @@ public class HomeController {
     private UserService userService;
 
     @GetMapping("/")
-    public String home(Model model, Authentication authentication) {
-        boolean isAuthenticated = userService.checkIfIsAuthenticated(model, authentication);
-        userService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
+    public String home(Model model) {
+        Optional<User> optionalUser = userService.getCurrentOptionalUser(model);
+        optionalUser.ifPresent(user -> model.addAttribute("user", user));
+//        User user = optionalUser.orElseThrow(() -> new EntityNotFoundException("User Entity: [%s] not found.".formatted(optionalUser)));
+//        model.addAttribute("user", user);
         return "index";
     }
 

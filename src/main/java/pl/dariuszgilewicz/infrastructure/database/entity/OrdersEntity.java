@@ -40,19 +40,14 @@ public class OrdersEntity {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "expected_delivery_date_time")
-    private OffsetDateTime expectedDeliveryDateTime;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "completed_date_time")
     private OffsetDateTime completedDateTime;
 
     @ElementCollection
-    @CollectionTable(name = "cart", joinColumns = @JoinColumn(name = "order_id"))
+    @CollectionTable(name = "order_foods", joinColumns = @JoinColumn(name = "order_id"))
     @MapKeyJoinColumn(name = "food_id")
     @Column(name = "quantity")
-    private Map<FoodEntity, Integer> orderRequest;
+    private Map<FoodEntity, Integer> orderFoods;
 
     @Column(name = "total_price")
     private BigDecimal totalPrice;

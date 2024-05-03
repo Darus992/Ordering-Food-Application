@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FoodMenuJpaRepository extends JpaRepository<FoodMenuEntity, Long> {
+public interface FoodMenuJpaRepository extends JpaRepository<FoodMenuEntity, Integer> {
 
     @Query("""
             SELECT fm FROM FoodMenuEntity fm

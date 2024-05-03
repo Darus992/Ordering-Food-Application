@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantOwnerEntity;
 import pl.dariuszgilewicz.infrastructure.database.repository.RestaurantRepository;
 import pl.dariuszgilewicz.infrastructure.database.repository.jpa.RestaurantJpaRepository;
@@ -13,7 +12,6 @@ import pl.dariuszgilewicz.infrastructure.database.repository.mapper.UserEntityMa
 import pl.dariuszgilewicz.infrastructure.model.exception.EntityAlreadyExistAuthenticationException;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
-import pl.dariuszgilewicz.infrastructure.util.FileUploadUtil;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,25 +27,21 @@ public class UserRepository {
 
 
     public UserEntity findUserEntityByUsername(String username){
-        return userJpaRepository.findByUserName(username)
+        return userJpaRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "UserEntity with username: [%s] not found".formatted(username)
                 ));
     }
 
     public void createCustomerUser(CustomerRequestForm customerRequestForm) {
-        UserEntity toSave = userEntityMapper.mapFromCustomerRequest(customerRequestForm);
+        UserEntity toSave = userEntityMapper.mapFromRequestForm(customerRequestForm);
         toSave.setPassword(passwordEncoder.encode(customerRequestForm.getUserPassword()));
         userJpaRepository.save(toSave);
     }
 
     public void createBusinessUser(BusinessRequestForm businessRequestForm) {
         validateExistingEntities(businessRequestForm);
-
-//        MultipartFile image = businessRequestForm.getRestaurantImageCard();
-//        String storageFileName = FileUploadUtil.uploadFile(image, RESTAURANT_IMAGE_DIR, null);
-
-        UserEntity toSave = userEntityMapper.mapFromBusinessRequest(businessRequestForm);
+        UserEntity toSave = userEntityMapper.mapFromRequestForm(businessRequestForm);
         toSave.setPassword(passwordEncoder.encode(businessRequestForm.getUserPassword()));
 
         RestaurantOwnerEntity owner = toSave.getOwner();
@@ -66,5 +60,13 @@ public class UserRepository {
                             .formatted(restaurantEmail, ownerPesel)
             );
         }
+    }
+
+    public void updateUserData(UserEntity userEntity, String password) {
+        if(password != null && !password.isEmpty()){
+            String encodePassword = passwordEncoder.encode(password);
+            userEntity.setPassword(encodePassword);
+        }
+        userJpaRepository.save(userEntity);
     }
 }

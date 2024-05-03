@@ -9,125 +9,85 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
-    <script src="src/main/resources/static/js/modal.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="http://localhost:8190/ordering-food-application/css/styles.css"/>
     <title>Restaurant</title>
 </head>
 <body>
 <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
     <div class="container-fluid">
-        <h5>Order your food online!</h5>
-        <div class="btn-group dropstart">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Menu
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-                <li><a class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
-                <li><button class="dropdown-item" type="button">Something else here</button></li>
-            </ul>
+        <div class="d-flex align-items-center">
+            <a th:href="@{/}" role="button">
+                <i class="bi bi-house-door-fill fs-4 mx-3"></i>
+            </a>
+            <h5 class="mb-0">Order your food online!</h5>
         </div>
-    </div>
-</nav>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
-            <form class="d-flex" th:action="@{/restaurants}" method="get" th:object="${restaurants}">
-                <input class="form-control me-2" type="search" placeholder="Restaurant name" id="restaurantName"
-                       name="restaurantName" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+        <div class="container-right">
+            <div class="btn-group dropstart">
+                <button class="btn btn-secondary dropdown-toggle p-0 rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"></path>
+                    </svg>
+                </button>
+                <ul class="dropdown-menu mx-1">
+                    <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
+                    <a th:href="@{/owner}" class="dropdown-item" role="button">Your account</a>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
 <br>
 <br>
-
-<div th:if="${isCompleted == false}" class="container text-center">
-    <div class="col">
-        <h3>Your account is not completed!</h3>
+<div class="container">
+    <div class="row justify-content-between m-3">
+        <div class="col-md-4 pt-4">
+            <a th:href="@{/restaurant/create}" class="btn btn-success" type="button">Create New Restaurant</a>
+            <a th:href="@{/owner/update-profile}" class="btn btn-info" type="button">Update Profile</a>
+        </div>
+        <div class="col-md-2">
+            <span class="text">Sort by:</span>
+            <select id="sortingType" name="sortingType" class="form-select">
+                <option value="Alphabetically">Alphabetically</option>
+                <option value="Price">Price</option>
+            </select>
+        </div>
     </div>
-    <div class="row">
-        <span>Please fill necessary data clicking <a href="/" th:href="@{/owner/create}">here</a> or go to Menu/LINK to use your account fully.</span>
-    </div>
-</div>
-<div  class="container text-center">
-    <div class="col">
-        <a th:href="@{/restaurant/create}" class="btn btn-info" type="button">Create Restaurant</a>
-    </div>
-
-    <br>
-
-    <div class="col">
-        <table class="table">
-            <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Restaurant City</th>
-                <th>Restaurant District</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="restaurant: ${restaurants}">
-                <td th:text="${restaurant.restaurantName}"></td>
-                <td th:text="${restaurant.restaurantPhone}"></td>
-                <td th:text="${restaurant.restaurantEmail}"></td>
-                <td th:text="${restaurant.restaurantAddress.addressCity}"></td>
-                <td th:text="${restaurant.restaurantAddress.addressDistrict}"></td>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            ...
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a th:if="${restaurant.foodMenu == null}" th:href="@{/restaurant/create-food-menu/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Add Food Menu</a></li>
-                            <li><a th:if="${restaurant.foodMenu != null}" th:href="@{/restaurant/create-food/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Add Food To Menu</a></li>
-                            <li><a th:href="@{/restaurant/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}" class="dropdown-item" type="button">Go To Restaurant</a></li>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateImageModal" data-value="${restaurant.restaurantEmail}">
-                                Upload image
-                            </button>
-                        </ul>
-
-                        <div class="modal fade" id="updateImageModal" tabindex="-1" aria-labelledby="updateImageModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="updateImageModalLabel">Update food menu image</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form th:action="@{/update-menu-image}" method="post" enctype="multipart/form-data">
-
-                                            <input type="text" class="form-control" name="restaurantEmail" th:value="${restaurant.restaurantEmail}">
-                                            <div class="mb-3">
-                                                <label for="menuImage" class="form-label">New menu image:</label>
-                                                <input type="file" class="form-control" id="menuImage" name="menuImage">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Update</button>
-<!--                                            <p id="modalValue"></p>-->
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="row m-3">
+        <div class="col-md-12 mb-4" th:each="restaurant : ${restaurants}">
+            <a th:href="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/details'}" class="card h-100 text-decoration-none bg-body-tertiary shadow rounded">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <img th:src="@{'/image/' + ${restaurant.restaurantEmail} + '?image=CARD'}" class="card-img rounded-pill p-1 mx-2" alt="Restaurant image">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${restaurant.restaurantName}">Restaurant Name</h5>
+                            <span class="card-text" th:text="${restaurant.restaurantAddress.addressStreet}">Street</span>,
+                            <span class="card-text" th:text="${restaurant.restaurantAddress.postalCode}">Post code</span>
+                            <p class="card-text" th:text="${restaurant.restaurantAddress.city}">City</p>
                         </div>
                     </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </div>
+            </a>
+        </div>
     </div>
-
 </div>
 </body>
+<footer class="footer bg-dark py-1">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <a href="https://www.facebook.com" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-facebook" style="font-size: 1.5rem; color: #0866ff;"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/dariusz-gilewicz-6646bb301" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-linkedin" style="font-size: 1.5rem; color: #0a66c2;"></i>
+            </a>
+            <a href="https://www.github.com/Darus992" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-github" style="font-size: 1.5rem; color: white;"></i>
+            </a>
+        </div>
+    </div>
+</footer>
 </html>

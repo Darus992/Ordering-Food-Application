@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <script src="http://localhost:8190/ordering-food-application/js/orderCard.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="http://localhost:8190/ordering-food-application/css/styles.css"/>
+    <title>Restaurant Details-Edit</title>
+</head>
+<body>
+<nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center">
+            <a th:href="@{/}" role="button">
+                <i class="bi bi-house-door-fill fs-4 mx-3"></i>
+            </a>
+            <h5 class="mb-0">Order your food online!</h5>
+        </div>
+        <div class="container-right">
+            <div class="btn-group dropstart">
+                <button class="btn btn-secondary dropdown-toggle p-0 rounded-circle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                         class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+                        <path fill-rule="evenodd"
+                              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"></path>
+                    </svg>
+                </button>
+                <ul class="dropdown-menu mx-1">
+                    <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
+                    <a th:href="@{/owner}" class="dropdown-item" role="button">Your account</a>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="list-group" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action" id="list-details-list" data-bs-toggle="list"
+                   href="#list-details" role="tab" aria-controls="list-details">Details</a>
+                <a class="list-group-item list-group-item-action" id="list-food-form-list" data-bs-toggle="list"
+                   href="#list-food-form" role="tab" aria-controls="list-food-form">Food Form</a>
+                <a class="list-group-item list-group-item-action" id="list-food-menu-list" data-bs-toggle="list"
+                   href="#list-food-menu" role="tab" aria-controls="list-food-menu">Food Menu</a>
+                <a class="list-group-item list-group-item-action" id="list-restaurant-image-list" data-bs-toggle="list"
+                   href="#list-restaurant-image" role="tab" aria-controls="list-restaurant-image">Restaurant Image</a>
+                <a class="list-group-item list-group-item-action" id="list-work-schedule-list" data-bs-toggle="list"
+                   href="#list-work-schedule" role="tab" aria-controls="list-work-schedule">Work Schedule</a>
+                <a class="list-group-item list-group-item-action" id="list-orders-list" data-bs-toggle="list"
+                   href="#list-orders" role="tab" aria-controls="list-orders">Orders List</a>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade" id="list-details" role="tabpanel" aria-labelledby="list-details-list">
+                    <div class="card bg-body-tertiary p-4 m-4">
+                        <div class="card-header">
+                            <img th:src="@{'/image/' + ${restaurant.restaurantEmail} + '?image=HEADER'}"
+                                 class="card-img" alt="Restaurant image">
+                        </div>
+                        <form action="#"
+                              th:action="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/details'}"
+                              method="post" th:object="${restaurant}">
+                            <input type="hidden" name="_method" value="PATCH">
+                            <div class="row my-3">
+                                <div class="d-flex justify-content-around">
+                                    <div class="col-md-4">
+                                        <label class="text" for="restaurantName">Restaurant Name:</label>
+                                        <input type="text" name="restaurantName" id="restaurantName" class="form-control"
+                                               th:value="${restaurant.restaurantName}">
+                                        <br>
+                                        <label class="text" for="restaurantPhone">Restaurant Phone:</label>
+                                        <input type="tel" name="restaurantPhone" id="restaurantPhone" class="form-control"
+                                               th:value="${restaurant.restaurantPhone}">
+                                        <br>
+                                        <label class="text" for="restaurantEmail">Restaurant Email:</label>
+                                        <input type="email" name="restaurantEmail" id="restaurantEmail" class="form-control"
+                                               th:value="${restaurant.restaurantEmail}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="text" for="restaurantAddressCity">Restaurant City:</label>
+                                        <input type="text" name="restaurantAddress.city" id="restaurantAddressCity" class="form-control"
+                                               th:value="${restaurant.restaurantAddress.city}">
+                                        <br>
+                                        <label class="text" for="restaurantAddressAddressStreet">Restaurant Street:</label>
+                                        <input type="text" name="restaurantAddress.addressStreet" id="restaurantAddressAddressStreet" class="form-control"
+                                               th:value="${restaurant.restaurantAddress.addressStreet}">
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="text" for="restaurantAddressDistrict">District:</label>
+                                                <input type="text" name="restaurantAddress.district" id="restaurantAddressDistrict"
+                                                       class="form-control"
+                                                       th:value="${restaurant.restaurantAddress.district}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="text" for="restaurantAddressPostalCode">Postal Code:</label>
+                                                <input type="text" name="restaurantAddress.postalCode" id="restaurantAddressPostalCode"
+                                                       class="form-control"
+                                                       th:value="${restaurant.restaurantAddress.postalCode}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-3">
+                                <div class="col-md-12">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary m-2">Update Restaurant
+                                                Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="list-food-form" role="tabpanel" aria-labelledby="list-food-form-list">
+                    <div class="card bg-body-tertiary p-4 m-4">
+                        <div class="text-center">
+                            <h3>Food Form</h3>
+                        </div>
+                        <form action="#"
+                              th:action="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/create-food'}"
+                              method="post" enctype="multipart/form-data" th:object="${food}">
+                            <div class="row my-3">
+                                <div class="d-flex justify-content-around">
+                                    <div class="col-md-4">
+                                        <label class="text" for="createFoodCategory">Category</label>
+                                        <input type="text" name="category" id="createFoodCategory" class="form-control"
+                                               th:field="*{category}">
+                                        <p th:if="${#fields.hasErrors('category')}"
+                                           th:errorclass="text-danger"
+                                           th:errors="${food.category}"></p>
+                                        <br>
+                                        <label class="text" for="createFoodName">Name</label>
+                                        <input type="text" name="name" id="createFoodName" class="form-control" th:field="*{name}">
+                                        <p th:if="${#fields.hasErrors('name')}"
+                                           th:errorclass="text-danger"
+                                           th:errors="${food.name}"></p>
+                                        <br>
+                                        <label class="text" for="createFoodDescription">Description</label>
+                                        <input type="text" name="description" id="createFoodDescription" class="form-control"
+                                               th:field="*{description}">
+                                        <br>
+                                        <label class="text" for="createFoodPrice">Price</label>
+                                        <input type="text" name="price" id="createFoodPrice" class="form-control" th:field="*{price}">
+                                        <p th:if="${#fields.hasErrors('price')}"
+                                           th:errorclass="text-danger"
+                                           th:errors="${food.price}"></p>
+                                        <br>
+                                        <span class="text">Image</span>
+                                        <input type="file" name="fileImageToUpload" id="fileImageToUpload" class="form-control"
+                                               th:field="*{fileImageToUpload}">
+                                        <p th:if="${#fields.hasErrors('fileImageToUpload')}"
+                                           th:errorclass="text-danger"
+                                           th:errors="${food.fileImageToUpload}"></p>
+                                        <br>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="d-flex align-items-center">
+                                                <button type="submit" class="btn btn-primary">Create</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="list-food-menu" role="tabpanel" aria-labelledby="list-food-menu-list">
+                    <div class="card p-4 m-4">
+                        <div th:each="food, foodIndex : ${restaurant.foodMenu.foods}" class="col my-3">
+                            <div class="card bg-body-tertiary">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
+                                        <img th:src="@{'/image/food/' + ${food.foodId}}"
+                                             class="card-img rounded-circle p-1 mx-2" alt="Food image">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${food.category}">Category</h5>
+                                            <p class="card-text" th:text="${food.name}">Name</p>
+                                            <p class="card-text" th:text="${food.description}">Description</p>
+                                            <p class="card-text" th:text="${food.price}">Price</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" th:data-bs-target="'#editFoodModal' + ${foodIndex.index}" style="width: 71px;">
+                                            Edit
+                                        </button>
+                                        <div th:id="'editFoodModal' + ${foodIndex.index}" class="modal fade"
+                                             tabindex="-1" aria-labelledby="'editFoodModalLabel' + ${foodIndex.index}"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editFoodModalLabel">Edit Food
+                                                            Form</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="#"
+                                                              th:action="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/edite-food-from-menu'}"
+                                                              method="post" enctype="multipart/form-data"
+                                                              th:object="${food}">
+                                                            <input type="hidden" name="_method" value="PATCH">
+                                                            <input type="hidden" name="foodId" th:value="${food.foodId}">
+                                                            <div class="d-flex justify-content-around">
+                                                                <div class="col-md-4">
+                                                                    <label class="text" for="editeFoodCategory">Category</label>
+                                                                    <input type="text" name="category" id="editeFoodCategory" class="form-control" th:field="*{category}">
+                                                                    <p th:if="${#fields.hasErrors('category')}"
+                                                                       th:errorclass="text-danger"
+                                                                       th:errors="${food.category}"></p>
+                                                                    <br>
+                                                                    <label class="text" for="editeFoodName">Name</label>
+                                                                    <input type="text" name="name" id="editeFoodName" class="form-control" th:field="*{name}">
+                                                                    <p th:if="${#fields.hasErrors('name')}"
+                                                                       th:errorclass="text-danger"
+                                                                       th:errors="${food.name}"></p>
+                                                                    <br>
+                                                                    <label class="text" for="editeFoodDescription">Description</label>
+                                                                    <input type="text" name="description" id="editeFoodDescription" class="form-control" th:field="*{description}">
+                                                                    <br>
+                                                                    <label class="text" for="editeFoodPrice">Price</label>
+                                                                    <input type="text" name="price" id="editeFoodPrice" class="form-control" th:field="*{price}">
+                                                                    <p th:if="${#fields.hasErrors('price')}"
+                                                                       th:errorclass="text-danger"
+                                                                       th:errors="${food.price}"></p>
+                                                                    <br>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-around">
+                                                                <div class="col-md-7">
+                                                                    <span class="text">Current Image</span>
+                                                                    <img th:src="@{'/image/food/' + ${food.foodId}}"
+                                                                         class="card-img rounded-circle p-1 m-2" id="currentImage"
+                                                                         alt="Food image">
+                                                                    <br>
+                                                                    <label class="text" for="editeFoodFileImageToUpload">Image</label>
+                                                                    <input type="file" name="fileImageToUpload" id="editeFoodFileImageToUpload" class="form-control" th:field="*{fileImageToUpload}" style="width: 280px;">
+                                                                    <p th:if="${#fields.hasErrors('fileImageToUpload')}"
+                                                                       th:errorclass="text-danger"
+                                                                       th:errors="${food.fileImageToUpload}"></p>
+                                                                    <br>
+                                                                    <div class="d-flex justify-content-center">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <button type="submit"
+                                                                                    class="btn btn-primary">Update
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <form action="#"
+                                              th:action="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/delete-food-from-menu'}"
+                                              method="post">
+                                            <input type="hidden" name="_method" value="PATCH">
+                                            <input type="hidden" name="foodId" class="form-control"
+                                                   th:value="${food.foodId}">
+                                            <button type="submit" class="btn btn-danger m-2">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="list-restaurant-image" role="tabpanel" aria-labelledby="list-restaurant-image-list">
+                    <div class="card bg-body-tertiary p-4 m-4">
+                        <div class="row my-3">
+                            <form action="#"
+                                  th:action="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/update-restaurant-image'}"
+                                  method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="_method" value="PATCH">
+                                <h3 class="text-center">Header Image</h3>
+                                <div class="d-flex justify-content-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="col-md-12">
+                                            <div class="col-md-12">
+                                                <img th:src="@{'/image/' + ${restaurant.restaurantEmail} + '?image=HEADER'}"
+                                                     class="card-img my-2" alt="Restaurant header image">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input type="file" name="restaurantImage" class="form-control">
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="hidden" name="image" class="form-control"
+                                                               value="HEADER">
+                                                        <button type="submit" class="btn btn-primary my-2">Update Header
+                                                            Image
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <form action="#"
+                                  th:action="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/update-restaurant-image'}"
+                                  method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="_method" value="PATCH">
+                                <h3 class="text-center">Card Image</h3>
+                                <div class="d-flex justify-content-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="col-md-12">
+                                            <div class="col-md-12">
+                                                <img th:src="@{'/image/' + ${restaurant.restaurantEmail} + '?image=CARD'}"
+                                                     class="card-img my-2" alt="Restaurant card image">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input type="file" name="restaurantImage" class="form-control">
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="hidden" name="image" class="form-control"
+                                                               value="CARD">
+                                                        <button type="submit" class="btn btn-primary my-2">Update Card
+                                                            Image
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="list-work-schedule" role="tabpanel" aria-labelledby="list-work-schedule">
+                    <div class="card bg-body-tertiary p-4 m-4">
+                        <div class="text-center m-3">
+                            <h3>Work Schedule</h3>
+                        </div>
+                        <form action="#"
+                              th:action="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/update-schedule'}"
+                              method="post" th:object="${restaurant}">
+                            <input type="hidden" name="_method" value="PATCH">
+                            <div class="row my-3">
+                                <div class="col-md-5 offset-md-1">
+                                    <div class="row">
+                                        <div class="col-md-12 m-3">
+                                            <span class="text fw-normal fs-5">Current Time:</span>
+                                            <br>
+                                            <span class="fw-normal fs-5"
+                                                   th:text="${restaurant.restaurantOpeningTime.openingHour}"></span>
+                                            <span class="fw-normal fs-5"> - </span>
+                                            <span class="fw-normal fs-5"
+                                                   th:text="${restaurant.restaurantOpeningTime.closeHour}"></span>
+                                        </div>
+                                        <div class="col-md-6" style="width: 200px">
+                                            Opening Hour:
+                                            <select id="startingHour" name="restaurantOpeningTime.openingHour"
+                                                    class="form-select"
+                                                    th:value="${restaurant.restaurantOpeningTime.openingHour}">
+                                                <option th:each="hour : ${#numbers.sequence(0, 23)}"
+                                                        th:value="${hour < 10 ? #strings.concat('0', hour) : #strings.concat('', hour)}"
+                                                        th:text="${#strings.concat(hour < 10 ? '0' : '', hour) + ':00'}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6" style="width: 200px">
+                                            Closing Hour:
+                                            <select id="closingHour" name="restaurantOpeningTime.closeHour"
+                                                    class="form-select"
+                                                    th:value="${restaurant.restaurantOpeningTime.closeHour}">
+                                                <option th:each="hour : ${#numbers.sequence(0, 23)}"
+                                                        th:value="${hour < 10 ? #strings.concat('0', hour) : #strings.concat('', hour)}"
+                                                        th:text="${#strings.concat(hour < 10 ? '0' : '', hour) + ':00'}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 offset-md-1">
+                                    <div class="row">
+                                        <div class="col-md-12 m-3">
+                                            <span class="text fw-normal fs-5">Current Working Days:</span>
+                                            <br>
+                                            <span class="fw-normal fs-5"
+                                                   th:text="${restaurant.restaurantOpeningTime.dayOfWeekFrom}"></span>
+                                            <span class="fw-normal fs-5"> - </span>
+                                            <span class="fw-normal fs-5"
+                                                   th:text="${restaurant.restaurantOpeningTime.dayOfWeekTill}"></span>
+                                        </div>
+                                        <div class="col-md-6" style="width: 200px">
+                                            Starting Day:
+                                            <select id="startingDay" name="restaurantOpeningTime.dayOfWeekFrom"
+                                                    class="form-select"
+                                                    th:value="${restaurant.restaurantOpeningTime.dayOfWeekFrom}">
+                                                <option value="MONDAY">MONDAY</option>
+                                                <option value="TUESDAY">TUESDAY</option>
+                                                <option value="WEDNESDAY">WEDNESDAY</option>
+                                                <option value="THURSDAY">THURSDAY</option>
+                                                <option value="FRIDAY">FRIDAY</option>
+                                                <option value="SATURDAY">SATURDAY</option>
+                                                <option value="SUNDAY">SUNDAY</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6" style="width: 200px">
+                                            Finishing Day:
+                                            <select id="finishDay" name="restaurantOpeningTime.dayOfWeekTill"
+                                                    class="form-select"
+                                                    th:value="${restaurant.restaurantOpeningTime.dayOfWeekTill}">
+                                                <option value="MONDAY">MONDAY</option>
+                                                <option value="TUESDAY">TUESDAY</option>
+                                                <option value="WEDNESDAY">WEDNESDAY</option>
+                                                <option value="THURSDAY">THURSDAY</option>
+                                                <option value="FRIDAY">FRIDAY</option>
+                                                <option value="SATURDAY">SATURDAY</option>
+                                                <option value="SUNDAY">SUNDAY</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-3">
+                                <div class="col-md-12">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary m-2">Update Schedule</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="list-orders" role="tabpanel" aria-labelledby="list-orders">
+                    <div class="card p-4 m-4">
+                        <div th:each="order : ${restaurant.orders}" class="col my-3">
+                            <div class="card" id="orderCard" th:data-status="${order.status}">
+                                <div class="row align-items-center">
+                                    <div class="col-md-12">
+                                        <div class="card-body">
+                                            <div class="col-md-12 d-flex justify-content-between">
+                                                <div class="col-md-6 fs-4 fw-bold">
+                                                    <span class="card-title">Order Status: </span>
+                                                    <span class="card-title" id="orderStatus" th:text="${order.status}">Order Status</span>
+                                                    <span class="card-title">Order Number: </span>
+                                                    <span class="card-text" id="orderNumber" th:text="${order.orderNumber}">Order Number</span>
+                                                </div>
+                                                <div th:if="${order.status.name() != 'COMPLETED'}" class="col-md-4 fs-5 fw-medium">
+                                                    <form action="#" th:action="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/order-update'}" method="post">
+                                                        <label for="orderStatusChanger">Change order status:</label>
+                                                        <div class="d-flex justify-content-between my-2">
+                                                            <select id="orderStatusChanger" name="statusChanger" class="form-select" th:value="${order.status}">
+                                                                <option value="ON_THE_WAY">ON_THE_WAY</option>
+                                                                <option value="COMPLETED">COMPLETED</option>
+                                                            </select>
+                                                            <input type="hidden" name="_method" value="PATCH">
+                                                            <input type="hidden" name="orderNumber" class="form-control" th:value="${order.orderNumber}">
+                                                            <button type="submit" class="btn btn-primary mx-2">Change</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 fs-5 fw-normal">
+                                                <span class="card-text">Received Date Time: </span>
+                                                <span class="card-text" id="orderReceivedDateTime" th:text="${order.receivedDateTime}">Received Date Time</span>
+                                            </div>
+                                            <div class="col-md-12 d-flex justify-content-between">
+                                                <div class="col-md-7 fs-5 fw-normal">
+                                                    <span class="card-text">Customer: </span>
+                                                    <span class="card-text" th:text="${order.customer.name}">Name</span>
+                                                    <span class="card-text me-5" th:text="${order.customer.surname}">Surname</span>
+                                                    <span class="card-text">Phone: </span>
+                                                    <span class="card-text" id="customerPhone" th:text="${order.customer.phone}">Phone</span>
+                                                </div>
+                                                <div class="col-md-3 px-2 flex-row-reverse">
+                                                    <a th:href="@{'/owner/restaurant/' + ${restaurant.restaurantEmail} + '/order-details/' + ${order.orderNumber}}"
+                                                       class="btn btn-primary" type="button">Details</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<footer class="footer bg-dark py-1">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <a href="https://www.facebook.com" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-facebook" style="font-size: 1.5rem; color: #0866ff;"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/dariusz-gilewicz-6646bb301" class="me-3" target="_blank"
+               style="text-decoration: none;">
+                <i class="bi bi-linkedin" style="font-size: 1.5rem; color: #0a66c2;"></i>
+            </a>
+            <a href="https://www.github.com/Darus992" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-github" style="font-size: 1.5rem; color: white;"></i>
+            </a>
+        </div>
+    </div>
+</footer>
+<script th:inline="javascript">
+    var defaultTab = /*[[${defaultTab}]]*/ 'list-details-list';
+    document.addEventListener("DOMContentLoaded", function() {
+        var tabLink = document.getElementById(defaultTab);
+        if (tabLink) {
+            tabLink.click(); // Wywołanie zdarzenia kliknięcia na zakładce
+        }
+    });
+</script>
+</html>

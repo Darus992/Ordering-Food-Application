@@ -25,6 +25,10 @@ public class RestaurantEntity {
     @Column(name = "restaurant_image_card")
     private byte[] restaurantImageCard;
 
+    @JdbcTypeCode(Types.VARBINARY)
+    @Column(name = "restaurant_image_header")
+    private byte[] restaurantImageHeader;
+
     @Column(name = "restaurant_name")
     private String restaurantName;
 

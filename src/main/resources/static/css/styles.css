@@ -1,0 +1,53 @@
+.img-fluid {
+    width:  100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-img {
+    width:  100%;
+}
+
+.bi-house-door-fill {
+    color: white;
+}
+
+.bg-index {
+    background: linear-gradient(to right, #feb800, #faa300);
+}
+
+.dropstart .dropdown-toggle::before {
+  content: none;
+}
+
+.bi {
+    pointer-events: none;
+}
+
+#fakePayButton {
+    width: 122px;
+    height: 38px;
+    background-color: #198754;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.button-clicked {
+    background-color: #198754bf;
+}
+
+.spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    vertical-align: middle;
+}

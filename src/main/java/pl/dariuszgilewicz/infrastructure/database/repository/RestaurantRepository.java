@@ -3,12 +3,17 @@ package pl.dariuszgilewicz.infrastructure.database.repository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 import pl.dariuszgilewicz.infrastructure.database.entity.*;
 import pl.dariuszgilewicz.infrastructure.database.repository.jpa.RestaurantJpaRepository;
+import pl.dariuszgilewicz.infrastructure.database.repository.jpa.RestaurantOwnerJpaRepository;
 import pl.dariuszgilewicz.infrastructure.database.repository.mapper.RestaurantEntityMapper;
+import pl.dariuszgilewicz.infrastructure.database.repository.mapper.RestaurantOwnerEntityMapper;
 import pl.dariuszgilewicz.infrastructure.model.Restaurant;
+import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 import pl.dariuszgilewicz.infrastructure.request_form.RestaurantRequestForm;
+import pl.dariuszgilewicz.infrastructure.util.ImageConverter;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +25,8 @@ public class RestaurantRepository {
 
     private RestaurantEntityMapper restaurantEntityMapper;
     private RestaurantJpaRepository restaurantJpaRepository;
-    private RestaurantOwnerRepository restaurantOwnerRepository;
+    private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
+    private RestaurantOwnerEntityMapper restaurantOwnerEntityMapper;
 
     public RestaurantEntity findRestaurantEntityByEmail(String restaurantEmail){
         return restaurantJpaRepository.findByEmail(restaurantEmail)
@@ -55,13 +61,13 @@ public class RestaurantRepository {
 
     public List<Restaurant> findAllRestaurantsWithSelectedCategory(List<FoodMenuEntity> foodMenus) {
         return restaurantJpaRepository.findByFoodMenus(foodMenus)
-                .map(restaurantEntityMapper::mapAllFromEntity)
+                .map(restaurantEntityMapper::mapFromEntityList)
                 .orElseThrow(() -> new EntityNotFoundException("Not found List of RestaurantEntity by FoodMenuEntity List: [%s]".formatted(foodMenus)));
     }
 
-    public List<Restaurant> findRestaurantsNearYouByAddress(List<AddressEntity> addressEntities) {
+    public List<Restaurant> findRestaurantsByAddress(List<AddressEntity> addressEntities) {
         return restaurantJpaRepository.findAllByAddress(addressEntities)
-                .map(restaurantEntityMapper::mapAllFromEntity)
+                .map(restaurantEntityMapper::mapFromEntityList)
                 .orElseThrow(() -> new EntityNotFoundException("Not found List of RestaurantEntity by AddressEntity List: [%s]".formatted(addressEntities)));
     }
 
@@ -77,9 +83,37 @@ public class RestaurantRepository {
         restaurantJpaRepository.save(toSave);
     }
 
-    public void createRestaurantFromRestaurantRequest(RestaurantRequestForm restaurantRequestForm, String ownerPesel) {
-        RestaurantOwnerEntity ownerEntity = restaurantOwnerRepository.findRestaurantOwnerEntityByPesel(ownerPesel);
-        RestaurantEntity toSave = restaurantEntityMapper.mapFromRestaurantRequest(restaurantRequestForm, ownerEntity);
+    public void createRestaurantFromRestaurantRequest(RestaurantRequestForm restaurantRequestForm, RestaurantOwner owner) {
+        Optional<RestaurantOwnerEntity> result = restaurantOwnerJpaRepository.findByPesel(owner.getPesel());
+        RestaurantOwnerEntity ownerEntity;
+        RestaurantEntity toSave;
+
+        ownerEntity = result.orElseGet(() -> restaurantOwnerEntityMapper.mapToEntity(owner));
+        toSave = restaurantEntityMapper.mapFromRestaurantRequest(restaurantRequestForm, ownerEntity);
         restaurantJpaRepository.save(toSave);
+    }
+
+    public void updateRestaurantDetails(RestaurantEntity entity, Restaurant restaurant, AddressEntity updateRestaurantAddressDetails) {
+        entity.setRestaurantName(restaurant.getRestaurantName());
+        entity.setPhone(restaurant.getRestaurantPhone());
+        entity.setEmail(restaurant.getRestaurantEmail());
+        entity.setRestaurantAddress(updateRestaurantAddressDetails);
+        restaurantJpaRepository.save(entity);
+    }
+
+    public void updateRestaurantImage(MultipartFile restaurantImage, RestaurantEntity entity, String param) {
+        byte[] convertFileToBytes = ImageConverter.convertFileToBytes(restaurantImage);
+
+        if(param.equals("CARD")){
+            entity.setRestaurantImageCard(convertFileToBytes);
+        }else {
+            entity.setRestaurantImageHeader(convertFileToBytes);
+        }
+        restaurantJpaRepository.save(entity);
+    }
+
+    public void updateRestaurantSchedule(RestaurantEntity restaurantEntity, RestaurantOpeningTimeEntity openingTimeEntity) {
+        restaurantEntity.setRestaurantOpeningTime(openingTimeEntity);
+        restaurantJpaRepository.save(restaurantEntity);
     }
 }

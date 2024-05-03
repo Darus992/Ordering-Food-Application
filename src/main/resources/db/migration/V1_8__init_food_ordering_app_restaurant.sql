@@ -2,6 +2,7 @@ CREATE TABLE restaurant
 (
     restaurant_id                   SERIAL          NOT NULL,
     restaurant_image_card           BYTEA,
+    restaurant_image_header         BYTEA,
     restaurant_name                 VARCHAR(120)    NOT NULL,
     phone                           VARCHAR(120)    NOT NULL,
     email                           VARCHAR(120)    NOT NULL,

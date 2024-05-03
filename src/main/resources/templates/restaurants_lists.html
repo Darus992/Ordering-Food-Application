@@ -9,129 +9,115 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="http://localhost:8190/ordering-food-application/css/styles.css"/>
     <title>Order your food online!</title>
 </head>
-
 <body>
 <nav class="navbar bg-dark border-bottom border-body text-white" data-bs-theme="dark">
     <div class="container-fluid">
-        <h5>Order your food online!</h5>
-        <div class="container-right">
-            <div th:if="${isAuthenticated}" class="btn-group dropstart">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Menu
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-                    <li><a th:if="${isAuthenticated && userRole == 'OWNER'}" class="dropdown-item" th:href="@{/owner}">Go to your account</a></li>
-                    <li><a th:if="${isAuthenticated && userRole == 'CUSTOMER'}" class="dropdown-item" th:href="@{/customer}">Go to your account</a></li>
-                    <li><button class="dropdown-item" type="button">Something else here</button></li>
-                </ul>
-            </div>
-            <a th:unless="${isAuthenticated}" th:href="@{/login}" class="btn btn-primary" role="button">Log in</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/user/register-customer}" class="btn btn-primary" role="button">Customer Register</a>
-            <a th:unless="${isAuthenticated}" th:href="@{/user/register-business}" class="btn btn-primary" role="button">Business Register</a>
+        <div class="d-flex align-items-center">
+            <a th:href="@{/}" role="button">
+                <i class="bi bi-house-door-fill fs-4 mx-3"></i>
+            </a>
+            <h5 class="mb-0">Order your food online!</h5>
         </div>
-    </div>
-</nav>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}" role="button">Home</a>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
+        <div class="container-right">
+            <div th:if="${isAuthenticated == false}">
+                <a th:href="@{/login}" class="btn btn-primary me-2" role="button">Log in</a>
+                <button class="btn btn-primary me-2" type="button" data-bs-toggle="modal" data-bs-target="#registerTypeModal">Register</button>
+            </div>
+            <div th:unless="${isAuthenticated == false}">
+                <div class="btn-group dropstart">
+                    <button class="btn btn-secondary dropdown-toggle p-0 rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"></path>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu mx-1">
+                        <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
+                        <a th:if="${user.role.name == 'CUSTOMER'}" th:href="@{/customer}" class="dropdown-item" role="button">Your account</a>
+                        <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item" role="button">Your account</a>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal fade" id="registerTypeModal" tabindex="-1" aria-labelledby="registerTypeModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="registerTypeModalLabel">Register Account Type</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="form-label">Which account type do you want to create?</p>
+                            <br>
+                            <a th:href="@{/user/register-customer}" class="btn btn-primary me-2" role="button">Customer
+                                Account</a>
+                            <a th:href="@{/user/register-business}" class="btn btn-primary me-2" role="button">Business
+                                Account</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
 
-<div class="container text-center">
-    <form th:action="@{/restaurants/category}" method="get">
-        <div class="d-flex justify-content-center">
-            <div class="col p-3 bg-warning text-emphasis-warning">
-                <div class="col">
-                    <button type="submit" name="foodCategory" value="Pizza"
-                            style="border: none; background-color: transparent;">
-                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/pizza.png" alt="pizza"/>
-                        <p>Pizza</p>
-                    </button>
-                    <button type="submit" name="foodCategory" value="Burgers"
-                            style="border: none; background-color: transparent;">
-                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/hamburger.png"
-                             alt="hamburger"/>
-                        <p>Burgers</p>
-                    </button>
-                    <button type="submit" name="foodCategory" value="Home Cooked Dinners"
-                            style="border: none; background-color: transparent;">
-                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/thanksgiving.png"
-                             alt="thanksgiving"/>
-                        <p>Home Cooked Dinners</p>
-                    </button>
-                    <button type="submit" name="foodCategory" value="Sushi"
-                            style="border: none; background-color: transparent;">
-                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/nigiri-sushi.png"
-                             alt="nigiri-sushi"/>
-                        <p>Sushi</p>
-                    </button>
-                    <button type="submit" name="foodCategory" value="Fish & Seafood"
-                            style="border: none; background-color: transparent;">
-                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/fish-food.png"
-                             alt="fish-food"/>
-                        <p>Fish & Seafood</p>
-                    </button>
-                </div>
-                <div class="h4 pb-2 mb-4 border-bottom border-dark"></div>
+<img src="images/index_part1.jpg" alt="image" class="img-fluid">
+<form th:action="@{/restaurants}" method="get" th:object="${restaurants}">
+    <div class="d-flex justify-content-center bg-index py-3">
+        <div class="d-flex align-items-center">
+            <div class="input-group input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-geo-alt-fill" style="font-size: 1.2rem;"></i>
+                </span>
+                <input class="form-control me-2" type="search" placeholder="Enter city or street" id="searchTerm" name="searchTerm" aria-label="Search">
+                <button class="btn btn-primary" type="submit">Search</button>
             </div>
         </div>
-    </form>
-    <form th:action="@{/restaurants}" method="get" th:object="${restaurants}">
-        <div class="col p-3 bg-warning text-emphasis-warning">
-            <p>Find restaurants delivering right now, near you</p>
-            <div class="col-6 d-flex" style="margin-left: 320px;">
-                <input class="form-control me-2" type="search" placeholder="Enter city or street" id="searchTerm"
-                       name="searchTerm" aria-label="Search">
-                <button class="btn btn-light" type="submit">Search</button>
+    </div>
+</form>
+
+<div class="container">
+    <div class="row justify-content-evenly my-3">
+        <div class="col-8">
+            <div class="col" th:each="restaurant : ${restaurants}">
+                <a th:href="@{'/restaurants/' + ${restaurant.restaurantEmail}}" class="card bg-body-tertiary text-decoration-none shadow mb-5 rounded">
+                    <div class="row align-items-center">
+                        <div class="col-md-5">
+                            <img th:src="@{'/image/' + ${restaurant.restaurantEmail} + '?image=CARD'}" class="card-img rounded-pill mx-2" alt="Restaurant image"
+                                 style="height: 98px; width: 348px;">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${restaurant.restaurantName}">Restaurant Name</h5>
+                                <span class="card-text" th:text="${restaurant.restaurantAddress.addressStreet}">Street</span>,
+                                <span class="card-text" th:text="${restaurant.restaurantAddress.postalCode}">Post code</span>
+                                <p class="card-text" th:text="${restaurant.restaurantAddress.city}">City</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
-    </form>
-    <br>
-    <div class="row">
-        <h4>Available Restaurants:</h4>
-        <table class="table table-warning table-hover">
-            <thead>
-            <tr>
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">City</th>
-                <th scope="col">District</th>
-                <th scope="col">Postal Code</th>
-                <th scope="col">Street</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="restaurant: ${restaurants}">
-                <td>
-                    <img th:src="@{'/images/restaurant/' + ${restaurant.restaurantImageFileName}}" alt="..." style="height: 120px;">
-                </td>
-                <td th:text="${restaurant.restaurantName}"></td>
-                <td th:text="${restaurant.restaurantAddress.addressCity}"></td>
-                <td th:text="${restaurant.restaurantAddress.addressDistrict}"></td>
-                <td th:text="${restaurant.restaurantAddress.addressPostalCode}"></td>
-                <td th:text="${restaurant.restaurantAddress.addressAddressStreet}"></td>
-                <td>
-                    <a th:href="@{/restaurant/{restaurantEmail}(restaurantEmail=${restaurant.restaurantEmail})}"
-                       class="btn btn-light" type="button">Go To Restaurant</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
     </div>
 </div>
 </body>
+<footer class="footer bg-dark py-1">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <a href="https://www.facebook.com" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-facebook" style="font-size: 1.5rem; color: #0866ff;"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/dariusz-gilewicz-6646bb301" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-linkedin" style="font-size: 1.5rem; color: #0a66c2;"></i>
+            </a>
+            <a href="https://www.github.com/Darus992" class="me-3" target="_blank" style="text-decoration: none;">
+                <i class="bi bi-github" style="font-size: 1.5rem; color: white;"></i>
+            </a>
+        </div>
+    </div>
+</footer>
 </html>

@@ -3,8 +3,6 @@ package pl.dariuszgilewicz.util;
 import lombok.experimental.UtilityClass;
 import pl.dariuszgilewicz.infrastructure.database.entity.AddressEntity;
 import pl.dariuszgilewicz.infrastructure.database.entity.CustomerEntity;
-import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantOwnerEntity;
-import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
 import pl.dariuszgilewicz.infrastructure.security.User;
 import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 import pl.dariuszgilewicz.infrastructure.security.UserRole;
@@ -16,7 +14,7 @@ public class UsersFixtures {
 
     public static UserEntity someBusinessUser1(){
         return UserEntity.builder()
-                .userName("business_user")
+                .username("business_user")
                 .email("business@business_user.com")
                 .password("haslo")
                 .active(true)
@@ -27,7 +25,7 @@ public class UsersFixtures {
 
     public static UserEntity someBusinessUser2(){
         return UserEntity.builder()
-                .userName("business_user2")
+                .username("business_user2")
                 .email("business@business_user2.com")
                 .password("haslo")
                 .active(true)
@@ -38,7 +36,7 @@ public class UsersFixtures {
 
     public static UserEntity someCustomerUser1(){
         return UserEntity.builder()
-                .userName("testowy_Nickname")
+                .username("testowy_Nickname")
                 .email("testowy_Nickname@mail.com")
                 .password("haslo")
                 .active(true)
@@ -63,7 +61,7 @@ public class UsersFixtures {
                 .email("testowy_Nickname@mail.com")
                 .password("encodedPassword")
                 .role(UserRole.CUSTOMER)
-                .restaurantOwner(null)
+                .owner(null)
                 .build();
     }
 
@@ -73,7 +71,7 @@ public class UsersFixtures {
                 .email("business@business_user.com")
                 .password("haslo")
                 .role(UserRole.OWNER)
-                .restaurantOwner(RestaurantOwnerFixtures.someRestaurantOwner1())
+                .owner(RestaurantOwnerFixtures.someRestaurantOwner1())
                 .build();
     }
 
@@ -83,7 +81,7 @@ public class UsersFixtures {
                 .email("business@business_user2.com")
                 .password("haslo")
                 .role(UserRole.OWNER)
-                .restaurantOwner(RestaurantOwnerFixtures.someRestaurantOwner2())
+                .owner(RestaurantOwnerFixtures.someRestaurantOwner2())
                 .build();
     }
 }

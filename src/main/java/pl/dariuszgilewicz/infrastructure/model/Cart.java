@@ -3,6 +3,7 @@ package pl.dariuszgilewicz.infrastructure.model;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Builder
 @Getter
@@ -11,11 +12,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Cart {
 
-    private Integer orderNumber;
-    private String foodCategory;
-    private String foodName;
-    private String foodDescription;
-    private BigDecimal foodPrice;
-    private Integer quantity;
+    private Map<Food, Integer> cartRequest;
+    private Integer[] foodsIdArray;
+    private Integer[] foodsValuesArray;
     private BigDecimal totalPrice;
+    private String orderNotes;
 }

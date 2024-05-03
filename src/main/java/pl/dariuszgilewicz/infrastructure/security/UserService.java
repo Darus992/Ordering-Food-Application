@@ -12,8 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import pl.dariuszgilewicz.infrastructure.database.repository.CustomerRepository;
+import pl.dariuszgilewicz.infrastructure.database.repository.RestaurantOwnerRepository;
 import pl.dariuszgilewicz.infrastructure.database.repository.mapper.UserEntityMapper;
-import pl.dariuszgilewicz.infrastructure.model.Orders;
 import pl.dariuszgilewicz.infrastructure.model.exception.EntityAlreadyExistAuthenticationException;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
@@ -31,6 +32,9 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserJpaRepository userJpaRepository;
     private final UserEntityMapper userEntityMapper;
+
+    private final RestaurantOwnerRepository restaurantOwnerRepository;
+    private final CustomerRepository customerRepository;
 
 
     @Transactional
@@ -52,16 +56,71 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userJpaRepository.findByUserName(username)
+        UserEntity userEntity = userJpaRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username: [%s] not found".formatted(username)));
         List<GrantedAuthority> authorities = getUserAuthority(userEntity.getRoles());
         return buildUserForAuthentication(userEntity, authorities);
+    }
+
+    @Transactional
+    public void updateUserData(User userForm, String userEmail) {
+        Optional<UserEntity> optionalUserEntity = userJpaRepository.findByEmail(userEmail);
+
+        if (optionalUserEntity.isEmpty()) {
+            throw new EntityNotFoundException("UserEntity with email: [%s] not found.");
+        }
+
+        UserEntity userEntity = optionalUserEntity.get();
+        userEntity.setUsername(userForm.getUsername());
+        userEntity.setEmail(userForm.getEmail());
+
+        if (userEntity.getOwner() != null) {
+            restaurantOwnerRepository.updateRestaurantOwner(userEntity.getOwner(), userForm);
+        } else if (userEntity.getCustomer() != null) {
+            customerRepository.updateCustomer(userEntity.getCustomer(), userForm);
+        }
+
+        userRepository.updateUserData(userEntity, userForm.getPassword());
+    }
+
+    @Transactional
+    public void deleteAccount(String userEmail) {
+        Optional<UserEntity> optional = userJpaRepository.findByEmail(userEmail);
+
+        if (optional.isEmpty()) {
+            throw new EntityNotFoundException("UserEntity with email: [%s] not found.".formatted(userEmail));
+        }
+
+        UserEntity userEntity = optional.get();
+        userJpaRepository.delete(userEntity);
     }
 
     public String getCurrentUserName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object details = authentication.getPrincipal();
         return ((org.springframework.security.core.userdetails.User) details).getUsername();
+    }
+
+    public Optional<User> getCurrentOptionalUser(Model model) {
+        String authority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("User is not log in.");
+        Optional<User> optionalUser;
+        boolean isAuthenticated;
+
+        isAuthenticated = authority.equals(UserRole.CUSTOMER.name()) || authority.equals(UserRole.OWNER.name());
+
+        if (isAuthenticated) {
+            String username = getCurrentUserName();
+            UserEntity userEntity = userRepository.findUserEntityByUsername(username);
+            optionalUser = userEntityMapper.mapFromEntityToOptionalUser(userEntity);
+            model.addAttribute("isAuthenticated", true);
+            return optionalUser;
+        } else {
+            model.addAttribute("isAuthenticated", false);
+            return Optional.empty();
+        }
     }
 
     private List<GrantedAuthority> getUserAuthority(Set<UserRole> userRoles) {
@@ -73,7 +132,7 @@ public class UserService implements UserDetailsService {
 
     private UserDetails buildUserForAuthentication(UserEntity userEntity, List<GrantedAuthority> authorities) {
         return new org.springframework.security.core.userdetails.User(
-                userEntity.getUserName(),
+                userEntity.getUsername(),
                 userEntity.getPassword(),
                 userEntity.getActive(),
                 true,
@@ -81,50 +140,6 @@ public class UserService implements UserDetailsService {
                 true,
                 authorities
         );
-    }
-
-    private User findUserOwnerByUserName(String userName) {
-        return userJpaRepository.findByUserName(userName)
-                .map(userEntityMapper::mapFromEntityOwner)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "User Entity with username: [%s] not found".formatted(userName)
-                ));
-    }
-
-    private User findUserCustomerByUserName(String userName) {
-        return userJpaRepository.findByUserName(userName)
-                .map(userEntityMapper::mapFromEntityCustomer)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "User Entity with username: [%s] not found".formatted(userName)
-                ));
-    }
-
-    public User getCurrentUser() {
-        String username = getCurrentUserName();
-        Optional<? extends GrantedAuthority> authority = SecurityContextHolder.getContext().getAuthentication()
-                .getAuthorities().stream()
-                .findFirst();
-
-        if (authority.isPresent() && authority.get().getAuthority().equals(UserRole.CUSTOMER.toString())) {
-            User user = findUserCustomerByUserName(username);
-            boolean isCartEmpty = checkIfCustomerCartIsEmpty(user.getCustomer().getCustomerOrders());
-            user.getCustomer().setCartEmpty(isCartEmpty);
-            return user;
-        } else if (authority.isPresent() && authority.get().getAuthority().equals(UserRole.OWNER.toString())) {
-            return findUserOwnerByUserName(username);
-        } else {
-            throw new RuntimeException("YOU ARE NOT LOGG IN");
-        }
-    }
-
-    private boolean checkIfCustomerCartIsEmpty(List<Orders> customerOrders) {
-        int counter = 0;
-        for (Orders order : customerOrders){
-            if(order.getStatus() != null){
-                counter++;
-            }
-        }
-        return customerOrders.size() == counter;
     }
 
     public boolean checkIfIsAuthenticated(Model model, Authentication authentication) {

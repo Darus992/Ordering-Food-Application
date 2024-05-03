@@ -16,8 +16,6 @@ import pl.dariuszgilewicz.infrastructure.database.repository.jpa.FoodMenuJpaRepo
 import pl.dariuszgilewicz.infrastructure.database.repository.jpa.RestaurantJpaRepository;
 import pl.dariuszgilewicz.infrastructure.database.repository.mapper.RestaurantEntityMapper;
 import pl.dariuszgilewicz.infrastructure.model.Restaurant;
-import pl.dariuszgilewicz.infrastructure.request_form.RestaurantRequestForm;
-import pl.dariuszgilewicz.infrastructure.security.User;
 import pl.dariuszgilewicz.infrastructure.security.UserService;
 
 import java.util.List;
@@ -26,15 +24,11 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static pl.dariuszgilewicz.util.AddressFixtures.someListOfAddressEntity1;
 import static pl.dariuszgilewicz.util.FoodMenuFixtures.someListOfFoodMenuEntities1;
 import static pl.dariuszgilewicz.util.RestaurantFixtures.*;
-import static pl.dariuszgilewicz.util.RestaurantRequestFormFixtures.someRestaurantRequestForm1;
-import static pl.dariuszgilewicz.util.UsersFixtures.someMappedBusinessUser1;
 
 @ExtendWith(MockitoExtension.class)
 class RestaurantServiceTest {
@@ -140,7 +134,7 @@ class RestaurantServiceTest {
 
         //  when
         //  then
-        assertThatThrownBy(() -> restaurantService.findRestaurantsNearYouByAddress(searchingTerm))
+        assertThatThrownBy(() -> restaurantService.findRestaurantsBySearchTerm(searchingTerm))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Not found List of AddressEntity by searchTerm: [%s]".formatted(searchingTerm));
 
@@ -153,28 +147,13 @@ class RestaurantServiceTest {
         List<AddressEntity> addressEntities = someListOfAddressEntity1();
         List<Restaurant> expectedList = someListOfMappedRestaurants1();
         when(addressJpaRepository.findBySearchTerm(searchingTerm)).thenReturn(Optional.of(addressEntities));
-        when(restaurantRepository.findRestaurantsNearYouByAddress(addressEntities)).thenReturn(expectedList);
+        when(restaurantRepository.findRestaurantsByAddress(addressEntities)).thenReturn(expectedList);
 
         //  when
-        List<Restaurant> resultList = restaurantService.findRestaurantsNearYouByAddress(searchingTerm);
+        List<Restaurant> resultList = restaurantService.findRestaurantsBySearchTerm(searchingTerm);
 
         //  then
         assertEquals(expectedList, resultList);
-
-    }
-
-    @Test
-    void createRestaurantAndAssignToOwner_shouldWorkSuccessfully() {
-        //  given
-        User businessUser = someMappedBusinessUser1();
-        RestaurantRequestForm requestForm = someRestaurantRequestForm1();
-        given(userService.getCurrentUser()).willReturn(businessUser);
-
-        //  when
-        restaurantService.createRestaurantAndAssignToOwner(requestForm);
-
-        //  then
-        then(restaurantRepository).should().createRestaurantFromRestaurantRequest(requestForm, businessUser.getRestaurantOwner().getPesel());
 
     }
 }

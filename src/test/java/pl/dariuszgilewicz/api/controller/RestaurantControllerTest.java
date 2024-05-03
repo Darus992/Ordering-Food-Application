@@ -138,7 +138,7 @@ class RestaurantControllerTest {
         //  given
         Restaurant restaurant = someRestaurantModel1();
         String searchTerm = restaurant.getRestaurantAddress().getCity();
-        when(restaurantService.findRestaurantsNearYouByAddress(anyString())).thenReturn(List.of(restaurant));
+        when(restaurantService.findRestaurantsBySearchTerm(anyString())).thenReturn(List.of(restaurant));
         when(userService.checkIfIsAuthenticated(any(Model.class), any(Authentication.class))).thenReturn(true);
         //  when
         //  then
@@ -165,7 +165,7 @@ class RestaurantControllerTest {
         //  given
         Restaurant restaurant = someRestaurantModel1();
         String searchTerm = restaurant.getRestaurantAddress().getCity();
-        when(restaurantService.findRestaurantsNearYouByAddress(anyString())).thenReturn(List.of(restaurant));
+        when(restaurantService.findRestaurantsBySearchTerm(anyString())).thenReturn(List.of(restaurant));
         when(userService.checkIfIsAuthenticated(any(Model.class), any(Authentication.class))).thenReturn(true);
         //  when
         //  then
@@ -192,7 +192,7 @@ class RestaurantControllerTest {
         //  given
         Restaurant restaurant = someRestaurantModel1();
         String searchTerm = restaurant.getRestaurantAddress().getCity();
-        when(restaurantService.findRestaurantsNearYouByAddress(anyString())).thenReturn(List.of(restaurant));
+        when(restaurantService.findRestaurantsBySearchTerm(anyString())).thenReturn(List.of(restaurant));
         when(userService.checkIfIsAuthenticated(any(Model.class), any(Authentication.class))).thenReturn(false);
         //  when
         //  then

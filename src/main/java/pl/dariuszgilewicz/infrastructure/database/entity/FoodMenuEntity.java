@@ -21,11 +21,6 @@ public class FoodMenuEntity {
     @Column(name = "food_menu_id")
     private Integer foodMenuId;
 
-    @JdbcTypeCode(Types.VARBINARY)
-//    @JdbcTypeCode(Types.BINARY)
-    @Column(name = "food_menu_image")
-    private byte[] foodMenuImage;
-
     @Column(name = "menu_name")
     private String menuName;
 

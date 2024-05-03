@@ -1,58 +1,42 @@
 package pl.dariuszgilewicz.infrastructure.database.repository.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import pl.dariuszgilewicz.infrastructure.database.entity.AddressEntity;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import pl.dariuszgilewicz.infrastructure.database.entity.CustomerEntity;
-import pl.dariuszgilewicz.infrastructure.model.Address;
 import pl.dariuszgilewicz.infrastructure.model.Customer;
 import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface CustomerEntityMapper {
+@Component
+@AllArgsConstructor
+public class CustomerEntityMapper {
+    private AddressEntityMapper addressEntityMapper;
+    private OrderEntityMapper orderEntityMapper;
 
-
-    default CustomerEntity mapToEntity(Customer customer){
-        return CustomerEntity.builder()
-                .name(customer.getName())
-                .surname(customer.getSurname())
-                .phone(customer.getPhone())
-                .address(AddressEntity.builder()
-                        .city(customer.getAddress().getCity())
-                        .district(customer.getAddress().getDistrict())
-                        .postalCode(customer.getAddress().getPostalCode())
-                        .address(customer.getAddress().getAddressStreet())
-                        .build())
-                .build();
-    }
-
-    default Customer mapFromEntity(CustomerEntity entity){
+    public Customer mapFromEntity(CustomerEntity entity) {
         return Customer.builder()
                 .name(entity.getName())
                 .surname(entity.getSurname())
                 .phone(entity.getPhone())
-                .address(Address.builder()
-                        .city(entity.getAddress().getCity())
-                        .district(entity.getAddress().getDistrict())
-                        .postalCode(entity.getAddress().getPostalCode())
-                        .addressStreet(entity.getAddress().getAddress())
-                        .build())
+                .address(addressEntityMapper.mapFromEntity(entity.getAddress()))
+                .customerOrders(orderEntityMapper.mapFromEntityList(entity.getCustomerOrders()))
                 .build();
     }
 
-
-
-    default CustomerEntity mapFromRequest(CustomerRequestForm customerRequestForm){
+    public CustomerEntity mapToEntity(Customer customer) {
         return CustomerEntity.builder()
-                .name(customerRequestForm.getCustomerName())
-                .surname(customerRequestForm.getCustomerSurname())
-                .phone(customerRequestForm.getCustomerPhone())
-                .address(AddressEntity.builder()
-                        .city(customerRequestForm.getCustomerAddressCity())
-                        .district(customerRequestForm.getCustomerAddressDistrict())
-                        .postalCode(customerRequestForm.getCustomerAddressPostalCode())
-                        .address(customerRequestForm.getCustomerAddressStreet())
-                        .build())
+                .name(customer.getName())
+                .surname(customer.getSurname())
+                .phone(customer.getPhone())
+                .address(addressEntityMapper.mapToEntity(customer.getAddress()))
+                .build();
+    }
+
+    public CustomerEntity mapFromCustomerRequest(CustomerRequestForm requestForm) {
+        return CustomerEntity.builder()
+                .name(requestForm.getCustomerName())
+                .surname(requestForm.getCustomerSurname())
+                .phone(requestForm.getCustomerPhone())
+                .address(addressEntityMapper.mapFromCustomerRequest(requestForm))
                 .build();
     }
 }

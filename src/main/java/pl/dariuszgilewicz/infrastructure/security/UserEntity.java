@@ -7,10 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import pl.dariuszgilewicz.infrastructure.database.entity.CustomerEntity;
-import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantEntity;
 import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantOwnerEntity;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -28,7 +26,7 @@ public class UserEntity {
 
     @Column(name = "user_name", unique = true)
     @Length(min = 6)
-    private String userName;
+    private String username;
 
     @Column(name = "email", unique = true)
     private String email;

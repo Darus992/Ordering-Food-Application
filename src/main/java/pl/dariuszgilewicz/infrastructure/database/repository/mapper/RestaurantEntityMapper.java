@@ -1,128 +1,93 @@
 package pl.dariuszgilewicz.infrastructure.database.repository.mapper;
 
-import org.mapstruct.*;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import pl.dariuszgilewicz.infrastructure.database.entity.*;
 import pl.dariuszgilewicz.infrastructure.model.*;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
 import pl.dariuszgilewicz.infrastructure.request_form.RestaurantRequestForm;
+import pl.dariuszgilewicz.infrastructure.util.ImageConverter;
 
 import java.io.IOException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface RestaurantEntityMapper {
+@Component
+@AllArgsConstructor
+public class RestaurantEntityMapper {
+    private FoodMenuEntityMapper foodMenuEntityMapper;
+    private AddressEntityMapper addressEntityMapper;
+    private RestaurantOpeningTimeEntityMapper restaurantOpeningTimeEntityMapper;
 
-    default Restaurant mapFromEntity(RestaurantEntity entity){
+    public Restaurant mapFromEntity(RestaurantEntity entity){
         return Restaurant.builder()
-                .restaurantImageCard(entity.getRestaurantImageCard())
+                .restaurantImageCard(ImageConverter.convertFromBytes(entity.getRestaurantImageCard()))
+                .restaurantImageHeader(ImageConverter.convertFromBytes(entity.getRestaurantImageHeader()))
                 .restaurantName(entity.getRestaurantName())
                 .restaurantPhone(entity.getPhone())
                 .restaurantEmail(entity.getEmail())
-                .foodMenu(FoodMenu.builder()
-                        .foodMenuId(entity.getFoodMenu().getFoodMenuId())
-                        .foodMenuImage(entity.getFoodMenu().getFoodMenuImage())
-                        .foods(mapAllFoodFromEntity(entity.getFoodMenu().getFoods()))
-                        .build())
-                .restaurantAddress(Address.builder()
-                        .city(entity.getRestaurantAddress().getCity())
-                        .district(entity.getRestaurantAddress().getDistrict())
-                        .postalCode(entity.getRestaurantAddress().getPostalCode())
-                        .addressStreet(entity.getRestaurantAddress().getAddress())
-                        .build())
-                .restaurantOpeningTime(RestaurantOpeningTime.builder()
-                        .openingHour(entity.getRestaurantOpeningTime().getOpeningHour().toString())
-                        .closeHour(entity.getRestaurantOpeningTime().getCloseHour().toString())
-                        .dayOfWeekFrom(entity.getRestaurantOpeningTime().getDayOfWeekFrom())
-                        .dayOfWeekTill(entity.getRestaurantOpeningTime().getDayOfWeekTill())
-                        .build())
-                .customerOrdersNumbers(getCustomerOrdersNumbers(entity.getCustomerOrders()))
+                .foodMenu(foodMenuEntityMapper.mapFromEntity(entity.getFoodMenu()))
+                .restaurantAddress(addressEntityMapper.mapFromEntity(entity.getRestaurantAddress()))
+                .restaurantOpeningTime(restaurantOpeningTimeEntityMapper.mapFromEntity(entity.getRestaurantOpeningTime()))
+                .customerOrdersNumbers(entity.getCustomerOrders().stream()
+                        .map(OrdersEntity::getOrderNumber)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
-    default List<Integer> getCustomerOrdersNumbers(List<OrdersEntity> ordersEntities){
-        List<Integer> resultList = new ArrayList<>();
-
-        for (OrdersEntity orders : ordersEntities){
-            resultList.add(orders.getOrderNumber());
-        }
-        return resultList;
-    }
-
-    default List<Food> mapAllFoodFromEntity(List<FoodEntity> allEntity){
-        List<Food> resultList = new ArrayList<>();
-        for (FoodEntity foodEntity : allEntity){
-            Food food = Food.builder()
-                    .foodId(foodEntity.getFoodId())
-                    .category(foodEntity.getCategory())
-                    .name(foodEntity.getName())
-                    .description(foodEntity.getDescription())
-                    .price(foodEntity.getPrice())
-                    .build();
-            resultList.add(food);
-        }
-        return resultList;
-    }
-
-    default List<Restaurant> mapAllFromEntity(List<RestaurantEntity> allEntity) {
-        List<Restaurant> resultList = new ArrayList<>();
-        for (RestaurantEntity restaurantEntity : allEntity) {
-            Restaurant restaurant = mapFromEntity(restaurantEntity);
-            resultList.add(restaurant);
-        }
-        return resultList;
-    }
-
-    @Mapping(source = "restaurantPhone", target = "phone")
-    @Mapping(source = "restaurantEmail", target = "email")
-    @Mapping(source = "foodMenu.foodMenuName", target = "foodMenu.menuName")
-    @Mapping(source = "restaurantAddress.city", target = "restaurantAddress.city")
-    @Mapping(source = "restaurantAddress.district", target = "restaurantAddress.district")
-    @Mapping(source = "restaurantAddress.postalCode", target = "restaurantAddress.postalCode")
-    @Mapping(source = "restaurantAddress.addressStreet", target = "restaurantAddress.address")
-    RestaurantEntity mapToEntity(Restaurant restaurant);
-
-    default RestaurantEntity mapFromBusinessRequest(BusinessRequestForm businessRequestForm) throws IOException {
+    public RestaurantEntity mapToEntity(Restaurant restaurant){
         return RestaurantEntity.builder()
-                .restaurantImageCard(businessRequestForm.getRestaurantImageCard().getBytes())
-                .restaurantName(businessRequestForm.getRestaurantName())
-                .phone(businessRequestForm.getRestaurantPhone())
-                .email(businessRequestForm.getRestaurantEmail())
-                .restaurantAddress(AddressEntity.builder()
-                        .city(businessRequestForm.getRestaurantAddressCity())
-                        .district(businessRequestForm.getRestaurantAddressDistrict())
-                        .postalCode(businessRequestForm.getRestaurantAddressPostalCode())
-                        .address(businessRequestForm.getRestaurantAddressStreet())
-                        .build())
-                .restaurantOpeningTime(RestaurantOpeningTimeEntity.builder()
-                        .openingHour(LocalTime.parse(businessRequestForm.getOpeningHour() + ":00", DateTimeFormatter.ISO_LOCAL_TIME))
-                        .closeHour(LocalTime.parse(businessRequestForm.getCloseHour() + ":00", DateTimeFormatter.ISO_LOCAL_TIME))
-                        .dayOfWeekFrom(businessRequestForm.getDayOfWeekFrom())
-                        .dayOfWeekTill(businessRequestForm.getDayOfWeekTill())
-                        .build())
+                .restaurantImageCard(ImageConverter.convertToBytes(restaurant.getRestaurantImageCard()))
+                .restaurantImageHeader(ImageConverter.convertToBytes(restaurant.getRestaurantImageHeader()))
+                .restaurantName(restaurant.getRestaurantName())
+                .phone(restaurant.getRestaurantPhone())
+                .email(restaurant.getRestaurantEmail())
+                .foodMenu(foodMenuEntityMapper.mapToEntity(restaurant.getFoodMenu()))
+                .restaurantAddress(addressEntityMapper.mapToEntity(restaurant.getRestaurantAddress()))
+                .restaurantOpeningTime(restaurantOpeningTimeEntityMapper.mapToEntity(restaurant.getRestaurantOpeningTime()))
                 .build();
     }
 
-    default RestaurantEntity mapFromRestaurantRequest(RestaurantRequestForm restaurantRequestForm, RestaurantOwnerEntity ownerEntity){
+    public List<Restaurant> mapFromEntityList(List<RestaurantEntity> entities){
+        return entities.stream()
+                .map(this::mapFromEntity)
+                .toList();
+    }
+
+    public RestaurantEntity mapFromBusinessRequest(BusinessRequestForm requestForm) throws IOException {
         return RestaurantEntity.builder()
-                .restaurantName(restaurantRequestForm.getRestaurantName())
-                .phone(restaurantRequestForm.getRestaurantPhone())
-                .email(restaurantRequestForm.getRestaurantEmail())
-                .restaurantAddress(AddressEntity.builder()
-                        .city(restaurantRequestForm.getRestaurantAddressCity())
-                        .district(restaurantRequestForm.getRestaurantAddressDistrict())
-                        .postalCode(restaurantRequestForm.getRestaurantAddressPostalCode())
-                        .address(restaurantRequestForm.getRestaurantAddressStreet())
+                .restaurantImageCard(requestForm.getRestaurantImageCard().getBytes())
+                .restaurantImageHeader(requestForm.getRestaurantImageHeader().getBytes())
+                .restaurantName(requestForm.getRestaurantName())
+                .phone(requestForm.getRestaurantPhone())
+                .email(requestForm.getRestaurantEmail())
+                .foodMenu(FoodMenuEntity.builder()
+                        .menuName(requestForm.getRestaurantName() + " Menu")
                         .build())
-                .restaurantOwner(ownerEntity)
-                .restaurantOpeningTime(RestaurantOpeningTimeEntity.builder()
-                        .openingHour(LocalTime.parse(restaurantRequestForm.getOpeningHour() + ":00", DateTimeFormatter.ISO_LOCAL_TIME))
-                        .closeHour(LocalTime.parse(restaurantRequestForm.getCloseHour() + ":00", DateTimeFormatter.ISO_LOCAL_TIME))
-                        .dayOfWeekFrom(restaurantRequestForm.getDayOfWeekFrom())
-                        .dayOfWeekTill(restaurantRequestForm.getDayOfWeekTill())
-                        .build())
+                .restaurantAddress(addressEntityMapper.mapFromBusinessRequest(requestForm))
+                .restaurantOpeningTime(restaurantOpeningTimeEntityMapper.mapFromBusinessRequest(requestForm))
                 .build();
+    }
+
+    public RestaurantEntity mapFromRestaurantRequest(RestaurantRequestForm requestForm, RestaurantOwnerEntity owner) {
+        return RestaurantEntity.builder()
+                .restaurantImageCard(ImageConverter.convertFileToBytes(requestForm.getRestaurantImageCard()))
+                .restaurantImageHeader(ImageConverter.convertFileToBytes(requestForm.getRestaurantImageHeader()))
+                .restaurantName(requestForm.getRestaurantName())
+                .phone(requestForm.getRestaurantPhone())
+                .email(requestForm.getRestaurantEmail())
+                .foodMenu(FoodMenuEntity.builder()
+                        .menuName(requestForm.getRestaurantName() + " Menu")
+                        .build())
+                .restaurantAddress(addressEntityMapper.mapFromRestaurantRequest(requestForm))
+                .restaurantOwner(owner)
+                .restaurantOpeningTime(restaurantOpeningTimeEntityMapper.mapFromRestaurantRequest(requestForm))
+                .build();
+    }
+
+    public List<RestaurantEntity> mapToEntityList(List<Restaurant> restaurants) {
+        return restaurants.stream()
+                .map(this::mapToEntity)
+                .toList();
     }
 }

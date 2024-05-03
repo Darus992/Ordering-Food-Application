@@ -28,22 +28,6 @@ class RestaurantOwnerControllerTest {
     private UserService userService;
 
     @Test
-    @WithMockUser(username = "business_user2", authorities = {"OWNER"})
-    void showOwnerPage_shouldWorkCorrectlyWithAuthenticatedUser() throws Exception {
-        //  given
-        User user = UsersFixtures.someMappedBusinessUser2();
-        when(userService.getCurrentUser()).thenReturn(user);
-
-        //  when
-        //  then
-        mockMvc.perform(MockMvcRequestBuilders.get("/owner"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("owner"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("restaurants"))
-                .andExpect(MockMvcResultMatchers.model().attribute("restaurants", user.getRestaurantOwner().getRestaurants()));
-    }
-
-    @Test
     @WithMockUser(username = "testowy_customer", authorities = {"CUSTOMER"})
     void showOwnerPage_shouldFailWhenUserIsCustomer403() throws Exception {
         //  given

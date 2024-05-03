@@ -1,33 +1,25 @@
 package pl.dariuszgilewicz.infrastructure.request_form;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.DayOfWeek;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusinessRequestForm {
+public class BusinessRequestForm extends RequestForm{
 
-    private String username;
-    private String userEmail;
-    private String userPassword;
+    @NotEmpty(message = "Name is required.")
     private String ownerName;
+
+    @NotEmpty(message = "Surname is required.")
     private String ownerSurname;
+
+    @NotEmpty(message = "Pesel is required.")
+    @Size(message = "Pesel number should have 11 numbers.", min = 11, max = 11)
+    @Pattern(regexp = "^\\d+$", message = "Pesel must contain only digits.")
     private String ownerPesel;
-    private MultipartFile restaurantImageCard;
-    private String restaurantName;
-    private String restaurantPhone;
-    private String restaurantEmail;
-    private String restaurantAddressCity;
-    private String restaurantAddressDistrict;
-    private String restaurantAddressPostalCode;
-    private String restaurantAddressStreet;
-    private String openingHour;
-    private String closeHour;
-    private DayOfWeek dayOfWeekFrom;
-    private DayOfWeek dayOfWeekTill;
 }
