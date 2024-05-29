@@ -7,6 +7,7 @@ import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {

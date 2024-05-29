@@ -38,8 +38,8 @@
                         <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
                         <a th:if="${user.role.name == 'CUSTOMER'}" th:href="@{/customer}" class="dropdown-item"
                            role="button">Your account</a>
-                        <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item" role="button">Your
-                            account</a>
+                        <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item"
+                           role="button">Your account</a>
                     </ul>
                 </div>
             </div>
@@ -75,12 +75,12 @@
                 <p th:if="${#fields.hasErrors('owner.name')}" th:errorclass="text-danger" th:errors="${userForm.owner.name}"></p>
             </div>
             <div class="col-6">
-                <label for="ownerSurname">Surname</label>
+                <label for="ownerSurname">Surname: </label>
                 <input type="text" name="owner.surname" id="ownerSurname" class="form-control" th:value="${user.owner.surname}">
                 <p th:if="${#fields.hasErrors('owner.surname')}" th:errorclass="text-danger" th:errors="${userForm.owner.surname}"></p>
             </div>
             <div class="col-md-6">
-                <label for="ownerPesel">Pesel</label>
+                <label for="ownerPesel">Pesel: </label>
                 <input type="text" name="owner.pesel" id="ownerPesel" class="form-control" th:value="${user.owner.pesel}">
                 <p th:if="${#fields.hasErrors('owner.pesel')}" th:errorclass="text-danger" th:errors="${userForm.owner.pesel}"></p>
             </div>

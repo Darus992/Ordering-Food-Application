@@ -1,10 +1,7 @@
 package pl.dariuszgilewicz.infrastructure.security;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import pl.dariuszgilewicz.infrastructure.database.entity.CustomerEntity;
 import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantOwnerEntity;
@@ -14,6 +11,7 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")

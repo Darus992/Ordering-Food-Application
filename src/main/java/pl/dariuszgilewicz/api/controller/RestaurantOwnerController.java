@@ -331,13 +331,17 @@ public class RestaurantOwnerController {
         ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "owner.surname", "required.surname", "Surname is required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "owner.pesel", "required.pesel", "Pesel is required.");
 
-        if (userForm.getOwner().getPesel().length() != 11) {
-            bindingResult.addError(new FieldError("userForm", "owner.pesel", "Pesel number should have 11 numbers."));
+        if (userForm.getOwner().getPesel() != null) {
+            validatePesel(userForm.getOwner().getPesel(), bindingResult);
         }
 
-        if (!userForm.getOwner().getPesel().matches("^\\d+$")) {
-            bindingResult.addError(new FieldError("userForm", "owner.pesel", "Pesel must contain only digits."));
-        }
+//        if (userForm.getOwner().getPesel().length() != 11) {
+//            bindingResult.addError(new FieldError("userForm", "owner.pesel", "Pesel number should have 11 numbers."));
+//        }
+//
+//        if (!userForm.getOwner().getPesel().matches("^\\d+$")) {
+//            bindingResult.addError(new FieldError("userForm", "owner.pesel", "Pesel must contain only digits."));
+//        }
 
         if (userForm.getUsername().length() < 5) {
             bindingResult.addError(new FieldError("userForm", "username", "Username must contain at least 5 characters."));
@@ -345,6 +349,15 @@ public class RestaurantOwnerController {
 
         if (!userForm.getPassword().isEmpty() && userForm.getPassword().length() < 5) {
             bindingResult.addError(new FieldError("userForm", "password", "Password must contain at least 5 characters."));
+        }
+    }
+
+    private static void validatePesel(String pesel, BindingResult bindingResult) {
+        if (pesel.length() != 11) {
+            bindingResult.addError(new FieldError("userForm", "owner.pesel", "Pesel number should have 11 numbers."));
+        }
+        if (!pesel.matches("^\\d+$")) {
+            bindingResult.addError(new FieldError("userForm", "owner.pesel", "Pesel must contain only digits."));
         }
     }
 }

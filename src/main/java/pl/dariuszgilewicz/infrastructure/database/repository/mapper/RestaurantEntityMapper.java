@@ -9,6 +9,7 @@ import pl.dariuszgilewicz.infrastructure.request_form.RestaurantRequestForm;
 import pl.dariuszgilewicz.infrastructure.util.ImageConverter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,8 +31,8 @@ public class RestaurantEntityMapper {
                 .restaurantAddress(addressEntityMapper.mapFromEntity(entity.getRestaurantAddress()))
                 .restaurantOpeningTime(restaurantOpeningTimeEntityMapper.mapFromEntity(entity.getRestaurantOpeningTime()))
                 .customerOrdersNumbers(entity.getCustomerOrders().stream()
-                        .map(OrdersEntity::getOrderNumber)
-                        .collect(Collectors.toList()))
+                .map(OrdersEntity::getOrderNumber)
+                .collect(Collectors.toList()))
                 .build();
     }
 
@@ -46,12 +47,6 @@ public class RestaurantEntityMapper {
                 .restaurantAddress(addressEntityMapper.mapToEntity(restaurant.getRestaurantAddress()))
                 .restaurantOpeningTime(restaurantOpeningTimeEntityMapper.mapToEntity(restaurant.getRestaurantOpeningTime()))
                 .build();
-    }
-
-    public List<Restaurant> mapFromEntityList(List<RestaurantEntity> entities){
-        return entities.stream()
-                .map(this::mapFromEntity)
-                .toList();
     }
 
     public RestaurantEntity mapFromBusinessRequest(BusinessRequestForm requestForm) throws IOException {
@@ -83,6 +78,12 @@ public class RestaurantEntityMapper {
                 .restaurantOwner(owner)
                 .restaurantOpeningTime(restaurantOpeningTimeEntityMapper.mapFromRestaurantRequest(requestForm))
                 .build();
+    }
+
+    public List<Restaurant> mapFromEntityList(List<RestaurantEntity> entities){
+        return entities.stream()
+                .map(this::mapFromEntity)
+                .toList();
     }
 
     public List<RestaurantEntity> mapToEntityList(List<Restaurant> restaurants) {

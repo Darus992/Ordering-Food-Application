@@ -1,6 +1,5 @@
 package pl.dariuszgilewicz.infrastructure.security;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +40,7 @@ class UserServiceTest {
     void createCustomerUser_shouldThrowException() {
         //  given
         CustomerRequestForm requestForm = someCustomerRequestForm();
-        UserEntity userEntity = someCustomerUser1();
+        UserEntity userEntity = someCustomerUserEntity1();
         when(userJpaRepository.findByEmail(requestForm.getUserEmail())).thenReturn(Optional.of(userEntity));
 
         //  when
@@ -70,7 +69,7 @@ class UserServiceTest {
     void createBusinessUser_shouldThrowException() {
         //  given
         BusinessRequestForm requestForm = someBusinessRequestForm1();
-        UserEntity businessUser = someBusinessUser1();
+        UserEntity businessUser = someBusinessUserEntity1();
         when(userJpaRepository.findByEmail(requestForm.getUserEmail())).thenReturn(Optional.of(businessUser));
 
         //  when

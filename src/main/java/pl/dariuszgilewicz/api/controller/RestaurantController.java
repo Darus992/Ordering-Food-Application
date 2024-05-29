@@ -54,22 +54,22 @@ public class RestaurantController {
     }
 
     //  TODO:  DO ZAIMPLEMENTOWANIA
-    @GetMapping(value = "/restaurants/category")
-    public String showRestaurantsWithPickedCategory(
-            @RequestParam(name = "foodCategory", required = false) String foodCategory,
-            Authentication authentication,
-            Model model
-    ) {
-        model.addAttribute("selectedCategory", foodCategory);
-        List<Restaurant> restaurants = restaurantService.findAllRestaurantsWithSelectedCategory(foodCategory);
-        boolean isAuthenticated = userService.checkIfIsAuthenticated(model, authentication);
-        userService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
-        model.addAttribute("restaurants", restaurants);
-
-        List<String> categories = Arrays.asList("Pizza", "Burgers");
-        model.addAttribute("categories", categories);
-        return "restaurants_lists";
-    }
+//    @GetMapping(value = "/restaurants/category")
+//    public String showRestaurantsWithPickedCategory(
+//            @RequestParam(name = "foodCategory", required = false) String foodCategory,
+//            Authentication authentication,
+//            Model model
+//    ) {
+//        model.addAttribute("selectedCategory", foodCategory);
+//        List<Restaurant> restaurants = restaurantService.findAllRestaurantsWithSelectedCategory(foodCategory);
+//        boolean isAuthenticated = userService.checkIfIsAuthenticated(model, authentication);
+//        userService.assignRoleDependsOnAuthentication(authentication, model, isAuthenticated);
+//        model.addAttribute("restaurants", restaurants);
+//
+//        List<String> categories = Arrays.asList("Pizza", "Burgers");
+//        model.addAttribute("categories", categories);
+//        return "restaurants_lists";
+//    }
 
     @PostMapping("/restaurant/create")
     public String createRestaurantForm(

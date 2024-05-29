@@ -1,6 +1,5 @@
 package pl.dariuszgilewicz.api.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +20,6 @@ public class HomeController {
     public String home(Model model) {
         Optional<User> optionalUser = userService.getCurrentOptionalUser(model);
         optionalUser.ifPresent(user -> model.addAttribute("user", user));
-//        User user = optionalUser.orElseThrow(() -> new EntityNotFoundException("User Entity: [%s] not found.".formatted(optionalUser)));
-//        model.addAttribute("user", user);
         return "index";
     }
 

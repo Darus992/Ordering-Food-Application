@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Setter
 @Entity
 @Builder
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "restaurant_opening_time")

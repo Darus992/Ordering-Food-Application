@@ -34,7 +34,7 @@ public class RestaurantService {
     private RestaurantRepository restaurantRepository;
     private AddressRepository addressRepository;
     private RestaurantJpaRepository restaurantJpaRepository;
-    private FoodMenuJpaRepository foodMenuJpaRepository;
+//    private FoodMenuJpaRepository foodMenuJpaRepository;
     private AddressJpaRepository addressJpaRepository;
     private RestaurantEntityMapper restaurantEntityMapper;
     private RestaurantOpeningTimeEntityMapper restaurantOpeningTimeEntityMapper;
@@ -52,12 +52,12 @@ public class RestaurantService {
                 ));
     }
 
-    @Transactional
-    public List<Restaurant> findAllRestaurantsWithSelectedCategory(String foodCategory) {
-        return foodMenuJpaRepository.findAllByCategory(foodCategory)
-                .map(restaurantRepository::findAllRestaurantsWithSelectedCategory)
-                .orElseThrow(() -> new EntityNotFoundException("Not found List of FoodMenuEntity by category name: [%s]".formatted(foodCategory)));
-    }
+//    @Transactional
+//    public List<Restaurant> findAllRestaurantsWithSelectedCategory(String foodCategory) {
+//        return foodMenuJpaRepository.findAllByCategory(foodCategory)
+//                .map(restaurantRepository::findAllRestaurantsWithSelectedCategory)
+//                .orElseThrow(() -> new EntityNotFoundException("Not found List of FoodMenuEntity by category name: [%s]".formatted(foodCategory)));
+//    }
 
     @Transactional
     public List<Restaurant> findRestaurantsBySearchTerm(String searchTerm) {
@@ -88,6 +88,17 @@ public class RestaurantService {
         restaurantRepository.updateRestaurantSchedule(entity, result);
     }
 
+    @Transactional
+    public List<Orders> createOrdersListByOrderNumber(List<Integer> orderNumbers) {
+        List<Orders> result = new ArrayList<>();
+
+        for (Integer number : orderNumbers){
+            Orders order = orderRepository.findOrderByOrderNumber(number);
+            result.add(order);
+        }
+        return result;
+    }
+
     private AddressEntity updateRestaurantAddressDetails(RestaurantEntity entity, Restaurant restaurant) {
         return addressRepository.updateRestaurantAddressDetails(entity.getRestaurantAddress(), restaurant);
     }
@@ -103,16 +114,5 @@ public class RestaurantService {
         );
 
         return entityByTimeAndDay.orElseGet(() -> restaurantOpeningTimeRepository.saveAndReturn(requestOpeningTimeEntity));
-    }
-
-    @Transactional
-    public List<Orders> createOrdersListByOrderNumber(List<Integer> orderNumbers) {
-        List<Orders> result = new ArrayList<>();
-
-        for (Integer number : orderNumbers){
-            Orders order = orderRepository.findOrderByOrderNumber(number);
-            result.add(order);
-        }
-        return result;
     }
 }

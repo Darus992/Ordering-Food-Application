@@ -9,6 +9,7 @@ import java.util.Map;
 @Builder
 @Getter
 @Setter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class Orders {

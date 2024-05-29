@@ -59,11 +59,11 @@ public class RestaurantRepository {
         restaurantJpaRepository.save(restaurantEntity);
     }
 
-    public List<Restaurant> findAllRestaurantsWithSelectedCategory(List<FoodMenuEntity> foodMenus) {
-        return restaurantJpaRepository.findByFoodMenus(foodMenus)
-                .map(restaurantEntityMapper::mapFromEntityList)
-                .orElseThrow(() -> new EntityNotFoundException("Not found List of RestaurantEntity by FoodMenuEntity List: [%s]".formatted(foodMenus)));
-    }
+//    public List<Restaurant> findAllRestaurantsWithSelectedCategory(List<FoodMenuEntity> foodMenus) {
+//        return restaurantJpaRepository.findByFoodMenus(foodMenus)
+//                .map(restaurantEntityMapper::mapFromEntityList)
+//                .orElseThrow(() -> new EntityNotFoundException("Not found List of RestaurantEntity by FoodMenuEntity List: [%s]".formatted(foodMenus)));
+//    }
 
     public List<Restaurant> findRestaurantsByAddress(List<AddressEntity> addressEntities) {
         return restaurantJpaRepository.findAllByAddress(addressEntities)

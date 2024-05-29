@@ -247,13 +247,19 @@
                     <div class="col-md-5 offset-md-1">
                         <div class="col-md-6" style="width: 400px">
                             <label class="col-form-label">Card Image:</label>
-                            <input class="form-control" type="file" th:field="*{restaurantImageCard}">
+                            <input class="form-control" type="file" name="fileCardImageToUpload" id="editeCardFileImageToUpload" th:field="*{restaurantImageCard}">
+                            <p th:if="${#fields.hasErrors('restaurantImageCard')}"
+                               th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.restaurantImageCard}"></p>
                         </div>
                     </div>
                     <div class="col-md-5 offset-md-1">
                         <div class="col-md-6" style="width: 400px">
                             <label class="col-form-label">Header Image:</label>
-                            <input class="form-control" type="file" th:field="*{restaurantImageHeader}">
+                            <input class="form-control" type="file" name="fileHeaderImageToUpload" id="editeHeaderFileImageToUpload" th:field="*{restaurantImageHeader}">
+                            <p th:if="${#fields.hasErrors('restaurantImageHeader')}"
+                               th:errorclass="text-danger"
+                               th:errors="${businessRequestForm.restaurantImageHeader}"></p>
                         </div>
                     </div>
                 </div>

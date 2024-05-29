@@ -7,6 +7,7 @@ import java.time.DayOfWeek;
 @Setter
 @Builder
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class RestaurantOpeningTime {

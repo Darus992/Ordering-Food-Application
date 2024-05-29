@@ -24,25 +24,29 @@ public class UserEntityMapper {
 
     public Optional<User> mapFromEntityToOptionalUser(UserEntity entity){
 
-        User user = User.builder()
-                .username(entity.getUsername())
-                .email(entity.getEmail())
-                .password(entity.getPassword())
-                .role(entity.getRoles().stream()
-                        .findFirst().orElseThrow(
-                                () -> new NullPointerException("User role not found")
-                        ))
-                .build();
+        if(entity != null){
+            User user = User.builder()
+                    .username(entity.getUsername())
+                    .email(entity.getEmail())
+                    .password(entity.getPassword())
+                    .role(entity.getRoles().stream()
+                            .findFirst().orElseThrow(
+                                    () -> new NullPointerException("User role not found")
+                            ))
+                    .build();
 
-        if(entity.getCustomer() != null){
-            Customer customer = customerEntityMapper.mapFromEntity(entity.getCustomer());
-            user.setCustomer(customer);
-        }else if(entity.getOwner() != null){
-            RestaurantOwner owner = restaurantOwnerEntityMapper.mapFromEntity(entity.getOwner());
-            user.setOwner(owner);
+            if(entity.getCustomer() != null){
+                Customer customer = customerEntityMapper.mapFromEntity(entity.getCustomer());
+                user.setCustomer(customer);
+            }else if(entity.getOwner() != null){
+                RestaurantOwner owner = restaurantOwnerEntityMapper.mapFromEntity(entity.getOwner());
+                user.setOwner(owner);
+            }
+
+            return Optional.of(user);
+        } else {
+            return Optional.empty();
         }
-
-        return Optional.of(user);
     }
 
     public UserEntity mapFromRequestForm(RequestForm form) {

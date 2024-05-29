@@ -3,7 +3,6 @@ package pl.dariuszgilewicz.infrastructure.security;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,16 +13,12 @@ import pl.dariuszgilewicz.infrastructure.database.repository.jpa.RestaurantOwner
 import pl.dariuszgilewicz.infrastructure.database.repository.mapper.UserEntityMapper;
 import pl.dariuszgilewicz.infrastructure.model.exception.EntityAlreadyExistAuthenticationException;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
-import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static pl.dariuszgilewicz.util.BusinessRequestFormFixtures.someBusinessRequestForm1;
-import static pl.dariuszgilewicz.util.CustomerRequestFormFixtures.someCustomerRequestForm;
-import static pl.dariuszgilewicz.util.UsersFixtures.someBusinessUser1;
-import static pl.dariuszgilewicz.util.UsersFixtures.someCustomerUser1;
 
 @ExtendWith(MockitoExtension.class)
 public class UserRepositoryTest {

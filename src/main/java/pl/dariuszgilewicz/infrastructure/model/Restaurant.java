@@ -7,6 +7,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class Restaurant {

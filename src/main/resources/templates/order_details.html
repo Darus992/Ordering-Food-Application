@@ -36,10 +36,10 @@
           </button>
           <ul class="dropdown-menu mx-1">
             <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
-            <a th:if="${user.role.name == 'CUSTOMER'}" th:href="@{/customer}" class="dropdown-item" role="button">Your
-              account</a>
-            <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item" role="button">Your
-              account</a>
+            <a th:if="${user.role.name == 'CUSTOMER'}" th:href="@{/customer}" class="dropdown-item" role="button">
+              Your account</a>
+            <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item" role="button">
+              Your account</a>
           </ul>
         </div>
       </div>
@@ -129,7 +129,7 @@
             </div>
             <div class="col-5 text-center">
               <span class="card-text" id="totalPrice" th:text="${order.totalPrice}">Total Price</span>
-              <span class="card-text px-2" text="zł.">zł.</span>
+              <span class="card-text px-2">zł.</span>
             </div>
           </div>
         </div>

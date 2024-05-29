@@ -47,13 +47,16 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/order/{orderNumber}/details")
+                        .hasAnyAuthority("OWNER", "CUSTOMER")
                         .requestMatchers("/owner/**", "/restaurant/create", "/restaurant/create-food-menu/{restaurantEmail}",
                                 "/restaurant/create-food/{restaurantEmail}")
                         .hasAuthority("OWNER")
-                        .requestMatchers("/customer/**", "/cart", "/add-to-cart", "/update-cart", "/delete-food-from-cart")
+                        .requestMatchers("/customer/**", "/cart", "/add-to-cart", "/update-cart", "/delete-food-from-cart",
+                                "/order/create-order")
                         .hasAuthority("CUSTOMER")
                         .requestMatchers("/", "/**", "/restaurants", "/user/register-customer", "/user/register-business",
-                                "/restaurant/{restaurantEmail}")
+                                "/restaurant/{restaurantEmail}", "/order/cart-summary")
                         .permitAll()
                 )
                 .formLogin(login -> login

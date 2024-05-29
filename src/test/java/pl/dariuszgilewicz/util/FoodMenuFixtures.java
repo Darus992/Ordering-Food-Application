@@ -1,110 +1,85 @@
 package pl.dariuszgilewicz.util;
 
 import lombok.experimental.UtilityClass;
-import pl.dariuszgilewicz.infrastructure.database.entity.FoodEntity;
 import pl.dariuszgilewicz.infrastructure.database.entity.FoodMenuEntity;
-import pl.dariuszgilewicz.infrastructure.model.Food;
 import pl.dariuszgilewicz.infrastructure.model.FoodMenu;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static pl.dariuszgilewicz.util.FoodFixtures.*;
 
 @UtilityClass
 public class FoodMenuFixtures {
 
-    public static List<FoodMenuEntity> someListOfFoodMenuEntities1(){
+    public static List<FoodMenuEntity> someListOfFoodMenuEntities1() {
         return List.of(someFoodMenuEntity1());
     }
 
-    public static List<FoodMenu> someListOfFoodMenu(){
-        return List.of(someFoodMenu1());
+    public static List<FoodMenu> someListOfFoodMenu() {
+        return List.of(someFoodMenuModel1());
     }
 
-    public static FoodMenuEntity someFoodMenuEntity1(){
-        return FoodMenuEntity.builder()
-                .menuName("Restauracje_1")
-                .foods(List.of(FoodEntity.builder()
-                                .category("Pizza")
-                                .name("Pizza nr 1")
-                                .description("dodatki, sosy, itp.")
-                                .price(BigDecimal.valueOf(35L))
-                        .build(),
-                        FoodEntity.builder()
-                                .category("Pizza")
-                                .name("Pizza nr 2")
-                                .description("dodatki, sosy, itp.")
-                                .price(BigDecimal.valueOf(40.5))
-                                .build(),
-                        FoodEntity.builder()
-                                .category("Burgery")
-                                .name("Super burger")
-                                .description("Warzywa, sosy")
-                                .price(BigDecimal.valueOf(18L))
-                                .build(),
-                        FoodEntity.builder()
-                                .category("Napoje")
-                                .name("Pepsi")
-                                .description("")
-                                .price(BigDecimal.valueOf(6L))
-                                .build()
-                ))
-                .build();
-    }
-
-    public static FoodMenu someFoodMenu1(){
+    public static FoodMenu someFoodMenuModel1() {
         return FoodMenu.builder()
-                .foodMenuName("Restauracje_1")
-                .foods(List.of(Food.builder()
-                                .category("Pizza")
-                                .name("Pizza nr 1")
-                                .description("dodatki, sosy, itp.")
-                                .price(BigDecimal.valueOf(35L))
-                                .build(),
-                        Food.builder()
-                                .category("Pizza")
-                                .name("Pizza nr 2")
-                                .description("dodatki, sosy, itp.")
-                                .price(BigDecimal.valueOf(40.5))
-                                .build(),
-                        Food.builder()
-                                .category("Burgery")
-                                .name("Super burger")
-                                .description("Warzywa, sosy")
-                                .price(BigDecimal.valueOf(18L))
-                                .build(),
-                        Food.builder()
-                                .category("Napoje")
-                                .name("Pepsi")
-                                .description("")
-                                .price(BigDecimal.valueOf(6L))
-                                .build()
-                ))
+                .foodMenuId(1)
+                .foods(someFoodModelList2())
                 .build();
     }
 
-    public static FoodMenu someFoodMenu2(){
+    public static FoodMenu someFoodMenuModel2() {
         return FoodMenu.builder()
-                .foodMenuName("Przykładowa nazwa")
-//                .foodCategory("Pizza")
-//                .foodName("Super Pizza")
-//                .foodDescription("dodatki, sosy, itp.")
-//                .foodPrice(BigDecimal.valueOf(35.5))
-                .foods(new ArrayList<>())
+                .foodMenuId(2)
+                .foods(List.of(someFoodModel1(), someFoodModel3()))
                 .build();
     }
 
-    public static FoodMenuEntity someFoodMenuEntity2(){
-        return FoodMenuEntity.builder()
-                .menuName("Przykładowa nazwa")
-                .foods(FoodFixtures.someFoodEntityList1())
+    public static FoodMenu someFoodMenuModel3() {
+        return FoodMenu.builder()
+                .foodMenuId(3)
+                .foods(someFoodModelList3())
                 .build();
     }
 
-    public static FoodMenuEntity someFoodMenuEntity3(){
+    public static FoodMenu someFoodMenuModel4() {
+        return FoodMenu.builder()
+                .foodMenuName("Testowa Nazwa")
+                .foods(someFoodModelList4())
+                .build();
+    }
+
+    public static FoodMenuEntity someFoodMenuEntity1() {
         return FoodMenuEntity.builder()
-                .menuName("Przykładowa nazwa")
-                .foods(FoodFixtures.someFoodEntityList2())
+                .foodMenuId(1)
+                .foods(someFoodEntityList2())
+                .build();
+    }
+
+    public static FoodMenuEntity someFoodMenuEntity2() {
+        return FoodMenuEntity.builder()
+                .foodMenuId(2)
+                .foods(someFoodEntityList1())
+                .build();
+    }
+
+    public static FoodMenuEntity someFoodMenuEntity3() {
+        return FoodMenuEntity.builder()
+                .foodMenuId(3)
+                .foods(someFoodEntityList3())
+                .build();
+    }
+
+    public static FoodMenuEntity someFoodMenuEntity4() {
+        return FoodMenuEntity.builder()
+                .menuName("Testowa Nazwa")
+                .foods(someFoodEntityList4())
+                .build();
+    }
+
+    public static FoodMenuEntity someFoodMenuEntity5() {
+        return FoodMenuEntity.builder()
+                .menuName("Przypisane Menu")
+                .foods(someFoodEntityList5())
                 .build();
     }
 }

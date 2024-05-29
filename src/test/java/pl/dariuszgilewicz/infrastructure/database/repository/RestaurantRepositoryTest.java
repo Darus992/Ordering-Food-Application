@@ -44,19 +44,19 @@ class RestaurantRepositoryTest {
     @Mock
     private RestaurantOwnerRepository restaurantOwnerRepository;
 
-    @Test
-    void findAllRestaurantsWithSelectedCategory_shouldThrowException() {
-        //  given
-        List<FoodMenuEntity> foodMenuEntities = someListOfFoodMenuEntities1();
-        when(restaurantJpaRepository.findByFoodMenus(foodMenuEntities)).thenReturn(Optional.empty());
-
-        //  when
-        //  then
-        assertThatThrownBy(() -> restaurantRepository.findAllRestaurantsWithSelectedCategory(foodMenuEntities))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Not found List of RestaurantEntity by FoodMenuEntity List: [%s]".formatted(foodMenuEntities));
-
-    }
+//    @Test
+//    void findAllRestaurantsWithSelectedCategory_shouldThrowException() {
+//        //  given
+//        List<FoodMenuEntity> foodMenuEntities = someListOfFoodMenuEntities1();
+//        when(restaurantJpaRepository.findByFoodMenus(foodMenuEntities)).thenReturn(Optional.empty());
+//
+//        //  when
+//        //  then
+//        assertThatThrownBy(() -> restaurantRepository.findAllRestaurantsWithSelectedCategory(foodMenuEntities))
+//                .isInstanceOf(EntityNotFoundException.class)
+//                .hasMessageContaining("Not found List of RestaurantEntity by FoodMenuEntity List: [%s]".formatted(foodMenuEntities));
+//
+//    }
 
     @Test
     void findRestaurantsNearYouByAddress_shouldThrowException() {
@@ -146,7 +146,7 @@ class RestaurantRepositoryTest {
         RestaurantEntity savedRestaurantEntity = argumentCaptor.getValue();
 
         assertEquals(expectedRestaurantEntity, savedRestaurantEntity);
-        assertEquals(expectedRestaurantEntity.getFoodMenu().getFoods().get(3), savedRestaurantEntity.getFoodMenu().getFoods().get(3));
+        assertEquals(expectedRestaurantEntity.getFoodMenu().getFoods().get(2), savedRestaurantEntity.getFoodMenu().getFoods().get(2));
 
     }
 

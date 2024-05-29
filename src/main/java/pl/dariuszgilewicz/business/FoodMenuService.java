@@ -68,7 +68,11 @@ public class FoodMenuService {
         FoodEntity foodEntity = checkIfFoodExistOrCreateNewAndReturn(food);
         FoodMenuEntity foodMenuEntity = restaurantEntity.getFoodMenu();
         List<FoodEntity> foods = foodMenuEntity.getFoods();
-        foods.add(foodEntity);
+
+        if (foods.stream().noneMatch(entity -> entity.getFoodId().equals(foodEntity.getFoodId()))) {
+            foods.add(foodEntity);
+        }
+
         foodMenuJpaRepository.save(foodMenuEntity);
     }
 

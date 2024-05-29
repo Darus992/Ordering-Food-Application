@@ -13,6 +13,7 @@ import java.util.Map;
 @Setter
 @Entity
 @Builder
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")

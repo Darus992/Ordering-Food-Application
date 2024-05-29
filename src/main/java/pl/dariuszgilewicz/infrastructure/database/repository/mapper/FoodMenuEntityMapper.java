@@ -21,6 +21,7 @@ public class FoodMenuEntityMapper {
     public FoodMenuEntity mapToEntity(FoodMenu foodMenu) {
         return FoodMenuEntity.builder()
                 .foodMenuId(foodMenu.getFoodMenuId())
+                .menuName(foodMenu.getFoodMenuName())
                 .foods(foodEntityMapper.mapToEntityList(foodMenu.getFoods()))
                 .build();
     }

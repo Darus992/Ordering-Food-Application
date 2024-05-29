@@ -48,6 +48,7 @@ public class UserRegistrationController {
     ) {
         if (businessRequestForm.getRestaurantImageCard().isEmpty()) {
             bindingResult.addError(new FieldError("businessRequestForm", "restaurantImageCard", "The image file is required."));
+            bindingResult.addError(new FieldError("businessRequestForm", "restaurantImageHeader", "The image file is required."));
         }
 
         if (bindingResult.hasErrors()) {

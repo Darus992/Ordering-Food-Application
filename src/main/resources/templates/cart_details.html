@@ -29,6 +29,25 @@
                 <button class="btn btn-primary me-2" type="button" data-bs-toggle="modal"
                         data-bs-target="#registerTypeModal">Register
                 </button>
+                <div class="modal fade" id="registerTypeModal" tabindex="-1" aria-labelledby="registerTypeModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="registerTypeModalLabel">Register Account Type</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="form-label">Which account type do you want to create?</p>
+                                <br>
+                                <a th:href="@{/user/register-customer}" class="btn btn-primary me-2" role="button">
+                                    Customer Account</a>
+                                <a th:href="@{/user/register-business}" class="btn btn-primary me-2" role="button">
+                                    Business Account</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div th:unless="${isAuthenticated == false}">
                 <div class="btn-group dropstart">
@@ -45,28 +64,9 @@
                         <a th:href="@{/logout}" class="dropdown-item" role="button">Logout</a>
                         <a th:if="${user.role.name == 'CUSTOMER'}" th:href="@{/customer}" class="dropdown-item"
                            role="button">Your account</a>
-                        <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item" role="button">Your
-                            account</a>
+                        <a th:if="${user.role.name == 'OWNER'}" th:href="@{/owner}" class="dropdown-item"
+                           role="button">Your account</a>
                     </ul>
-                </div>
-            </div>
-            <div class="modal fade" id="registerTypeModal" tabindex="-1" aria-labelledby="registerTypeModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="registerTypeModalLabel">Register Account Type</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="form-label">Which account type do you want to create?</p>
-                            <br>
-                            <a th:href="@{/user/register-customer}" class="btn btn-primary me-2" role="button">Customer
-                                Account</a>
-                            <a th:href="@{/user/register-business}" class="btn btn-primary me-2" role="button">Business
-                                Account</a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
