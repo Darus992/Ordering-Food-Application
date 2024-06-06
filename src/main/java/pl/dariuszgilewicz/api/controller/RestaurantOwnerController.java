@@ -3,10 +3,6 @@ package pl.dariuszgilewicz.api.controller;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,10 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.dariuszgilewicz.business.FoodMenuService;
 import pl.dariuszgilewicz.business.OrderService;
 import pl.dariuszgilewicz.business.RestaurantService;
-import pl.dariuszgilewicz.infrastructure.database.entity.FoodEntity;
 import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantEntity;
 import pl.dariuszgilewicz.infrastructure.database.repository.OrderRepository;
-import pl.dariuszgilewicz.infrastructure.database.repository.jpa.FoodJpaRepository;
 import pl.dariuszgilewicz.infrastructure.database.repository.jpa.RestaurantJpaRepository;
 import pl.dariuszgilewicz.infrastructure.database.repository.mapper.RestaurantEntityMapper;
 import pl.dariuszgilewicz.infrastructure.model.Food;
@@ -38,47 +32,10 @@ public class RestaurantOwnerController {
     private UserService userService;
     private RestaurantService restaurantService;
     private RestaurantJpaRepository restaurantJpaRepository;
-    private FoodJpaRepository foodJpaRepository;
     private FoodMenuService foodMenuService;
     private RestaurantEntityMapper restaurantEntityMapper;
     private OrderService orderService;
     private OrderRepository orderRepository;
-
-    //  TODO:   REST API ?
-    @GetMapping("/image/{restaurantEmail}")
-    public ResponseEntity<byte[]> getImage(
-            @PathVariable String restaurantEmail,
-            @RequestParam(required = false) String image
-    ) {
-        Optional<RestaurantEntity> restaurantOptional = restaurantJpaRepository.findByEmail(restaurantEmail);
-
-        if (restaurantOptional.isPresent()) {
-            byte[] imageData;
-            if (image.equals("CARD")) {
-                imageData = restaurantOptional.get().getRestaurantImageCard();
-            } else {
-                imageData = restaurantOptional.get().getRestaurantImageHeader();
-            }
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_JPEG);
-            return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping("/image/food/{foodId}")
-    public ResponseEntity<byte[]> getFoodImage(@PathVariable Integer foodId) {
-        Optional<FoodEntity> optionalFood = foodJpaRepository.findById(foodId);
-
-        if (optionalFood.isPresent()) {
-            byte[] imageData;
-            imageData = optionalFood.get().getFoodImage();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_JPEG);
-            return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 
 
     @GetMapping("/owner")
@@ -334,14 +291,6 @@ public class RestaurantOwnerController {
         if (userForm.getOwner().getPesel() != null) {
             validatePesel(userForm.getOwner().getPesel(), bindingResult);
         }
-
-//        if (userForm.getOwner().getPesel().length() != 11) {
-//            bindingResult.addError(new FieldError("userForm", "owner.pesel", "Pesel number should have 11 numbers."));
-//        }
-//
-//        if (!userForm.getOwner().getPesel().matches("^\\d+$")) {
-//            bindingResult.addError(new FieldError("userForm", "owner.pesel", "Pesel must contain only digits."));
-//        }
 
         if (userForm.getUsername().length() < 5) {
             bindingResult.addError(new FieldError("userForm", "username", "Username must contain at least 5 characters."));

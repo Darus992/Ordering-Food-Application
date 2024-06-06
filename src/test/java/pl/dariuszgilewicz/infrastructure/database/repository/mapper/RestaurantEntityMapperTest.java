@@ -90,7 +90,7 @@ class RestaurantEntityMapperTest {
     }
 
     @Test
-    void mapFromRestaurantRequest_shouldWorkSuccessfully() {
+    void mapFromRestaurantRequest_shouldWorkSuccessfully() throws IOException {
         //  given
         RestaurantRequestForm requestForm = someRestaurantRequestForm2();
         RestaurantOwnerEntity ownerEntity = someRestaurantOwnerEntity1();

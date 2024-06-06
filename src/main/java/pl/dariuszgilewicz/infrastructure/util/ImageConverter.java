@@ -1,8 +1,13 @@
 package pl.dariuszgilewicz.infrastructure.util;
 
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Base64;
 
 public class ImageConverter {
@@ -29,5 +34,10 @@ public class ImageConverter {
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while converting string:[ %s ] to a byte array. ".formatted(imageAsString) + e);
         }
+    }
+
+    public static String convertFileToString(String filePath) throws IOException {
+        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+        return new String(bytes, "UTF-8");
     }
 }

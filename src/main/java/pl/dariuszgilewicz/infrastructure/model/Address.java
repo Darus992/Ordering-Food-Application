@@ -20,7 +20,6 @@ public class Address {
     @NotEmpty(message = "Postal Code is required.")
     private String postalCode;
 
-    //  TODO:   DODAĆ SPRAWDZENIE CZY POSIADA NR.
     @NotEmpty(message = "Address street is required.")
     private String addressStreet;
 }

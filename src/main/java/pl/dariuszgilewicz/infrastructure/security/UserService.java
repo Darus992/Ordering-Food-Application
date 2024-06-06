@@ -123,6 +123,27 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public Optional<User> getCurrentOptionalUser() {
+        String authority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("User is not log in.");
+
+        Optional<User> optionalUser;
+        boolean isAuthenticated;
+
+        isAuthenticated = authority.equals(UserRole.CUSTOMER.name()) || authority.equals(UserRole.OWNER.name());
+
+        if (isAuthenticated) {
+            String username = getCurrentUserName();
+            UserEntity userEntity = userRepository.findUserEntityByUsername(username);
+            optionalUser = userEntityMapper.mapFromEntityToOptionalUser(userEntity);
+            return optionalUser;
+        } else {
+            return Optional.empty();
+        }
+    }
+
     private List<GrantedAuthority> getUserAuthority(Set<UserRole> userRoles) {
         return userRoles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))

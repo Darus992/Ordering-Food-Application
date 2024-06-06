@@ -3,6 +3,7 @@ package pl.dariuszgilewicz.business;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.dariuszgilewicz.api.dto.FoodDTO;
 import pl.dariuszgilewicz.infrastructure.database.entity.CustomerEntity;
 import pl.dariuszgilewicz.infrastructure.database.entity.FoodEntity;
 import pl.dariuszgilewicz.infrastructure.database.entity.OrdersEntity;
@@ -67,6 +68,11 @@ public class OrderService {
     public void updateOrderStatus(Integer orderNumber, String status) {
         OrdersEntity ordersEntity = orderRepository.findOrderEntityByOrderNumber(orderNumber);
         OrderStatus orderStatus;
+
+        if (ordersEntity.getStatus().equals(OrderStatus.COMPLETED)) {
+            throw new IllegalStateException("Order Entity with number: [%s] is already completed"
+                    .formatted(ordersEntity.getOrderNumber()));
+        }
 
         if (status.equals(OrderStatus.ON_THE_WAY.name())) {
             orderStatus = OrderStatus.ON_THE_WAY;
