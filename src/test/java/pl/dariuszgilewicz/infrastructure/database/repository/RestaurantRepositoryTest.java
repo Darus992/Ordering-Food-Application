@@ -25,7 +25,6 @@ import static pl.dariuszgilewicz.util.BusinessRequestFormFixtures.someBusinessRe
 import static pl.dariuszgilewicz.util.FoodFixtures.someFoodEntity1;
 import static pl.dariuszgilewicz.util.FoodFixtures.someFoodEntity4;
 import static pl.dariuszgilewicz.util.FoodMenuFixtures.someFoodMenuEntity2;
-import static pl.dariuszgilewicz.util.FoodMenuFixtures.someListOfFoodMenuEntities1;
 import static pl.dariuszgilewicz.util.RestaurantFixtures.*;
 import static pl.dariuszgilewicz.util.RestaurantOwnerFixtures.someRestaurantOwnerEntity1;
 
@@ -43,20 +42,6 @@ class RestaurantRepositoryTest {
 
     @Mock
     private RestaurantOwnerRepository restaurantOwnerRepository;
-
-//    @Test
-//    void findAllRestaurantsWithSelectedCategory_shouldThrowException() {
-//        //  given
-//        List<FoodMenuEntity> foodMenuEntities = someListOfFoodMenuEntities1();
-//        when(restaurantJpaRepository.findByFoodMenus(foodMenuEntities)).thenReturn(Optional.empty());
-//
-//        //  when
-//        //  then
-//        assertThatThrownBy(() -> restaurantRepository.findAllRestaurantsWithSelectedCategory(foodMenuEntities))
-//                .isInstanceOf(EntityNotFoundException.class)
-//                .hasMessageContaining("Not found List of RestaurantEntity by FoodMenuEntity List: [%s]".formatted(foodMenuEntities));
-//
-//    }
 
     @Test
     void findRestaurantsNearYouByAddress_shouldThrowException() {
@@ -95,7 +80,7 @@ class RestaurantRepositoryTest {
     }
 
     @Test
-    void assignFoodMenuToRestaurant_shouldWorkSuccessfully(){
+    void assignFoodMenuToRestaurant_shouldWorkSuccessfully() {
         //  given
         RestaurantEntity expectedRestaurantEntity = someRestaurantEntity4();
         FoodMenuEntity menuEntity = someFoodMenuEntity2();
@@ -116,7 +101,7 @@ class RestaurantRepositoryTest {
     }
 
     @Test
-    void assignFoodMenuToRestaurant_shouldThrowException(){
+    void assignFoodMenuToRestaurant_shouldThrowException() {
         //  given
         FoodMenuEntity menuEntity = someFoodMenuEntity2();
         String email = "na_wypasie@restaurant.pl";
@@ -130,7 +115,7 @@ class RestaurantRepositoryTest {
     }
 
     @Test
-    void assignFoodToFoodMenuInRestaurant_shouldWorkSuccessfully(){
+    void assignFoodToFoodMenuInRestaurant_shouldWorkSuccessfully() {
         //  given
         RestaurantEntity expectedRestaurantEntity = someRestaurantEntity5();
         FoodEntity foodEntity = someFoodEntity4();
@@ -151,7 +136,7 @@ class RestaurantRepositoryTest {
     }
 
     @Test
-    void assignFoodToFoodMenuInRestaurant_shouldThrowException(){
+    void assignFoodToFoodMenuInRestaurant_shouldThrowException() {
         //  given
         FoodEntity foodEntity = someFoodEntity1();
         String email = "zapiecek@restaurant.pl";

@@ -36,9 +36,9 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static pl.dariuszgilewicz.util.AddressFixtures.*;
+import static pl.dariuszgilewicz.util.AddressFixtures.someAddressEntity3;
+import static pl.dariuszgilewicz.util.AddressFixtures.someListOfAddressEntity2;
 import static pl.dariuszgilewicz.util.OrdersFixtures.someCustomerOrderNumbers1;
 import static pl.dariuszgilewicz.util.OrdersFixtures.someOrdersModelList1;
 import static pl.dariuszgilewicz.util.RestaurantFixtures.*;

@@ -13,7 +13,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.dariuszgilewicz.api.dto.OrderDTO;
@@ -42,8 +45,10 @@ import pl.dariuszgilewicz.infrastructure.security.User;
 import pl.dariuszgilewicz.infrastructure.security.UserService;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -196,9 +201,7 @@ public class RestaurantOwnerRestController {
 
     @Operation(
             summary = "Update restaurant details",
-            description = "Endpoint for updating restaurant details.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(
-                    mediaType = "multipart/form-data"))
+            description = "Endpoint for updating restaurant details."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Restaurant details updated successfully", content = @Content),
@@ -213,24 +216,24 @@ public class RestaurantOwnerRestController {
             String restaurantEmail,
             @RequestParam(required = false)
             @Parameter(description = "Update the restaurant name by filling in this field or leave it empty to keep the current name.")
-            @Valid @Pattern(regexp = "\\D*", message = "The restaurant name must not contain any digits.")
+            @Valid @Pattern(regexp = "^\\D*$")
             String restaurantName,
             @RequestParam(required = false)
             @Parameter(description = "Update phone number by filling in this field or leave it empty to keep the current phone number.")
-            @Valid @Pattern(regexp = "^\\d+$", message = "Phone number must contain only digits.")
+            @Valid @Pattern(regexp = "^\\d+$")
             @Size(message = "The phone number size cannot be larger or smaller than 9.", min = 9, max = 9)
             String restaurantPhone,
             @RequestParam(required = false)
             @Parameter(description = "Update the restaurant email by filling in this field or leave it empty to keep the current email.")
-            @Valid @Pattern(regexp = "^(.+)@(.+)$", message = "Email must contains @ sign")
+            @Valid @Pattern(regexp = "^(.+)@(.+)$")
             String restaurantEmailToUpdate,
             @RequestParam(required = false)
             @Parameter(description = "Update city by filling in this field or leave it empty to keep the current city.")
-            @Valid @Pattern(regexp = "\\D*", message = "City must not contain any digits.")
+            @Valid @Pattern(regexp = "^\\D*$")
             String restaurantAddressCity,
             @RequestParam(required = false)
             @Parameter(description = "Update district by filling in this field or leave it empty to keep the current district.")
-            @Valid @Pattern(regexp = "\\D*", message = "District must not contain any digits.")
+            @Valid @Pattern(regexp = "^\\D*$")
             String restaurantAddressDistrict,
             @RequestParam(required = false)
             @Parameter(description = "Update postal code by filling in this field or leave it empty to keep the current postal code.")
@@ -240,8 +243,12 @@ public class RestaurantOwnerRestController {
             String restaurantAddressStreet
     ) {
         User user = getCurrentAuthenticatedBusinessUser();
+        List<String> errorMessagesListDependsOnFieldError = createErrorMessagesListDependsOnFieldError(
+                restaurantName, restaurantPhone, restaurantEmailToUpdate, restaurantAddressCity, restaurantAddressDistrict);
 
-        if (checkIfCurrentBusinessUserHaveRestaurantWithThisEmail(restaurantEmail, user.getOwner().getRestaurants())) {
+        if (errorMessagesListDependsOnFieldError.size() > 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesListDependsOnFieldError);
+        } else if (checkIfCurrentBusinessUserHaveRestaurantWithThisEmail(restaurantEmail, user.getOwner().getRestaurants())) {
             RestaurantEntity currentRestaurant = getRestaurantByEmail(restaurantEmail);
             Restaurant updatedRestaurant = restaurantMapper.mapRestaurantDetailsFormToUpdateFromDTO(
                     restaurantName,
@@ -256,6 +263,7 @@ public class RestaurantOwnerRestController {
             restaurantService.updateRestaurantDetails(currentRestaurant, updatedRestaurant);
             return ResponseEntity.ok("Restaurant details updated successfully.");
         }
+
         throw new NoContentException("User with email: [%s] does not have a restaurant with email: [%s]"
                 .formatted(user.getEmail(), restaurantEmail));
     }
@@ -425,5 +433,37 @@ public class RestaurantOwnerRestController {
     private boolean checkIfCurrentBusinessUserHaveRestaurantWithThisEmail(String restaurantEmail, List<Restaurant> userRestaurants) {
         return userRestaurants.stream()
                 .anyMatch(restaurant -> restaurant.getRestaurantEmail().equals(restaurantEmail));
+    }
+
+    private static List<String> createErrorMessagesListDependsOnFieldError(
+            String restaurantName,
+            String restaurantPhone,
+            String restaurantEmailToUpdate,
+            String restaurantAddressCity,
+            String restaurantAddressDistrict
+    ) {
+        List<String> errorMessages = new ArrayList<>();
+
+        //  TODO: STWORZYĆ KLASĘ ZAWIERAJĄCĄ TEGO TYPY BŁĘDY
+
+        if (!restaurantName.matches("^\\D*$")) {
+            errorMessages.add("The restaurant name must not contain any digits.");
+        }
+        else if (restaurantPhone != null && restaurantPhone.length() != 9) {
+            errorMessages.add("The phone number size cannot be larger or smaller than 9.");
+        }
+        else if (restaurantPhone != null && !restaurantPhone.matches("^\\d+$")) {
+            errorMessages.add("Phone number must contain only digits.");
+        }
+        else if (restaurantEmailToUpdate != null && !restaurantEmailToUpdate.matches("^(.+)@(.+)$")) {
+            errorMessages.add("Email must contains @ sign");
+        }
+        else if (restaurantAddressCity != null && !restaurantAddressCity.matches("^\\D*$")) {
+            errorMessages.add("City must not contain any digits.");
+        }
+        else if (restaurantAddressDistrict != null && !restaurantAddressDistrict.matches("^\\D*$")) {
+            errorMessages.add("District must not contain any digits.");
+        }
+        return errorMessages;
     }
 }

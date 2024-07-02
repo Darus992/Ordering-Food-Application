@@ -1,18 +1,18 @@
 package pl.dariuszgilewicz.util;
 
 import lombok.experimental.UtilityClass;
-import pl.dariuszgilewicz.infrastructure.database.entity.OrdersEntity;
+import pl.dariuszgilewicz.api.dto.RestaurantDTO;
 import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantEntity;
 import pl.dariuszgilewicz.infrastructure.model.Restaurant;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 import static pl.dariuszgilewicz.util.AddressFixtures.*;
 import static pl.dariuszgilewicz.util.FoodMenuFixtures.*;
 import static pl.dariuszgilewicz.util.OrdersFixtures.someCustomerOrderNumbers1;
-import static pl.dariuszgilewicz.util.OrdersFixtures.someOrdersEntityList3;
 import static pl.dariuszgilewicz.util.RestaurantOpeningTimeFixtures.*;
-import static pl.dariuszgilewicz.util.RestaurantOwnerFixtures.*;
+import static pl.dariuszgilewicz.util.RestaurantOwnerFixtures.someRestaurantOwnerEntity1;
 
 @UtilityClass
 public class RestaurantFixtures {
@@ -38,7 +38,7 @@ public class RestaurantFixtures {
                 .build();
     }
 
-    public static RestaurantEntity someRestaurantEntity3(){
+    public static RestaurantEntity someRestaurantEntity3() {
         byte[] content = {84, 101, 115, 116, 32, 99, 111, 110, 116, 101, 110, 116};
 
         return RestaurantEntity.builder()
@@ -51,11 +51,10 @@ public class RestaurantFixtures {
                 .restaurantAddress(someAddressEntity3())
                 .restaurantOpeningTime(someRestaurantOpeningTimeEntity2())
                 .restaurantOwner(someRestaurantOwnerEntity1())
-//                .customerOrders(someOrdersEntityList3())
                 .build();
     }
 
-    public static RestaurantEntity someRestaurantEntity4(){
+    public static RestaurantEntity someRestaurantEntity4() {
         return RestaurantEntity.builder()
                 .restaurantName("Na Wypasie")
                 .phone("4577816539")
@@ -72,12 +71,11 @@ public class RestaurantFixtures {
                 .restaurantImageCard(new byte[0])
                 .restaurantImageHeader(new byte[0])
                 .restaurantName("Zapiecek")
-                .phone("4417811209")
+                .phone("441781120")
                 .email("zapiecek@restaurant.pl")
                 .foodMenu(someFoodMenuEntity3())
                 .restaurantAddress(someAddressEntity4())
                 .restaurantOpeningTime(someRestaurantOpeningTimeEntity1())
-//                .customerOrders(List.of())
                 .build();
     }
 
@@ -120,7 +118,7 @@ public class RestaurantFixtures {
                 .restaurantImageCard("")
                 .restaurantImageHeader("")
                 .restaurantName("Zapiecek")
-                .restaurantPhone("4417811209")
+                .restaurantPhone("441781120")
                 .restaurantEmail("zapiecek@restaurant.pl")
                 .foodMenu(someFoodMenuModel3())
                 .restaurantAddress(someAddressModel4())
@@ -129,19 +127,88 @@ public class RestaurantFixtures {
                 .build();
     }
 
-    public static List<RestaurantEntity> someListOfRestaurantEntities1(){
+    public static List<RestaurantEntity> someListOfRestaurantEntities1() {
         return List.of(someRestaurantEntity1(), someRestaurantEntity2());
     }
-    public static List<RestaurantEntity> someListOfRestaurantEntities3(){
+
+    public static List<RestaurantEntity> someListOfRestaurantEntities3() {
         return List.of(someRestaurantEntity5());
     }
-    public static List<Restaurant> someListOfMappedRestaurants1(){
+
+    public static List<Restaurant> someListOfMappedRestaurants1() {
         return List.of(someRestaurantModel1(), someRestaurantModel2());
     }
-    public static List<Restaurant> someListOfMappedRestaurants2(){
+
+    public static List<Restaurant> someListOfMappedRestaurants2() {
         return List.of(someRestaurantModel2(), someRestaurantModel3());
     }
-    public static List<Restaurant> someListOfMappedRestaurants3(){
+
+    public static List<Restaurant> someListOfMappedRestaurants3() {
         return List.of(someRestaurantModel5());
+    }
+
+    public static RestaurantDTO someRestaurantDTO1() {
+        return RestaurantDTO.builder()
+                .restaurantImageCard("http://localhost:8190/ordering-food-application/image/na_wypasie@restaurant.pl?image=CARD")
+                .restaurantImageHeader("http://localhost:8190/ordering-food-application/image/na_wypasie@restaurant.pl?image=HEADER")
+                .restaurantName("Na Wypasie")
+                .restaurantPhone("4577816539")
+                .restaurantEmail("na_wypasie@restaurant.pl")
+                .restaurantCity("Białystok")
+                .restaurantDistrict("Antoniuk")
+                .restaurantPostalCode("12-221")
+                .restaurantAddressStreet("Antoniukowska 100")
+                .openingHour("15:00")
+                .closeHour("23:00")
+                .dayOfWeekFrom(DayOfWeek.MONDAY.name())
+                .dayOfWeekTill(DayOfWeek.SATURDAY.name())
+                .customerOrdersNumbers(List.of())
+                .build();
+    }
+
+    public static RestaurantDTO someRestaurantDTO2() {
+        return RestaurantDTO.builder()
+                .restaurantImageCard("http://localhost:8190/ordering-food-application/image/zapiecek@restaurant.pl?image=CARD")
+                .restaurantImageHeader("http://localhost:8190/ordering-food-application/image/zapiecek@restaurant.pl?image=HEADER")
+                .restaurantName("Zapiecek")
+                .restaurantPhone("4417811209")
+                .restaurantEmail("zapiecek@restaurant.pl")
+                .restaurantCity("Warszawa")
+                .restaurantDistrict("Zacisze")
+                .restaurantPostalCode("11-253")
+                .restaurantAddressStreet("Lisia 2")
+                .openingHour("15:00")
+                .closeHour("23:00")
+                .dayOfWeekFrom(DayOfWeek.MONDAY.name())
+                .dayOfWeekTill(DayOfWeek.SATURDAY.name())
+                .customerOrdersNumbers(List.of())
+                .build();
+    }
+
+    public static RestaurantDTO someRestaurantDTO5() {
+        return RestaurantDTO.builder()
+                .restaurantImageCard("http://localhost:8190/ordering-food-application/image/zapiecek@restaurant.pl?image=CARD")
+                .restaurantImageHeader("http://localhost:8190/ordering-food-application/image/zapiecek@restaurant.pl?image=HEADER")
+                .restaurantName("Zapiecek")
+                .restaurantPhone("4417811209")
+                .restaurantEmail("zapiecek@restaurant.pl")
+                .restaurantCity("Warszawa")
+                .restaurantDistrict("Zacisze")
+                .restaurantPostalCode("11-253")
+                .restaurantAddressStreet("Lisia 2")
+                .openingHour("15:00")
+                .closeHour("23:00")
+                .dayOfWeekFrom(DayOfWeek.MONDAY.name())
+                .dayOfWeekTill(DayOfWeek.SATURDAY.name())
+                .customerOrdersNumbers(List.of())
+                .build();
+    }
+
+    public static List<RestaurantDTO> someListOfRestaurantDTO1() {
+        return List.of(someRestaurantDTO1(), someRestaurantDTO2());
+    }
+
+    public static List<RestaurantDTO> someListOfRestaurantDTO2() {
+        return List.of(someRestaurantDTO5(), someRestaurantDTO2());
     }
 }

@@ -56,7 +56,7 @@ class FoodMenuServiceTest {
 
 
     @Test
-    void createFoodMenuAndAssignToRestaurant_shouldWorkSuccessfully(){
+    void createFoodMenuAndAssignToRestaurant_shouldWorkSuccessfully() {
         //  given
         FoodMenuEntity expectedFoodMenuEntity = someFoodMenuEntity2();
         FoodMenu foodMenu = someFoodMenuModel2();

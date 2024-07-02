@@ -28,18 +28,24 @@ import pl.dariuszgilewicz.infrastructure.security.User;
 import pl.dariuszgilewicz.infrastructure.security.UserService;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.hamcrest.core.StringContains.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static pl.dariuszgilewicz.util.CartFixtures.someCartModel1;
 import static pl.dariuszgilewicz.util.OrdersFixtures.someOrdersModel1;
-import static pl.dariuszgilewicz.util.UsersFixtures.*;
+import static pl.dariuszgilewicz.util.UsersFixtures.someBusinessUserModel1;
+import static pl.dariuszgilewicz.util.UsersFixtures.someCustomerUserModel1;
 
 @WebMvcTest(OrdersController.class)
 @Import(SecurityConfiguration.class)
@@ -47,13 +53,10 @@ class OrdersControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private OrderService orderService;
-
     @MockBean
     private UserService userService;
-
     @MockBean
     private OrderRepository orderRepository;
 

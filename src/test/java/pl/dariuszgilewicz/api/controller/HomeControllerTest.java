@@ -33,7 +33,6 @@ class HomeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private UserService userService;
 

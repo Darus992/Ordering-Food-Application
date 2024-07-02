@@ -4,7 +4,8 @@ import lombok.experimental.UtilityClass;
 import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantOwnerEntity;
 import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
 
-import static pl.dariuszgilewicz.util.RestaurantFixtures.*;
+import static pl.dariuszgilewicz.util.RestaurantFixtures.someListOfMappedRestaurants1;
+import static pl.dariuszgilewicz.util.RestaurantFixtures.someListOfMappedRestaurants2;
 
 @UtilityClass
 public class RestaurantOwnerFixtures {
@@ -27,7 +28,7 @@ public class RestaurantOwnerFixtures {
                 .build();
     }
 
-    public static RestaurantOwner someRestaurantOwnerModel3(){
+    public static RestaurantOwner someRestaurantOwnerModel3() {
         return RestaurantOwner.builder()
                 .name("Dawid")
                 .surname("Goliat")
@@ -35,14 +36,6 @@ public class RestaurantOwnerFixtures {
                 .restaurants(someListOfMappedRestaurants2())
                 .build();
     }
-
-//    public static RestaurantOwner someRestaurantOwnerModel4(){
-//        return RestaurantOwner.builder()
-//                .name("Tomek")
-//                .surname("Gapiński")
-//                .pesel("92100712943")
-//                .build();
-//    }
 
     public static RestaurantOwnerEntity someRestaurantOwnerEntity1() {
         return RestaurantOwnerEntity.builder()
@@ -57,15 +50,6 @@ public class RestaurantOwnerFixtures {
                 .name("Maciek")
                 .surname("Pracowity")
                 .pesel("97051242360")
-//                .restaurants(someListOfRestaurantEntities1())
                 .build();
     }
-
-//    public static RestaurantOwnerEntity someRestaurantOwnerEntity4() {
-//        return RestaurantOwnerEntity.builder()
-//                .name("Tomek")
-//                .surname("Gapiński")
-//                .pesel("92100712943")
-//                .build();
-//    }
 }

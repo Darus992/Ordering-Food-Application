@@ -22,6 +22,7 @@ import pl.dariuszgilewicz.infrastructure.database.entity.FoodEntity;
 import pl.dariuszgilewicz.infrastructure.database.repository.FoodRepository;
 import pl.dariuszgilewicz.infrastructure.model.exception.UnauthorizedException;
 import pl.dariuszgilewicz.infrastructure.security.User;
+import pl.dariuszgilewicz.infrastructure.security.UserRole;
 import pl.dariuszgilewicz.infrastructure.security.UserService;
 
 import java.math.BigDecimal;
@@ -81,7 +82,9 @@ public class OrderRestController {
 
     private User getCurrentAuthenticatedCustomerUser() {
         Optional<User> optionalUser = userService.getCurrentOptionalUser();
-        return optionalUser.orElseThrow(
+        return optionalUser
+                .filter(user -> !user.getRole().equals(UserRole.OWNER))
+                .orElseThrow(
                 () -> new UnauthorizedException("User is not authenticated. Please log in to access this resource"));
     }
 

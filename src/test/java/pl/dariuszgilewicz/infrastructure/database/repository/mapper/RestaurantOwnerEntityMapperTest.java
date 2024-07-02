@@ -1,29 +1,25 @@
 package pl.dariuszgilewicz.infrastructure.database.repository.mapper;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantOwnerEntity;
 import pl.dariuszgilewicz.infrastructure.model.RestaurantOwner;
 import pl.dariuszgilewicz.infrastructure.request_form.BusinessRequestForm;
-import pl.dariuszgilewicz.util.BusinessRequestFormFixtures;
-import pl.dariuszgilewicz.util.RestaurantOwnerFixtures;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static pl.dariuszgilewicz.util.BusinessRequestFormFixtures.*;
-import static pl.dariuszgilewicz.util.RestaurantOwnerFixtures.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static pl.dariuszgilewicz.util.BusinessRequestFormFixtures.someBusinessRequestForm1;
+import static pl.dariuszgilewicz.util.RestaurantOwnerFixtures.someRestaurantOwnerEntity1;
+import static pl.dariuszgilewicz.util.RestaurantOwnerFixtures.someRestaurantOwnerModel1;
 
 @ExtendWith(MockitoExtension.class)
 class RestaurantOwnerEntityMapperTest {
 
     @InjectMocks
     private RestaurantOwnerEntityMapper restaurantOwnerEntityMapper;
-
     @Mock
     private RestaurantEntityMapper restaurantEntityMapper;
 

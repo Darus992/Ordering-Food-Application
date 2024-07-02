@@ -14,13 +14,13 @@ import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 import static pl.dariuszgilewicz.util.BusinessRequestFormFixtures.someBusinessRequestForm1;
 import static pl.dariuszgilewicz.util.CustomerRequestFormFixtures.someCustomerRequestForm;
-import static pl.dariuszgilewicz.util.UsersFixtures.*;
+import static pl.dariuszgilewicz.util.UsersFixtures.someBusinessUserEntity1;
+import static pl.dariuszgilewicz.util.UsersFixtures.someCustomerUserEntity1;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -92,41 +92,4 @@ class UserServiceTest {
         //  then
         then(userRepository).should().createBusinessUser(requestForm);
     }
-
-//    @Test
-//    @DisplayName("Find and map user entity to user model work successfully")
-//    void findUserByUserName_shouldWorkCorrectly() {
-//        //  given
-//        UserEntity existingUser = someCustomerUser1();
-//        User expectedUser = someMappedCustomerUser1();
-//        when(userJpaRepository.findByUserName(existingUser.getUsername())).thenReturn(Optional.of(existingUser));
-//        when(userEntityMapper.mapFromEntityOwner(existingUser)).thenReturn(expectedUser);
-//
-//        //  when
-////        User userResult = userService.findUserOwnerByUserName(existingUser.getUserName());
-//        User userResult = userService.getCurrentUser();
-//
-//        //  then
-//        assertEquals(expectedUser.getUsername(), userResult.getUsername());
-//        assertEquals(expectedUser.getEmail(), userResult.getEmail());
-//        assertEquals(expectedUser.getPassword(), userResult.getPassword());
-//
-//    }
-
-//    @Test
-//    @DisplayName("Should throw exception user not found by username")
-//    void findUserByUserName_shouldThrowExceptionUserNotFoundByUsername(){
-//        //  given
-//        String notExistingUsername = "Zawisza_Czarny";
-//        when(userJpaRepository.findByUserName(notExistingUsername)).thenReturn(Optional.empty());
-//
-//        //  when
-//        //  then
-////        assertThatThrownBy(() -> userService.findUserOwnerByUserName(notExistingUsername))
-////                .isInstanceOf(EntityNotFoundException.class)
-////                .hasMessageContaining("User Entity with username: [%s] not found".formatted(notExistingUsername));
-//        assertThatThrownBy(() -> userService.getCurrentUser())
-//                .isInstanceOf(EntityNotFoundException.class)
-//                .hasMessageContaining("User Entity with username: [%s] not found".formatted(notExistingUsername));
-//    }
 }

@@ -13,7 +13,7 @@ import static pl.dariuszgilewicz.util.RestaurantOwnerFixtures.*;
 @UtilityClass
 public class UsersFixtures {
 
-    public static UserEntity someBusinessUserEntity1(){
+    public static UserEntity someBusinessUserEntity1() {
         return UserEntity.builder()
                 .username("business_user")
                 .email("business@business_user.com")
@@ -24,7 +24,7 @@ public class UsersFixtures {
                 .build();
     }
 
-    public static UserEntity someBusinessUserEntity2(){
+    public static UserEntity someBusinessUserEntity2() {
         return UserEntity.builder()
                 .username("business_user2")
                 .email("business@business_user2.com")
@@ -35,7 +35,7 @@ public class UsersFixtures {
                 .build();
     }
 
-    public static UserEntity someCustomerUserEntity1(){
+    public static UserEntity someCustomerUserEntity1() {
         return UserEntity.builder()
                 .username("testowy_customer")
                 .email("testowy_customer@mail.com")
@@ -46,7 +46,7 @@ public class UsersFixtures {
                 .build();
     }
 
-    public static User someCustomerUserModel1(){
+    public static User someCustomerUserModel1() {
         return User.builder()
                 .username("testowy_customer")
                 .email("testowy_customer@mail.com")
@@ -57,7 +57,7 @@ public class UsersFixtures {
                 .build();
     }
 
-    public static User someErrorCustomerUserModel1(){
+    public static User someErrorCustomerUserModel1() {
         return User.builder()
                 .username("")
                 .email("testowy_customer@mail.com")
@@ -68,7 +68,7 @@ public class UsersFixtures {
                 .build();
     }
 
-    public static User someErrorCustomerUserModel2(){
+    public static User someErrorCustomerUserModel2() {
         return User.builder()
                 .username("nick")
                 .email("nick_customer@email.com")
@@ -79,7 +79,7 @@ public class UsersFixtures {
                 .build();
     }
 
-    public static User someBusinessUserModel1(){
+    public static User someBusinessUserModel1() {
         return User.builder()
                 .username("business_user")
                 .email("business@business_user.com")
@@ -89,7 +89,7 @@ public class UsersFixtures {
                 .build();
     }
 
-    public static User someBusinessUserModel2(){
+    public static User someBusinessUserModel2() {
         return User.builder()
                 .username("business_user2")
                 .email("business@business_user2.com")

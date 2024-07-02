@@ -34,7 +34,6 @@ class OrderServiceTest {
 
     @InjectMocks
     private OrderService orderService;
-
     @Mock
     private FoodRepository foodRepository;
     @Mock
@@ -92,7 +91,7 @@ class OrderServiceTest {
         orderService.updateOrderStatus(orderNumber, status);
 
         //  then
-        if(status.equals("COMPLETED")){
+        if (status.equals("COMPLETED")) {
             assertNotNull(ordersEntity.getCompletedDateTime());
         } else {
             assertNull(ordersEntity.getCompletedDateTime());

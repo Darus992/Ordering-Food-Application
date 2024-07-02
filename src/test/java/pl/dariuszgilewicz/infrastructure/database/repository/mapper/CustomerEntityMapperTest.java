@@ -9,10 +9,8 @@ import pl.dariuszgilewicz.infrastructure.database.entity.CustomerEntity;
 import pl.dariuszgilewicz.infrastructure.model.Customer;
 import pl.dariuszgilewicz.infrastructure.request_form.CustomerRequestForm;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 import static pl.dariuszgilewicz.util.CustomerFixtures.someCustomerEntity1;
 import static pl.dariuszgilewicz.util.CustomerFixtures.someCustomerModel1;
 import static pl.dariuszgilewicz.util.CustomerRequestFormFixtures.someCustomerRequestForm;

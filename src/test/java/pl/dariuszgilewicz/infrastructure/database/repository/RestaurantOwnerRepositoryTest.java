@@ -40,7 +40,7 @@ class RestaurantOwnerRepositoryTest {
     }
 
     @Test
-    void findRestaurantOwnerEntityByPesel_shouldThrowException(){
+    void findRestaurantOwnerEntityByPesel_shouldThrowException() {
         //  given
         String pesel = "91014452879";
         when(restaurantOwnerJpaRepository.findByPesel(pesel)).thenReturn(Optional.empty());

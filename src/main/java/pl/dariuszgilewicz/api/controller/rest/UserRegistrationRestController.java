@@ -33,11 +33,7 @@ public class UserRegistrationRestController {
     private final BusinessUserMapper businessUserMapper;
 
 
-    @Operation(
-            summary = "Create a new customer user",
-            requestBody = @RequestBody(content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = BusinessUserDTO.class))
-            ))
+    @Operation(summary = "Create a new customer user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
             @ApiResponse(responseCode = "400", description = "Invalid request data", content = @Content),

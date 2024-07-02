@@ -36,7 +36,7 @@ public class CartFixtures {
                 .build();
     }
 
-    private static Map<Food, Integer> createCartRequest1(){
+    private static Map<Food, Integer> createCartRequest1() {
         Map<Food, Integer> cartRequest = new HashMap<>();
         Food food = someFoodModel4();
 

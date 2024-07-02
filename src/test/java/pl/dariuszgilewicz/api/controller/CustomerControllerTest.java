@@ -133,7 +133,7 @@ class CustomerControllerTest {
 
         //  when
         //  then
-        if(hasErrors){
+        if (hasErrors) {
             ResultActions resultActions = mockMvc.perform(patch("/customer/update-profile")
                             .flashAttr("userForm", expectedUser)
                             .param("emailParam", emailParam)

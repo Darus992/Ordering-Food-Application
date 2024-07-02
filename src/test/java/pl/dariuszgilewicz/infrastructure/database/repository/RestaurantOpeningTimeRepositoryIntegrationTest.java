@@ -1,6 +1,5 @@
 package pl.dariuszgilewicz.infrastructure.database.repository;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
@@ -8,12 +7,11 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import pl.dariuszgilewicz.configuration.AbstractJpaIT;
 import pl.dariuszgilewicz.infrastructure.database.entity.RestaurantOpeningTimeEntity;
 import pl.dariuszgilewicz.infrastructure.database.repository.jpa.RestaurantOpeningTimeJpaRepository;
-import pl.dariuszgilewicz.util.RestaurantOpeningTimeFixtures;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static pl.dariuszgilewicz.util.RestaurantOpeningTimeFixtures.*;
+import static pl.dariuszgilewicz.util.RestaurantOpeningTimeFixtures.someRestaurantOpeningTimeEntity1;
 
 @Import(RestaurantOpeningTimeRepository.class)
 class RestaurantOpeningTimeRepositoryIntegrationTest extends AbstractJpaIT {

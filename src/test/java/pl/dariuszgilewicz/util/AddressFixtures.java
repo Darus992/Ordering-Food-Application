@@ -9,7 +9,7 @@ import java.util.List;
 @UtilityClass
 public class AddressFixtures {
 
-    public static Address someAddressModel1(){
+    public static Address someAddressModel1() {
         return Address.builder()
                 .city("Białystok")
                 .district("Antoniuk")
@@ -18,7 +18,7 @@ public class AddressFixtures {
                 .build();
     }
 
-    public static Address someAddressModel2(){
+    public static Address someAddressModel2() {
         return Address.builder()
                 .city("Warszawa")
                 .district("Testowy")
@@ -27,7 +27,7 @@ public class AddressFixtures {
                 .build();
     }
 
-    public static Address someAddressModel3(){
+    public static Address someAddressModel3() {
         return Address.builder()
                 .city("Kraków")
                 .district("Olsza")
@@ -36,7 +36,7 @@ public class AddressFixtures {
                 .build();
     }
 
-    public static Address someAddressModel4(){
+    public static Address someAddressModel4() {
         return Address.builder()
                 .city("Warszawa")
                 .district("Zacisze")
@@ -45,7 +45,7 @@ public class AddressFixtures {
                 .build();
     }
 
-    public static Address someErrorAddressModel2(){
+    public static Address someErrorAddressModel2() {
         return Address.builder()
                 .city("")
                 .district("Testowy")
@@ -54,7 +54,7 @@ public class AddressFixtures {
                 .build();
     }
 
-    public static AddressEntity someAddressEntity1(){
+    public static AddressEntity someAddressEntity1() {
         return AddressEntity.builder()
                 .city("Białystok")
                 .district("Antoniuk")
@@ -63,7 +63,7 @@ public class AddressFixtures {
                 .build();
     }
 
-    public static AddressEntity someAddressEntity2(){
+    public static AddressEntity someAddressEntity2() {
         return AddressEntity.builder()
                 .city("Warszawa")
                 .district("Testowy")
@@ -72,7 +72,7 @@ public class AddressFixtures {
                 .build();
     }
 
-    public static AddressEntity someAddressEntity3(){
+    public static AddressEntity someAddressEntity3() {
         return AddressEntity.builder()
                 .city("Kraków")
                 .district("Olsza")
@@ -81,7 +81,7 @@ public class AddressFixtures {
                 .build();
     }
 
-    public static AddressEntity someAddressEntity4(){
+    public static AddressEntity someAddressEntity4() {
         return AddressEntity.builder()
                 .city("Warszawa")
                 .district("Zacisze")
@@ -93,6 +93,7 @@ public class AddressFixtures {
     public static List<AddressEntity> someListOfAddressEntity1() {
         return List.of(someAddressEntity1());
     }
+
     public static List<AddressEntity> someListOfAddressEntity2() {
         return List.of(someAddressEntity2(), someAddressEntity4());
     }

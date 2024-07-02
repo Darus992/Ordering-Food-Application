@@ -1006,13 +1006,6 @@ class RestaurantOwnerControllerTest {
         return new MockMultipartFile("restaurantImage", filename, "image/jpeg", isEmpty ? new byte[0] : "some-image-content".getBytes());
     }
 
-//    private static MultipartFile mockMultipartFile(String filename, boolean isEmpty) {
-//        MultipartFile multipartFile = mock(MultipartFile.class);
-//        when(multipartFile.getOriginalFilename()).thenReturn(filename);
-//        when(multipartFile.isEmpty()).thenReturn(isEmpty);
-//        return multipartFile;
-//    }
-
     private static Stream<Arguments> provideTestData() {
         User userWithErrors = User.builder()
                 .username("business_user")

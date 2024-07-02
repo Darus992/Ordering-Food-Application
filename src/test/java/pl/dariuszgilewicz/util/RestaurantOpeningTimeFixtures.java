@@ -29,6 +29,15 @@ public class RestaurantOpeningTimeFixtures {
                 .build();
     }
 
+    public static RestaurantOpeningTime someRestaurantOpeningTimeModel3() {
+        return RestaurantOpeningTime.builder()
+                .openingHour("10:00:00")
+                .closeHour("18:00:00")
+                .dayOfWeekFrom(DayOfWeek.FRIDAY)
+                .dayOfWeekTill(DayOfWeek.TUESDAY)
+                .build();
+    }
+
     public static RestaurantOpeningTimeEntity someRestaurantOpeningTimeEntity1() {
         return RestaurantOpeningTimeEntity.builder()
                 .openingHour(LocalTime.parse("15:00", DateTimeFormatter.ISO_LOCAL_TIME))

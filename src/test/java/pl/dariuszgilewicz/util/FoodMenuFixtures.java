@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 import pl.dariuszgilewicz.infrastructure.database.entity.FoodMenuEntity;
 import pl.dariuszgilewicz.infrastructure.model.FoodMenu;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static pl.dariuszgilewicz.util.FoodFixtures.*;

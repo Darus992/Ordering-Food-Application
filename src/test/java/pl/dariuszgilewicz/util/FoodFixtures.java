@@ -2,6 +2,7 @@ package pl.dariuszgilewicz.util;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.mock.web.MockMultipartFile;
+import pl.dariuszgilewicz.api.dto.FoodDTO;
 import pl.dariuszgilewicz.infrastructure.database.entity.FoodEntity;
 import pl.dariuszgilewicz.infrastructure.model.Food;
 
@@ -39,6 +40,10 @@ public class FoodFixtures {
         return new ArrayList<>(List.of(someFoodEntity6()));
     }
 
+    public static List<FoodEntity> someFoodEntityList6() {
+        return new ArrayList<>(List.of(someFoodEntity1(), someFoodEntity2(), someFoodEntity3()));
+    }
+
     public static List<Food> someFoodModelList1() {
         return new ArrayList<>(List.of(someFoodModel1(), someFoodModel3()));
     }
@@ -60,7 +65,7 @@ public class FoodFixtures {
         return new ArrayList<>(List.of(someFoodModel5()));
     }
 
-    public static Map<Food, Integer> someFoodsModelMap1(){
+    public static Map<Food, Integer> someFoodsModelMap1() {
         Map<Food, Integer> foodIntegerMap = new HashMap<>();
         foodIntegerMap.put(someFoodModel1(), 1);
         foodIntegerMap.put(someFoodModel2(), 2);
@@ -68,7 +73,7 @@ public class FoodFixtures {
         return foodIntegerMap;
     }
 
-    public static Map<FoodEntity, Integer> someFoodsEntityMap1(){
+    public static Map<FoodEntity, Integer> someFoodsEntityMap1() {
         Map<FoodEntity, Integer> foodIntegerMap = new HashMap<>();
         foodIntegerMap.put(someFoodEntity1(), 1);
         foodIntegerMap.put(someFoodEntity2(), 2);
@@ -76,7 +81,7 @@ public class FoodFixtures {
         return foodIntegerMap;
     }
 
-    public static Map<FoodEntity, Integer> someFoodsEntityMap2(){
+    public static Map<FoodEntity, Integer> someFoodsEntityMap2() {
         Map<FoodEntity, Integer> foodIntegerMap = new HashMap<>();
         foodIntegerMap.put(someFoodEntity5(), 1);
         return foodIntegerMap;
@@ -195,6 +200,36 @@ public class FoodFixtures {
                 .description("")
                 .price(BigDecimal.valueOf(6.5))
                 .fileImageToUpload(new MockMultipartFile("pepsiZero.jpg", content))
+                .build();
+    }
+
+    public static FoodDTO someFoodDTO1() {
+        return FoodDTO.builder()
+                .foodImage("http://localhost:8190/ordering-food-application/image/food/4")
+                .foodCategory("Pizza")
+                .foodName("Super Pizza")
+                .foodDescription("dodatki, sosy, itp.")
+                .foodPrice("35.5")
+                .build();
+    }
+
+    public static FoodDTO someFoodDTO2() {
+        return FoodDTO.builder()
+                .foodImage("http://localhost:8190/ordering-food-application/image/food/2")
+                .foodCategory("Pizza")
+                .foodName("Mega Pizza")
+                .foodDescription("dodatki, sosy, itp.")
+                .foodPrice("50")
+                .build();
+    }
+
+    public static FoodDTO someFoodDTO3() {
+        return FoodDTO.builder()
+                .foodImage("http://localhost:8190/ordering-food-application/image/food/3")
+                .foodCategory("Napoje")
+                .foodName("Pepsi")
+                .foodDescription("")
+                .foodPrice("6")
                 .build();
     }
 }

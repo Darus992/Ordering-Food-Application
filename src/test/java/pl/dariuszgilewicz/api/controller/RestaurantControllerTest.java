@@ -49,10 +49,8 @@ class RestaurantControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private RestaurantService restaurantService;
-
     @MockBean
     private UserService userService;
 

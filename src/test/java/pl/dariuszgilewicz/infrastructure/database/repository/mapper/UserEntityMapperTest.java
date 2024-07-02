@@ -17,10 +17,11 @@ import pl.dariuszgilewicz.infrastructure.security.UserEntity;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static pl.dariuszgilewicz.util.BusinessRequestFormFixtures.*;
-import static pl.dariuszgilewicz.util.CustomerRequestFormFixtures.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+import static pl.dariuszgilewicz.util.BusinessRequestFormFixtures.someBusinessRequestForm1;
+import static pl.dariuszgilewicz.util.CustomerRequestFormFixtures.someCustomerRequestForm;
 import static pl.dariuszgilewicz.util.UsersFixtures.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +29,6 @@ class UserEntityMapperTest {
 
     @InjectMocks
     private UserEntityMapper userEntityMapper;
-
     @Mock
     private RestaurantOwnerEntityMapper restaurantOwnerEntityMapper;
     @Mock
@@ -40,8 +40,8 @@ class UserEntityMapperTest {
     @MethodSource("provideUserOptionalsData")
     void mapFromEntityToOptionalUser_shouldWorkSuccessfully(UserEntity userEntity, Optional<User> expectedUser) {
         //  given
-        if(expectedUser.isPresent()){
-            if(userEntity.getCustomer() != null){
+        if (expectedUser.isPresent()) {
+            if (userEntity.getCustomer() != null) {
                 when(customerEntityMapper.mapFromEntity(userEntity.getCustomer())).thenReturn(expectedUser.get().getCustomer());
             } else if (userEntity.getOwner() != null) {
                 when(restaurantOwnerEntityMapper.mapFromEntity(userEntity.getOwner())).thenReturn(expectedUser.get().getOwner());
@@ -106,7 +106,7 @@ class UserEntityMapperTest {
         //  given
         expectedUserEntity.setActive(null);
 
-        if(user.getOwner() != null){
+        if (user.getOwner() != null) {
             when(restaurantOwnerEntityMapper.mapToEntity(user.getOwner())).thenReturn(expectedUserEntity.getOwner());
         } else if (user.getCustomer() != null) {
             when(customerEntityMapper.mapToEntity(user.getCustomer())).thenReturn(expectedUserEntity.getCustomer());
